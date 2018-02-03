@@ -51,6 +51,9 @@ int main()
         }
         else{
             assert(0); // There are only three token types.
+            /* assert is used to write a message to std::errdevice and abort is called if
+            inside the brackets the expression = 0
+            basically this case should never happen */
             return 1;
         }
     }

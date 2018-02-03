@@ -3,6 +3,8 @@
 
 #include <string>
 
+/*enums are values "Token Type can take", ie TokenType can only be assigned
+ as = None, Number or Word */
 enum TokenType{
     None   = 0, // This indicates there are no more tokens
     Number = 1, // token codes must be positive
