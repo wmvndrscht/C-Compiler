@@ -1,2 +1,3 @@
-initialise
+%option noyywrap
+
 
