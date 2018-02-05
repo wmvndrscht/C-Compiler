@@ -7,9 +7,8 @@ int f(int x, int y){
 
 
 
-Root : Program
-
-Program : FunctionDeclaration
+Root : FunctionDeclaration
+		| Declaration
 
 FunctionDeclaration : T_TypeIdentifier Identifier T_LBracket Arguement T_RBracket Statement
 
