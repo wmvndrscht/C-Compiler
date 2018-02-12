@@ -18,40 +18,49 @@
 	std::string *string;
 }
 
+/* token terminal */
 %token T_INT T_ID T_Return
 %token T_LBracket T_RBracket T_LBrace T_RBrace
 %token T_Comma
 %token T_ADD
 
-%type <exp> Function_Declaration Argument 
+/* non-terminal */
+%type <exp> Function_Declaration Declaration_List
 %type <exp> Statement Compound_Statement ReturnStatement
 %type <exp> Expression Addition_Expression
 %type <exp> TypeIdentifier
+%type <exp> Program
 %type <string> TypeIdentifier
 
-%start ROOT
+/* start symbol */
+%start Root
 
-Root 	:Function_Declaration
+Root 	:	Program {ast_root = $1}
 
-Function_Declaration : TypeIdentifier Identifier T_LBracket Arguement T_RBracket Statement
+Program : Function_Declaration {$$ = $1}
 
-Argument : TypeIdentifier T_ID
-					| TypeIdentifier T_ID T_Comma Argument
+Function_Declaration : TypeIdentifier Identifier T_LBracket Argument_List T_RBracket Statement {$$ = new Function_Declaration($1, $2, $4, $6);}
 
-Statement: T_LBrace CompoundStatement T_RBrace 
+Declaration_List 	: Parameter	{$$ = $1}
+									| Parameter T_Comma Declaration_List {$$ = $3}
 
-Compound_Statement : ReturnStatement
-									| IfStatement
-									|	CompoundStatement
+Parameter: TypeIdentifier T_ID { $$ = new Parameter($1, $2);}
 
-Return_Statement : T_Return Expression
+TypeIdentifier: T_INT { $$ = new TypeIdentifier($1);}
 
-Expression: T_ID
-					| ADDITION_EXPRESSION
-					| SUBTRACT_EXPRESSION
+Statement: T_LBrace CompoundStatement T_RBrace {$$ = $2}
 
-Addition_Expression: T_ID T_ADD T_ID
+Compound_Statement : T_Return Expression {$$ = new ReturnStatement($1);}
 
-TypeIdentifier: T_INT
+Expression: Addition_Expression {$$ = $1}
 
+Addition_Expression: T_ID T_ADD T_ID {$$ = new Addition_Expression($1, $3);}
 
+const Expression *ast_root; // Definition of variable (to match declaration earlier)
+
+const Expression *parseAST()
+{
+  ast_root=0;
+  yyparse();
+  return ast_root;
+}
