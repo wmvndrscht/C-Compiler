@@ -14,7 +14,6 @@ public:
 	virtual void print(std::ostream &dst) const=0;
 
 
-
 };
 
 
