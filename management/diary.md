@@ -16,3 +16,9 @@ Moral : Build the roots before fiddling with leaves, but good to think a little 
 Yes, DT is correct, start simple, start testing, get going, get momentum
 How about start with external declaration int x; ?
 Also develop testbench with this as well :)
+
+
+16/02/2018
+Title: So Clear (Junip)
+Moral: Started simple makes things clearer
+Good start now, just need to fix some compiler errors in order for simple thing to get going

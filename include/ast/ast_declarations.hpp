@@ -1,24 +1,19 @@
 #ifndef ast_declarations_hpp
 #define ast_declarations_hpp
 
-"include ast_program.hpp"
+#include <string>
+#include <iostream>
 
-class Declaration : public Program{
 
+class DeclarationSpecifier : public Node {
+private:
+	std::string type;
 public:
-	
+	TypeSpecifier(const std::string &_type) : type(_type){}
+
 	virtual void print(std::ostream &dst) const override{
-    dst << getFunction()<<"( ";
-    arg->print(dst);
-    dst<<" )";
-  }
-
-
-}
-
-
-class Function_Declaration : public Declaration{
-
+		dst<<type;
+	}
 }
 
 

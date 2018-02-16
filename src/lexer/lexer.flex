@@ -1,8 +1,9 @@
 %option noyywrap
 
-
 %{
 	extern "C" int fileno(FILE *stream);
+
+	#include "parser.tab.hpp"
 %}
 
 %%
