@@ -1,0 +1,121 @@
+Grammar
+
+    0 $accept: ROOT $end
+
+    1 ROOT: Translation_Unit
+
+    2 Translation_Unit: External_Declaration
+    3                 | Translation_Unit External_Declaration
+
+    4 External_Declaration: Declaration
+
+    5 Declaration: Declaration_Specifiers T_SEMICOLON
+
+    6 Declaration_Specifiers: T_INT
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+T_INT (258) 6
+T_SEMICOLON (259) 5
+
+
+Nonterminals, with rules where they appear
+
+$accept (5)
+    on left: 0
+ROOT (6)
+    on left: 1, on right: 0
+Translation_Unit (7)
+    on left: 2 3, on right: 1 3
+External_Declaration (8)
+    on left: 4, on right: 2 3
+Declaration (9)
+    on left: 5, on right: 4
+Declaration_Specifiers (10)
+    on left: 6, on right: 5
+
+
+State 0
+
+    0 $accept: . ROOT $end
+
+    T_INT  shift, and go to state 1
+
+    ROOT                    go to state 2
+    Translation_Unit        go to state 3
+    External_Declaration    go to state 4
+    Declaration             go to state 5
+    Declaration_Specifiers  go to state 6
+
+
+State 1
+
+    6 Declaration_Specifiers: T_INT .
+
+    $default  reduce using rule 6 (Declaration_Specifiers)
+
+
+State 2
+
+    0 $accept: ROOT . $end
+
+    $end  shift, and go to state 7
+
+
+State 3
+
+    1 ROOT: Translation_Unit .
+    3 Translation_Unit: Translation_Unit . External_Declaration
+
+    T_INT  shift, and go to state 1
+
+    $default  reduce using rule 1 (ROOT)
+
+    External_Declaration    go to state 8
+    Declaration             go to state 5
+    Declaration_Specifiers  go to state 6
+
+
+State 4
+
+    2 Translation_Unit: External_Declaration .
+
+    $default  reduce using rule 2 (Translation_Unit)
+
+
+State 5
+
+    4 External_Declaration: Declaration .
+
+    $default  reduce using rule 4 (External_Declaration)
+
+
+State 6
+
+    5 Declaration: Declaration_Specifiers . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 9
+
+
+State 7
+
+    0 $accept: ROOT $end .
+
+    $default  accept
+
+
+State 8
+
+    3 Translation_Unit: Translation_Unit External_Declaration .
+
+    $default  reduce using rule 3 (Translation_Unit)
+
+
+State 9
+
+    5 Declaration: Declaration_Specifiers T_SEMICOLON .
+
+    $default  reduce using rule 5 (Declaration)

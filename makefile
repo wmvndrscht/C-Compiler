@@ -1,5 +1,5 @@
 CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
-CPPFLAGS += -I include
+CPPFLAGS += -I include 
 
 all : bin/print
 
@@ -16,7 +16,9 @@ bin/print : src/print.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
 
 
 clean :
+	rm src/*.tab.hpp
+	rm src/*.tab.cpp
+	rm src/*.output
 	rm src/*.o
 	rm bin/*
-	rm src/*.tab.cpp
 	rm src/*.yy.cpp

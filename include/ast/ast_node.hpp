@@ -1,7 +1,9 @@
 #ifndef ast_node_hpp
 #define ast_node_hpp
 
+#include <string>
 #include <iostream>
+#include <memory>
 
 class Node;
 
@@ -9,10 +11,10 @@ typedef const Node *NodePtr;
 
 class Node{
 public:
-	virtual ~Node(){};
+  virtual ~Node(){}
 
-	virtual void print(std::ostream &dst) const=0;
-
+    //! Tell and Node to print itself to the given stream
+  virtual void print(std::ostream &dst) const =0;
 
 };
 
@@ -26,11 +28,12 @@ public:
 	~TranslationUnit(){ delete left; delete right;}
 	
 	virtual void print(std::ostream &dst) const override{
-		dst << left->print(dst);
-		dst << "\n";
-		dst << right->print(dst);
+		left->print(dst);
+		dst<<"\n";
+		right->print(dst);
 	}
-}
+
+};
 
 
 #endif

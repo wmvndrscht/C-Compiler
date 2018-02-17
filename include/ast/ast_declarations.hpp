@@ -5,16 +5,33 @@
 #include <iostream>
 
 
-class DeclarationSpecifier : public Node {
+
+
+class LoneDeclaration : public Node {
 private:
-	std::string type;
+	const std::string type;
 public:
-	TypeSpecifier(const std::string &_type) : type(_type){}
+	LoneDeclaration(const std::string &_type) : type(_type){}
 
 	virtual void print(std::ostream &dst) const override{
 		dst<<type;
 	}
-}
+};
+
+// class Declaration : public Node{
+// private:
+// 	const DeclarationSpecifier* decspec;
+// 	const NodePtr dec;
+// public:
+// 	Declaration(const DeclarationSpecifier* _decspec, const NodePtr _dec ) 
+// 	: decspec(_decspec), dec(_dec){}
+	
+// 	virtual void print(std::ostream &dst) const override{
+// 		decspec->print(dst);
+// 		dst<<" ";
+// 		dec->print(dst);
+// 	}
+// };
 
 
 #endif
