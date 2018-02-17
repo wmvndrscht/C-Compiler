@@ -14,6 +14,7 @@ public:
 	LoneDeclaration(const std::string &_type) : type(_type){}
 
 	virtual void print(std::ostream &dst) const override{
+		dst<< "[LoneDeclaration->] ";
 		dst<<type;
 	}
 };
