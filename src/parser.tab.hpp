@@ -59,8 +59,23 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    T_INT = 258,
-    T_SEMICOLON = 259
+    T_TYPEDEF = 258,
+    T_EXTERN = 259,
+    T_STATIC = 260,
+    T_AUTO = 261,
+    T_REGISTER = 262,
+    T_VOID = 263,
+    T_CHAR = 264,
+    T_SHORT = 265,
+    T_INT = 266,
+    T_LONG = 267,
+    T_FLOAT = 268,
+    T_DOUBLE = 269,
+    T_SIGNED = 270,
+    T_UNSIGNED = 271,
+    T_CONST = 272,
+    T_VOLATILE = 273,
+    T_SEMICOLON = 274
   };
 #endif
 
@@ -72,9 +87,10 @@ union YYSTYPE
 #line 14 "src/parser.y" /* yacc.c:1909  */
 
 	const Node *node;
+	const Declaration_Specifier *decspec;
 	std::string *str;
 
-#line 78 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 94 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

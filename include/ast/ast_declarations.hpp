@@ -6,18 +6,37 @@
 
 
 
+class Declaration_Specifier : Node {
+private:
+	const std::string type;
+	const Declaration_Specifier* decspec;
+public:
+	Declaration_Specifier(const std::string &_type, 
+		const Declaration_Specifier* _decspec) : type(_type), decspec(_decspec){}
+	
+	virtual void print(std::ostream &dst) const override{
+		dst << type;
+		if(decspec != NULL){
+			dst << " ";
+			decspec->print(dst);
+		}
+	}
+
+};
 
 class LoneDeclaration : public Node {
 private:
-	const std::string type;
+	const Declaration_Specifier* decspec;
 public:
-	LoneDeclaration(const std::string &_type) : type(_type){}
+	LoneDeclaration(const Declaration_Specifier* _decspec) : decspec(_decspec){}
 
 	virtual void print(std::ostream &dst) const override{
-		dst<< "[LoneDeclaration->] ";
-		dst<<type;
+		decspec->print(dst);
+		dst << ";";
+		std::cerr << "LoneDeclaration: " << std::endl;
 	}
 };
+
 
 // class Declaration : public Node{
 // private:

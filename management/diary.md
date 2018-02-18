@@ -22,3 +22,11 @@ Also develop testbench with this as well :)
 Title: So Clear (Junip)
 Moral: Started simple makes things clearer
 Good start now, just need to fix some compiler errors in order for simple thing to get going
+
+17/02/2018
+Title: Highway to Hell (ACDC)
+Moral: Get used to obscure bugs making your efficiency 1/100th of what you planned
+Yeah........hit hard by stupid bugs and not very helpful error messages :-)
+Luckily I jumped off the highway in the evening having fixed the bugs, getting lexer, parser etc working!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+18/02/2018

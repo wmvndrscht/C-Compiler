@@ -1,0 +1,15 @@
+typedef;
+extern;
+static;
+auto;
+register;
+void;
+char;
+short;
+int;
+long;
+float;
+double;
+signed;
+const;
+volatile;
