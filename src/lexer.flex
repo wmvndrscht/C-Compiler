@@ -4,7 +4,10 @@
 	extern "C" int fileno(FILE *stream);
 
 	#include "parser.tab.hpp"
+	#include <string>
 %}
+
+IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
 
 %%
 
@@ -26,6 +29,9 @@
 "const"							{return T_CONST;}
 "volatile"					{return T_VOLATILE;}
 
+{IDENTIFIER}				{yylval.str=new std::string(yytext);return T_IDENTIFIER;}
+
+"="									{return T_EQUAL;}
 ";"									{return T_SEMICOLON;}
 
 

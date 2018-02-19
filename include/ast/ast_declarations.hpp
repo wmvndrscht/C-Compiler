@@ -6,13 +6,13 @@
 
 
 
-class Declaration_Specifier : Node {
+class DeclarationSpecifier : public Node {
 private:
 	const std::string type;
-	const Declaration_Specifier* decspec;
+	const DeclarationSpecifier* decspec;
 public:
-	Declaration_Specifier(const std::string &_type, 
-		const Declaration_Specifier* _decspec) : type(_type), decspec(_decspec){}
+	DeclarationSpecifier(const std::string &_type, 
+		const DeclarationSpecifier* _decspec) : type(_type), decspec(_decspec){}
 	
 	virtual void print(std::ostream &dst) const override{
 		dst << type;
@@ -24,17 +24,46 @@ public:
 
 };
 
+class VariableDeclarator : public Node{
+private:
+	const std::string variable;
+public:
+	VariableDeclarator(const std::string &_variable) : variable(_variable){}
+
+	virtual void print(std::ostream &dst) const override{
+		dst << variable;
+	}
+};
+
 class LoneDeclaration : public Node {
 private:
-	const Declaration_Specifier* decspec;
+	const DeclarationSpecifier* decspec;
 public:
-	LoneDeclaration(const Declaration_Specifier* _decspec) : decspec(_decspec){}
+	LoneDeclaration(const DeclarationSpecifier* _decspec) : decspec(_decspec){}
 
 	virtual void print(std::ostream &dst) const override{
 		decspec->print(dst);
 		dst << ";";
 		std::cerr << "LoneDeclaration: " << std::endl;
 	}
+};
+
+class Declaration : public Node{
+private:
+	const DeclarationSpecifier* decspec;
+	const NodePtr initdeclaratorlist;
+public:
+	Declaration(const DeclarationSpecifier* _decspec,
+		const NodePtr _initdeclaratorlist): decspec(_decspec), initdeclaratorlist(_initdeclaratorlist){}
+
+	virtual void print(std::ostream &dst) const override{
+		decspec->print(dst);
+		initdeclaratorlist->print(dst);
+		std::cerr << "Declaration" << std::endl;
+	}
+
+
+
 };
 
 
