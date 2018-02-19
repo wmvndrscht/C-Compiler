@@ -1,11 +1,11 @@
 MilestoneID,Dependencies,EstimatedEffort,Lead,Completed,Description
 DefineInitialMilestones,Read management spec,2,wv116,082da0a9a8f7eb843e25b2a51267ba2c75d5a54f,Come up with initial milestones for getting started
 LEXER_CODELABREVIEW,Complete lexer lab,2,wv116,5059412e0c3a179a12cc74643211415d5148ee70,Read the lab code; compare with notes; comment code to show understanding.
-LEXER_SIMPLE,Understand Flex; Lexer code lab review; read C89 draft,4,wv116,,Look at C89 draft; identify key parts; start writing lever
-LEXER_SIMPLE_TESTING,Simple lexer written,3,wv116,,Test Lexer; create tests for independent tokens and group tests.
+LEXER_SIMPLE,Understand Flex; Lexer code lab review; read C89 draft,4,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Look at C89 draft; identify key parts; start writing lever
+LEXER_SIMPLE_TESTING,Simple lexer written,3,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Lexer; create tests for independent tokens and group tests.
 PARSER_CODELABREVIEW,Complete lexer lab; code lab; understood AST; understood Bison Tool.,3,wv116,0cce1ce401f4adce130c7a49c1f31fcfebfd4956,Read the lab code; compare with notes; comment code to show understanding.
-PARSER_SIMPLE,Simple lexer written; parser code lab review.,6,wv116,,Work on the AST. Create simple tree for simple expressions; working with the Lexer.
-PARSER_SIMPLE_TESTING,Parser simple completed.,6,wv116,,Test Parser; create tests for independent tokens and group tests; start simple thoughâ€_â€_..
+PARSER_SIMPLE,Simple lexer written; parser code lab review.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Work on the AST. Create simple tree for simple expressions; working with the Lexer.
+PARSER_SIMPLE_TESTING,Parser simple completed.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Parser; create tests for independent tokens and group tests; start simple though‰Û_‰Û_..
 LEXER_PARSER_INTER1,Simple parser completed and tested.,6,wv116,,Start by implementing more complex parts; adding to the parser as I add to the lexer.
 LEXER_PARSER_INTER2,Inter1 parser completed and tested.,6,wv116,,Start by implementing more complex parts; adding to the parser as I add to the lexer; this I expect to take a long time to split into two.
 CODEGEN_CODELABREVIEW,Complete lexer lab; parser lab; code gen lab.,3,wv116,,Read the lab code; compare with notes; comment code to show understanding.
