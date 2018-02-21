@@ -1,9 +1,11 @@
-*.tab.cpp
-*.tab.hpp
-*.yy.cpp
-*.got.txt
+src/*.tab.cpp
+src/*.tab.hpp
+src/*.yy.cpp
+
+test/out/*
 
 bin/*
+
 *.o
 *.output
 *.log

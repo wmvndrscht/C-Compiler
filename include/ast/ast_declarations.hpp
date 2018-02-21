@@ -8,6 +8,7 @@
 
 class DeclarationSpecifier : public Node {
 private:
+	//can be extern int
 	const std::string type;
 	const DeclarationSpecifier* decspec;
 public:
@@ -19,6 +20,7 @@ public:
 		if(decspec != NULL){
 			dst << " ";
 			decspec->print(dst);
+
 		}
 	}
 
@@ -31,7 +33,8 @@ public:
 	VariableDeclarator(const std::string &_variable) : variable(_variable){}
 
 	virtual void print(std::ostream &dst) const override{
-		dst << variable;
+		dst << " " << variable;
+		// std::cerr << "VariableDeclarator" << std::endl;
 	}
 };
 
@@ -44,7 +47,7 @@ public:
 	virtual void print(std::ostream &dst) const override{
 		decspec->print(dst);
 		dst << ";";
-		std::cerr << "LoneDeclaration: " << std::endl;
+		// std::cerr << "LoneDeclaration: " << std::endl;
 	}
 };
 
@@ -59,13 +62,32 @@ public:
 	virtual void print(std::ostream &dst) const override{
 		decspec->print(dst);
 		initdeclaratorlist->print(dst);
-		std::cerr << "Declaration" << std::endl;
+		dst << ";";
+		// std::cerr << "Declaration" << std::endl;
 	}
+};
 
-
+//Declaration_Specifiers Declarator Compound_Statement
+class FunctionDefinition : public Node{
+private:
+	const DeclarationSpecifier* decspec;
+	const NodePtr dec;
+	const Compound_Statement* cstatement;
+public:
+		FunctionDefinition(const DeclarationSpecifier* _decspec, const NodePtr _dec,
+			const Compound_Statement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
+		virtual void print(std::ostream &dst) const override{
+			decspec->print(dst);
+			dec->print(dst);
+			cstatement->print(dst);
+		}
 
 };
 
+class EmptyDeclaration : public Node{
+private:
+
+}
 
 // class Declaration : public Node{
 // private:

@@ -33,6 +33,10 @@ IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
 
 "="									{return T_EQUAL;}
 ";"									{return T_SEMICOLON;}
+"{"									{return T_LCBRACK;}
+"}"									{return T_RCBRACK;}
+"("									{return T_LRBRACK;}
+")"									{return T_RRBRACK;}
 
 
 [ \t\r\n]+ 				{;}

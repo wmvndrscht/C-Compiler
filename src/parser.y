@@ -21,7 +21,8 @@
 %token T_TYPEDEF T_EXTERN T_STATIC T_AUTO T_REGISTER
 %token T_VOID T_CHAR T_SHORT T_INT T_LONG T_FLOAT T_DOUBLE T_SIGNED T_UNSIGNED
 %token T_CONST T_VOLATILE
-%token T_SEMICOLON T_EQUAL
+%token T_SEMICOLON T_EQUAL 
+%token T_LCBRACK T_RCBRACK T_LRBRACK T_RRBRACK
 %token T_IDENTIFIER
 
 
@@ -41,7 +42,12 @@ ROOT:	Translation_Unit 	{ ast_root = $1; }
 Translation_Unit	:	External_Declaration 	{$$ = $1;}
 									| Translation_Unit External_Declaration	{$$ = new TranslationUnit($1, $2);}
 
-External_Declaration	:	Declaration {$$ = $1;}
+External_Declaration	:	Declaration 				{$$ = $1;}
+											| Function_Defintion	{$$ = $1}
+
+Function_Defintion	:	Declaration_Specifiers Declarator Compound_Statement {$$ = new FunctionDefintion($1,$2,$3);}
+
+Compound_Statement	: T_LCBRACK T_RCBRACK
 
 Declaration 	:	Declaration_Specifiers T_SEMICOLON {$$ = new LoneDeclaration($1);}
 							|	Declaration_Specifiers Init_Declarator_List T_SEMICOLON	{$$ = new Declaration($1,$2); }
@@ -53,6 +59,7 @@ Init_Declarator :	 Declarator {$$ = $1;}
 Declarator 	:	Direct_Declarator		{$$ = $1;}
 
 Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
+									:	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
 
 
 
