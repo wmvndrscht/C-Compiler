@@ -2,11 +2,10 @@ src/*.tab.hpp
 src/*.tab.cpp
 src/*.yy.cpp
 
-test/out/*
+test/out/
+bin/
 
-bin/*
-
-*.o
+**/*.o
 *.output
 *.log
 *.stackdump
@@ -14,5 +13,3 @@ bin/*
 *.DS_Store
 
 .vagrant
-
-
