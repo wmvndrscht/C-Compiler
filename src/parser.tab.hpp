@@ -77,7 +77,11 @@ extern int yydebug;
     T_VOLATILE = 273,
     T_SEMICOLON = 274,
     T_EQUAL = 275,
-    T_IDENTIFIER = 276
+    T_LCBRACK = 276,
+    T_RCBRACK = 277,
+    T_LRBRACK = 278,
+    T_RRBRACK = 279,
+    T_IDENTIFIER = 280
   };
 #endif
 
@@ -90,9 +94,10 @@ union YYSTYPE
 
 	const Node *node;
 	const DeclarationSpecifier *decspec;
+	const CompoundStatement *cstatement;
 	std::string *str;
 
-#line 96 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 101 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

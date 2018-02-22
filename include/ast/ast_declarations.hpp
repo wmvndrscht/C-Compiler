@@ -20,6 +20,7 @@ public:
 		if(decspec != NULL){
 			dst << " ";
 			decspec->print(dst);
+			//std::cerr << "[DeclarationSpecifier]" << std::endl;
 
 		}
 	}
@@ -34,7 +35,7 @@ public:
 
 	virtual void print(std::ostream &dst) const override{
 		dst << " " << variable;
-		// std::cerr << "VariableDeclarator" << std::endl;
+		//std::cerr << "[VariableDeclarator]" << std::endl;
 	}
 };
 
@@ -47,7 +48,7 @@ public:
 	virtual void print(std::ostream &dst) const override{
 		decspec->print(dst);
 		dst << ";";
-		// std::cerr << "LoneDeclaration: " << std::endl;
+		//std::cerr << "[LoneDeclaration]" << std::endl;
 	}
 };
 
@@ -63,7 +64,7 @@ public:
 		decspec->print(dst);
 		initdeclaratorlist->print(dst);
 		dst << ";";
-		// std::cerr << "Declaration" << std::endl;
+		//std::cerr << "[Declaration]" << std::endl;
 	}
 };
 
@@ -72,22 +73,31 @@ class FunctionDefinition : public Node{
 private:
 	const DeclarationSpecifier* decspec;
 	const NodePtr dec;
-	const Compound_Statement* cstatement;
+	const CompoundStatement* cstatement;
 public:
 		FunctionDefinition(const DeclarationSpecifier* _decspec, const NodePtr _dec,
-			const Compound_Statement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
+			const CompoundStatement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
 		virtual void print(std::ostream &dst) const override{
 			decspec->print(dst);
 			dec->print(dst);
 			cstatement->print(dst);
+			//std::cerr << "[FunctionDefinition]" << std::endl;
 		}
 
 };
 
-class EmptyDeclaration : public Node{
+class EmptyDeclarator : public Node{
 private:
+	const NodePtr directdec;
+public:
+	EmptyDeclarator(const NodePtr _directdec) : directdec(_directdec){}
 
-}
+	virtual void print(std::ostream &dst) const override{
+		directdec->print(dst);
+		dst << "()";
+		//std::cerr << "[EmptyDeclarator]" << std::endl;
+	}
+};
 
 // class Declaration : public Node{
 // private:

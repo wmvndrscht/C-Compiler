@@ -1,0 +1,15 @@
+typedef JESUS;
+extern ohlord123;
+static _thiscantberight;
+auto     autocar;
+register osingd;
+void oesngf342;
+char ndsglkn;
+short AWGA2141;
+int awgoin2124;
+long qwoein4235;
+float sopoe42;
+double _no123;
+signed spifn;
+const sgdlfkgn123;
+volatile lsdknk35;

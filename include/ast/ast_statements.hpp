@@ -9,6 +9,7 @@ class CompoundStatement : public Node{
 public:
 	virtual void print(std::ostream &dst) const override{
 		dst<< "{}";
+		//std::cerr << "[CompoundStatement]" << std::endl;
 	}
 };
 

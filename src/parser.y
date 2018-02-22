@@ -14,6 +14,7 @@
 %union{
 	const Node *node;
 	const DeclarationSpecifier *decspec;
+	const CompoundStatement *cstatement;
 	std::string *str;
 }
 
@@ -28,8 +29,10 @@
 
 /* non-terminal */
 %type<node> ROOT Translation_Unit External_Declaration 
+%type<node> Function_Definition
 %type<node> Declaration Declarator Init_Declarator_List Init_Declarator
 %type<node>  Direct_Declarator
+%type<cstatement> Compound_Statement
 %type<decspec> Declaration_Specifiers
 %type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier T_IDENTIFIER
 
@@ -43,11 +46,11 @@ Translation_Unit	:	External_Declaration 	{$$ = $1;}
 									| Translation_Unit External_Declaration	{$$ = new TranslationUnit($1, $2);}
 
 External_Declaration	:	Declaration 				{$$ = $1;}
-											| Function_Defintion	{$$ = $1}
+											| Function_Definition	{$$ = $1;}
 
-Function_Defintion	:	Declaration_Specifiers Declarator Compound_Statement {$$ = new FunctionDefintion($1,$2,$3);}
+Function_Definition	:	Declaration_Specifiers Declarator Compound_Statement {$$ = new FunctionDefinition($1,$2,$3);}
 
-Compound_Statement	: T_LCBRACK T_RCBRACK
+Compound_Statement	: T_LCBRACK T_RCBRACK	{$$ = new CompoundStatement();}
 
 Declaration 	:	Declaration_Specifiers T_SEMICOLON {$$ = new LoneDeclaration($1);}
 							|	Declaration_Specifiers Init_Declarator_List T_SEMICOLON	{$$ = new Declaration($1,$2); }
@@ -59,7 +62,7 @@ Init_Declarator :	 Declarator {$$ = $1;}
 Declarator 	:	Direct_Declarator		{$$ = $1;}
 
 Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
-									:	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
+									|	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
 
 
 
