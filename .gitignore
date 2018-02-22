@@ -1,6 +1,6 @@
-src/*.tab.cpp
-src/*.tab.hpp
-src/*.yy.cpp
+*.tab.hpp
+*.tab.cpp
+*.yy.cpp
 
 test/out/*
 
