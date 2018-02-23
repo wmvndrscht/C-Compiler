@@ -11,7 +11,7 @@ fi
 echo "===================================="
 echo " Cleaning temporaries and outputs"
 make clean
-echo " Force building bin/print"
+echo " Force building bin/c_compiler"
 make all -B
 if [[ "$?" -ne 0 ]]; then
 	echo "Build failed.";
@@ -28,7 +28,7 @@ for i in test/in/*.txt; do
 	echo "=================================="
 	echo "Input file : ${i}"
 	BASENAME=$(basename $i .txt)
-	cat $i | ${DOCS2UNIX} | ./bin/print > test/out/$BASENAME.stdout.txt 2> test/out/$BASENAME.stderr.txt
+	cat $i | ${DOCS2UNIX} | ./bin/c_compiler > test/out/$BASENAME.stdout.txt 2> test/out/$BASENAME.stderr.txt
 	diff <(cat test/ref/$BASENAME.stdout.txt | ${DOCS2UNIX}) <(cat test/out/$BASENAME.stdout.txt) > test/out/$BASENAME.diff.txt
 	if [[ "$?" -ne "0" ]]; then
 		echo -e "\nERROR"

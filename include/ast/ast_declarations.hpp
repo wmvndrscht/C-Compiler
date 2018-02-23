@@ -24,6 +24,12 @@ public:
 
 		}
 	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << type;
+		if( decspec != NULL){
+			dst << "\n **>1 Declaration Specifier not in spec for formative** \n";
+		}
+	}
 
 };
 
@@ -37,6 +43,11 @@ public:
 		dst << " " << variable;
 		//std::cerr << "[VariableDeclarator]" << std::endl;
 	}
+
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << variable;
+	}
+
 };
 
 class LoneDeclaration : public Node {
@@ -49,6 +60,9 @@ public:
 		decspec->print(dst);
 		dst << ";";
 		//std::cerr << "[LoneDeclaration]" << std::endl;
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << "\n **Lone Declarationnot in py spec**\n";
 	}
 };
 
@@ -66,6 +80,9 @@ public:
 		dst << ";";
 		//std::cerr << "[Declaration]" << std::endl;
 	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << "Declaration needs adaption later on";
+	}
 };
 
 //Declaration_Specifiers Declarator Compound_Statement
@@ -75,14 +92,19 @@ private:
 	const NodePtr dec;
 	const CompoundStatement* cstatement;
 public:
-		FunctionDefinition(const DeclarationSpecifier* _decspec, const NodePtr _dec,
-			const CompoundStatement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
-		virtual void print(std::ostream &dst) const override{
-			decspec->print(dst);
-			dec->print(dst);
-			cstatement->print(dst);
-			//std::cerr << "[FunctionDefinition]" << std::endl;
-		}
+	FunctionDefinition(const DeclarationSpecifier* _decspec, const NodePtr _dec,
+		const CompoundStatement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
+	virtual void print(std::ostream &dst) const override{
+		decspec->print(dst);
+		dec->print(dst);
+		cstatement->print(dst);
+		//std::cerr << "[FunctionDefinition]" << std::endl;
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << "int ";
+		dec->py_translate(dst);
+		cstatement->py_translate(dst);
+	}
 
 };
 
@@ -96,6 +118,10 @@ public:
 		directdec->print(dst);
 		dst << "()";
 		//std::cerr << "[EmptyDeclarator]" << std::endl;
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		directdec->py_translate(dst);
+		dst << "()";
 	}
 };
 

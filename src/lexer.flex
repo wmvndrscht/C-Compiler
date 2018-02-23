@@ -8,6 +8,8 @@
 %}
 
 IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
+ /*include mutiple constants eg hex, oct */
+NUMBER 		 [-]?[1-9][0-9]*
 
 %%
 
@@ -27,9 +29,12 @@ IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
 "signed"						{return T_SIGNED;}
 
 "const"							{return T_CONST;}
-"volatile"					{return T_VOLATILE;}
+"volatile"					{return T_VOLATILE;}	
+
+"return"						{return T_RETURN;}
 
 {IDENTIFIER}				{yylval.str=new std::string(yytext);return T_IDENTIFIER;}
+{NUMBER}						{yylval.number= new double(strtod(yytext, 0)); return T_NUMBER; }
 
 "="									{return T_EQUAL;}
 ";"									{return T_SEMICOLON;}

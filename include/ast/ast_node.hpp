@@ -15,6 +15,7 @@ public:
 
     //! Tell and Node to print itself to the given stream
   virtual void print(std::ostream &dst) const =0;
+  virtual void py_translate(std::ostream &dst) const =0;
 
 };
 
@@ -31,6 +32,11 @@ public:
 		left->print(dst);
 		dst<<"\n";
 		right->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		left->py_translate(dst);
+		dst<<"\n";
+		right->py_translate(dst);
 	}
 
 };

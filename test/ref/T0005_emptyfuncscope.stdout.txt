@@ -1,3 +1,6 @@
-int f(){}
-extern double ohlordf(){}
-typedef int f(){}
+int f(){
+}
+extern double ohlordf(){
+}
+typedef int f(){
+}

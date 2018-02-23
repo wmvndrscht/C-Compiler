@@ -18,107 +18,132 @@ Grammar
     6 Function_Definition: Declaration_Specifiers Declarator Compound_Statement
 
     7 Compound_Statement: T_LCBRACK T_RCBRACK
+    8                   | T_LCBRACK Statement_List T_RCBRACK
 
-    8 Declaration: Declaration_Specifiers T_SEMICOLON
-    9            | Declaration_Specifiers Init_Declarator_List T_SEMICOLON
+    9 Declaration: Declaration_Specifiers T_SEMICOLON
+   10            | Declaration_Specifiers Init_Declarator_List T_SEMICOLON
 
-   10 Init_Declarator_List: Init_Declarator
+   11 Statement_List: Statement
 
-   11 Init_Declarator: Declarator
+   12 Statement: Return_Statement
 
-   12 Declarator: Direct_Declarator
+   13 Return_Statement: T_RETURN T_SEMICOLON
+   14                 | T_RETURN Expression T_SEMICOLON
 
-   13 Direct_Declarator: T_IDENTIFIER
-   14                  | Direct_Declarator T_LRBRACK T_RRBRACK
+   15 Expression: Primary_Expression
 
-   15 Declaration_Specifiers: Storage_Class_Specifier Declaration_Specifiers
-   16                       | Storage_Class_Specifier
-   17                       | Type_Specifier Declaration_Specifiers
-   18                       | Type_Specifier
-   19                       | Type_Qualifier Declaration_Specifiers
-   20                       | Type_Qualifier
+   16 Primary_Expression: T_IDENTIFIER
+   17                   | T_NUMBER
 
-   21 Storage_Class_Specifier: T_TYPEDEF
-   22                        | T_EXTERN
-   23                        | T_STATIC
-   24                        | T_AUTO
-   25                        | T_REGISTER
+   18 Init_Declarator_List: Init_Declarator
 
-   26 Type_Specifier: T_VOID
-   27               | T_CHAR
-   28               | T_SHORT
-   29               | T_INT
-   30               | T_LONG
-   31               | T_FLOAT
-   32               | T_DOUBLE
-   33               | T_SIGNED
-   34               | T_UNSIGNED
+   19 Init_Declarator: Declarator
 
-   35 Type_Qualifier: T_CONST
-   36               | T_VOLATILE
+   20 Declarator: Direct_Declarator
+
+   21 Direct_Declarator: T_IDENTIFIER
+   22                  | Direct_Declarator T_LRBRACK T_RRBRACK
+
+   23 Declaration_Specifiers: Storage_Class_Specifier Declaration_Specifiers
+   24                       | Storage_Class_Specifier
+   25                       | Type_Specifier Declaration_Specifiers
+   26                       | Type_Specifier
+   27                       | Type_Qualifier Declaration_Specifiers
+   28                       | Type_Qualifier
+
+   29 Storage_Class_Specifier: T_TYPEDEF
+   30                        | T_EXTERN
+   31                        | T_STATIC
+   32                        | T_AUTO
+   33                        | T_REGISTER
+
+   34 Type_Specifier: T_VOID
+   35               | T_CHAR
+   36               | T_SHORT
+   37               | T_INT
+   38               | T_LONG
+   39               | T_FLOAT
+   40               | T_DOUBLE
+   41               | T_SIGNED
+   42               | T_UNSIGNED
+
+   43 Type_Qualifier: T_CONST
+   44               | T_VOLATILE
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-T_TYPEDEF (258) 21
-T_EXTERN (259) 22
-T_STATIC (260) 23
-T_AUTO (261) 24
-T_REGISTER (262) 25
-T_VOID (263) 26
-T_CHAR (264) 27
-T_SHORT (265) 28
-T_INT (266) 29
-T_LONG (267) 30
-T_FLOAT (268) 31
-T_DOUBLE (269) 32
-T_SIGNED (270) 33
-T_UNSIGNED (271) 34
-T_CONST (272) 35
-T_VOLATILE (273) 36
-T_SEMICOLON (274) 8 9
+T_TYPEDEF (258) 29
+T_EXTERN (259) 30
+T_STATIC (260) 31
+T_AUTO (261) 32
+T_REGISTER (262) 33
+T_VOID (263) 34
+T_CHAR (264) 35
+T_SHORT (265) 36
+T_INT (266) 37
+T_LONG (267) 38
+T_FLOAT (268) 39
+T_DOUBLE (269) 40
+T_SIGNED (270) 41
+T_UNSIGNED (271) 42
+T_CONST (272) 43
+T_VOLATILE (273) 44
+T_SEMICOLON (274) 9 10 13 14
 T_EQUAL (275)
-T_LCBRACK (276) 7
-T_RCBRACK (277) 7
-T_LRBRACK (278) 14
-T_RRBRACK (279) 14
-T_IDENTIFIER (280) 13
+T_LCBRACK (276) 7 8
+T_RCBRACK (277) 7 8
+T_LRBRACK (278) 22
+T_RRBRACK (279) 22
+T_IDENTIFIER (280) 16 21
+T_RETURN (281) 13 14
+T_NUMBER (282) 17
 
 
 Nonterminals, with rules where they appear
 
-$accept (26)
+$accept (28)
     on left: 0
-ROOT (27)
+ROOT (29)
     on left: 1, on right: 0
-Translation_Unit (28)
+Translation_Unit (30)
     on left: 2 3, on right: 1 3
-External_Declaration (29)
+External_Declaration (31)
     on left: 4 5, on right: 2 3
-Function_Definition (30)
+Function_Definition (32)
     on left: 6, on right: 5
-Compound_Statement (31)
-    on left: 7, on right: 6
-Declaration (32)
-    on left: 8 9, on right: 4
-Init_Declarator_List (33)
-    on left: 10, on right: 9
-Init_Declarator (34)
-    on left: 11, on right: 10
-Declarator (35)
-    on left: 12, on right: 6 11
-Direct_Declarator (36)
-    on left: 13 14, on right: 12 14
-Declaration_Specifiers (37)
-    on left: 15 16 17 18 19 20, on right: 6 8 9 15 17 19
-Storage_Class_Specifier (38)
-    on left: 21 22 23 24 25, on right: 15 16
-Type_Specifier (39)
-    on left: 26 27 28 29 30 31 32 33 34, on right: 17 18
-Type_Qualifier (40)
-    on left: 35 36, on right: 19 20
+Compound_Statement (33)
+    on left: 7 8, on right: 6
+Declaration (34)
+    on left: 9 10, on right: 4
+Statement_List (35)
+    on left: 11, on right: 8
+Statement (36)
+    on left: 12, on right: 11
+Return_Statement (37)
+    on left: 13 14, on right: 12
+Expression (38)
+    on left: 15, on right: 14
+Primary_Expression (39)
+    on left: 16 17, on right: 15
+Init_Declarator_List (40)
+    on left: 18, on right: 10
+Init_Declarator (41)
+    on left: 19, on right: 18
+Declarator (42)
+    on left: 20, on right: 6 19
+Direct_Declarator (43)
+    on left: 21 22, on right: 20 22
+Declaration_Specifiers (44)
+    on left: 23 24 25 26 27 28, on right: 6 9 10 23 25 27
+Storage_Class_Specifier (45)
+    on left: 29 30 31 32 33, on right: 23 24
+Type_Specifier (46)
+    on left: 34 35 36 37 38 39 40 41 42, on right: 25 26
+Type_Qualifier (47)
+    on left: 43 44, on right: 27 28
 
 
 State 0
@@ -155,114 +180,114 @@ State 0
 
 State 1
 
-   21 Storage_Class_Specifier: T_TYPEDEF .
+   29 Storage_Class_Specifier: T_TYPEDEF .
 
-    $default  reduce using rule 21 (Storage_Class_Specifier)
+    $default  reduce using rule 29 (Storage_Class_Specifier)
 
 
 State 2
 
-   22 Storage_Class_Specifier: T_EXTERN .
+   30 Storage_Class_Specifier: T_EXTERN .
 
-    $default  reduce using rule 22 (Storage_Class_Specifier)
+    $default  reduce using rule 30 (Storage_Class_Specifier)
 
 
 State 3
 
-   23 Storage_Class_Specifier: T_STATIC .
+   31 Storage_Class_Specifier: T_STATIC .
 
-    $default  reduce using rule 23 (Storage_Class_Specifier)
+    $default  reduce using rule 31 (Storage_Class_Specifier)
 
 
 State 4
 
-   24 Storage_Class_Specifier: T_AUTO .
+   32 Storage_Class_Specifier: T_AUTO .
 
-    $default  reduce using rule 24 (Storage_Class_Specifier)
+    $default  reduce using rule 32 (Storage_Class_Specifier)
 
 
 State 5
 
-   25 Storage_Class_Specifier: T_REGISTER .
+   33 Storage_Class_Specifier: T_REGISTER .
 
-    $default  reduce using rule 25 (Storage_Class_Specifier)
+    $default  reduce using rule 33 (Storage_Class_Specifier)
 
 
 State 6
 
-   26 Type_Specifier: T_VOID .
-
-    $default  reduce using rule 26 (Type_Specifier)
-
-
-State 7
-
-   27 Type_Specifier: T_CHAR .
-
-    $default  reduce using rule 27 (Type_Specifier)
-
-
-State 8
-
-   28 Type_Specifier: T_SHORT .
-
-    $default  reduce using rule 28 (Type_Specifier)
-
-
-State 9
-
-   29 Type_Specifier: T_INT .
-
-    $default  reduce using rule 29 (Type_Specifier)
-
-
-State 10
-
-   30 Type_Specifier: T_LONG .
-
-    $default  reduce using rule 30 (Type_Specifier)
-
-
-State 11
-
-   31 Type_Specifier: T_FLOAT .
-
-    $default  reduce using rule 31 (Type_Specifier)
-
-
-State 12
-
-   32 Type_Specifier: T_DOUBLE .
-
-    $default  reduce using rule 32 (Type_Specifier)
-
-
-State 13
-
-   33 Type_Specifier: T_SIGNED .
-
-    $default  reduce using rule 33 (Type_Specifier)
-
-
-State 14
-
-   34 Type_Specifier: T_UNSIGNED .
+   34 Type_Specifier: T_VOID .
 
     $default  reduce using rule 34 (Type_Specifier)
 
 
+State 7
+
+   35 Type_Specifier: T_CHAR .
+
+    $default  reduce using rule 35 (Type_Specifier)
+
+
+State 8
+
+   36 Type_Specifier: T_SHORT .
+
+    $default  reduce using rule 36 (Type_Specifier)
+
+
+State 9
+
+   37 Type_Specifier: T_INT .
+
+    $default  reduce using rule 37 (Type_Specifier)
+
+
+State 10
+
+   38 Type_Specifier: T_LONG .
+
+    $default  reduce using rule 38 (Type_Specifier)
+
+
+State 11
+
+   39 Type_Specifier: T_FLOAT .
+
+    $default  reduce using rule 39 (Type_Specifier)
+
+
+State 12
+
+   40 Type_Specifier: T_DOUBLE .
+
+    $default  reduce using rule 40 (Type_Specifier)
+
+
+State 13
+
+   41 Type_Specifier: T_SIGNED .
+
+    $default  reduce using rule 41 (Type_Specifier)
+
+
+State 14
+
+   42 Type_Specifier: T_UNSIGNED .
+
+    $default  reduce using rule 42 (Type_Specifier)
+
+
 State 15
 
-   35 Type_Qualifier: T_CONST .
+   43 Type_Qualifier: T_CONST .
 
-    $default  reduce using rule 35 (Type_Qualifier)
+    $default  reduce using rule 43 (Type_Qualifier)
 
 
 State 16
 
-   36 Type_Qualifier: T_VOLATILE .
+   44 Type_Qualifier: T_VOLATILE .
 
-    $default  reduce using rule 36 (Type_Qualifier)
+    $default  reduce using rule 44 (Type_Qualifier)
 
 
 State 17
@@ -329,8 +354,8 @@ State 21
 State 22
 
     6 Function_Definition: Declaration_Specifiers . Declarator Compound_Statement
-    8 Declaration: Declaration_Specifiers . T_SEMICOLON
-    9            | Declaration_Specifiers . Init_Declarator_List T_SEMICOLON
+    9 Declaration: Declaration_Specifiers . T_SEMICOLON
+   10            | Declaration_Specifiers . Init_Declarator_List T_SEMICOLON
 
     T_SEMICOLON   shift, and go to state 28
     T_IDENTIFIER  shift, and go to state 29
@@ -343,8 +368,8 @@ State 22
 
 State 23
 
-   15 Declaration_Specifiers: Storage_Class_Specifier . Declaration_Specifiers
-   16                       | Storage_Class_Specifier .
+   23 Declaration_Specifiers: Storage_Class_Specifier . Declaration_Specifiers
+   24                       | Storage_Class_Specifier .
 
     T_TYPEDEF   shift, and go to state 1
     T_EXTERN    shift, and go to state 2
@@ -363,7 +388,7 @@ State 23
     T_CONST     shift, and go to state 15
     T_VOLATILE  shift, and go to state 16
 
-    $default  reduce using rule 16 (Declaration_Specifiers)
+    $default  reduce using rule 24 (Declaration_Specifiers)
 
     Declaration_Specifiers   go to state 34
     Storage_Class_Specifier  go to state 23
@@ -373,8 +398,8 @@ State 23
 
 State 24
 
-   17 Declaration_Specifiers: Type_Specifier . Declaration_Specifiers
-   18                       | Type_Specifier .
+   25 Declaration_Specifiers: Type_Specifier . Declaration_Specifiers
+   26                       | Type_Specifier .
 
     T_TYPEDEF   shift, and go to state 1
     T_EXTERN    shift, and go to state 2
@@ -393,7 +418,7 @@ State 24
     T_CONST     shift, and go to state 15
     T_VOLATILE  shift, and go to state 16
 
-    $default  reduce using rule 18 (Declaration_Specifiers)
+    $default  reduce using rule 26 (Declaration_Specifiers)
 
     Declaration_Specifiers   go to state 35
     Storage_Class_Specifier  go to state 23
@@ -403,8 +428,8 @@ State 24
 
 State 25
 
-   19 Declaration_Specifiers: Type_Qualifier . Declaration_Specifiers
-   20                       | Type_Qualifier .
+   27 Declaration_Specifiers: Type_Qualifier . Declaration_Specifiers
+   28                       | Type_Qualifier .
 
     T_TYPEDEF   shift, and go to state 1
     T_EXTERN    shift, and go to state 2
@@ -423,7 +448,7 @@ State 25
     T_CONST     shift, and go to state 15
     T_VOLATILE  shift, and go to state 16
 
-    $default  reduce using rule 20 (Declaration_Specifiers)
+    $default  reduce using rule 28 (Declaration_Specifiers)
 
     Declaration_Specifiers   go to state 36
     Storage_Class_Specifier  go to state 23
@@ -447,87 +472,93 @@ State 27
 
 State 28
 
-    8 Declaration: Declaration_Specifiers T_SEMICOLON .
+    9 Declaration: Declaration_Specifiers T_SEMICOLON .
 
-    $default  reduce using rule 8 (Declaration)
+    $default  reduce using rule 9 (Declaration)
 
 
 State 29
 
-   13 Direct_Declarator: T_IDENTIFIER .
+   21 Direct_Declarator: T_IDENTIFIER .
 
-    $default  reduce using rule 13 (Direct_Declarator)
+    $default  reduce using rule 21 (Direct_Declarator)
 
 
 State 30
 
-    9 Declaration: Declaration_Specifiers Init_Declarator_List . T_SEMICOLON
+   10 Declaration: Declaration_Specifiers Init_Declarator_List . T_SEMICOLON
 
     T_SEMICOLON  shift, and go to state 37
 
 
 State 31
 
-   10 Init_Declarator_List: Init_Declarator .
+   18 Init_Declarator_List: Init_Declarator .
 
-    $default  reduce using rule 10 (Init_Declarator_List)
+    $default  reduce using rule 18 (Init_Declarator_List)
 
 
 State 32
 
     6 Function_Definition: Declaration_Specifiers Declarator . Compound_Statement
-   11 Init_Declarator: Declarator .
+   19 Init_Declarator: Declarator .
 
     T_LCBRACK  shift, and go to state 38
 
-    $default  reduce using rule 11 (Init_Declarator)
+    $default  reduce using rule 19 (Init_Declarator)
 
     Compound_Statement  go to state 39
 
 
 State 33
 
-   12 Declarator: Direct_Declarator .
-   14 Direct_Declarator: Direct_Declarator . T_LRBRACK T_RRBRACK
+   20 Declarator: Direct_Declarator .
+   22 Direct_Declarator: Direct_Declarator . T_LRBRACK T_RRBRACK
 
     T_LRBRACK  shift, and go to state 40
 
-    $default  reduce using rule 12 (Declarator)
+    $default  reduce using rule 20 (Declarator)
 
 
 State 34
 
-   15 Declaration_Specifiers: Storage_Class_Specifier Declaration_Specifiers .
+   23 Declaration_Specifiers: Storage_Class_Specifier Declaration_Specifiers .
 
-    $default  reduce using rule 15 (Declaration_Specifiers)
+    $default  reduce using rule 23 (Declaration_Specifiers)
 
 
 State 35
 
-   17 Declaration_Specifiers: Type_Specifier Declaration_Specifiers .
+   25 Declaration_Specifiers: Type_Specifier Declaration_Specifiers .
 
-    $default  reduce using rule 17 (Declaration_Specifiers)
+    $default  reduce using rule 25 (Declaration_Specifiers)
 
 
 State 36
 
-   19 Declaration_Specifiers: Type_Qualifier Declaration_Specifiers .
+   27 Declaration_Specifiers: Type_Qualifier Declaration_Specifiers .
 
-    $default  reduce using rule 19 (Declaration_Specifiers)
+    $default  reduce using rule 27 (Declaration_Specifiers)
 
 
 State 37
 
-    9 Declaration: Declaration_Specifiers Init_Declarator_List T_SEMICOLON .
+   10 Declaration: Declaration_Specifiers Init_Declarator_List T_SEMICOLON .
 
-    $default  reduce using rule 9 (Declaration)
+    $default  reduce using rule 10 (Declaration)
 
 
 State 38
 
     7 Compound_Statement: T_LCBRACK . T_RCBRACK
+    8                   | T_LCBRACK . Statement_List T_RCBRACK
 
     T_RCBRACK  shift, and go to state 41
+    T_RETURN   shift, and go to state 42
+
+    Statement_List    go to state 43
+    Statement         go to state 44
+    Return_Statement  go to state 45
 
 
 State 39
@@ -539,9 +570,9 @@ State 39
 
 State 40
 
-   14 Direct_Declarator: Direct_Declarator T_LRBRACK . T_RRBRACK
+   22 Direct_Declarator: Direct_Declarator T_LRBRACK . T_RRBRACK
 
-    T_RRBRACK  shift, and go to state 42
+    T_RRBRACK  shift, and go to state 46
 
 
 State 41
@@ -553,6 +584,89 @@ State 41
 
 State 42
 
-   14 Direct_Declarator: Direct_Declarator T_LRBRACK T_RRBRACK .
+   13 Return_Statement: T_RETURN . T_SEMICOLON
+   14                 | T_RETURN . Expression T_SEMICOLON
 
-    $default  reduce using rule 14 (Direct_Declarator)
+    T_SEMICOLON   shift, and go to state 47
+    T_IDENTIFIER  shift, and go to state 48
+    T_NUMBER      shift, and go to state 49
+
+    Expression          go to state 50
+    Primary_Expression  go to state 51
+
+
+State 43
+
+    8 Compound_Statement: T_LCBRACK Statement_List . T_RCBRACK
+
+    T_RCBRACK  shift, and go to state 52
+
+
+State 44
+
+   11 Statement_List: Statement .
+
+    $default  reduce using rule 11 (Statement_List)
+
+
+State 45
+
+   12 Statement: Return_Statement .
+
+    $default  reduce using rule 12 (Statement)
+
+
+State 46
+
+   22 Direct_Declarator: Direct_Declarator T_LRBRACK T_RRBRACK .
+
+    $default  reduce using rule 22 (Direct_Declarator)
+
+
+State 47
+
+   13 Return_Statement: T_RETURN T_SEMICOLON .
+
+    $default  reduce using rule 13 (Return_Statement)
+
+
+State 48
+
+   16 Primary_Expression: T_IDENTIFIER .
+
+    $default  reduce using rule 16 (Primary_Expression)
+
+
+State 49
+
+   17 Primary_Expression: T_NUMBER .
+
+    $default  reduce using rule 17 (Primary_Expression)
+
+
+State 50
+
+   14 Return_Statement: T_RETURN Expression . T_SEMICOLON
+
+    T_SEMICOLON  shift, and go to state 53
+
+
+State 51
+
+   15 Expression: Primary_Expression .
+
+    $default  reduce using rule 15 (Expression)
+
+
+State 52
+
+    8 Compound_Statement: T_LCBRACK Statement_List T_RCBRACK .
+
+    $default  reduce using rule 8 (Compound_Statement)
+
+
+State 53
+
+   14 Return_Statement: T_RETURN Expression T_SEMICOLON .
+
+    $default  reduce using rule 14 (Return_Statement)

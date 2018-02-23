@@ -1,7 +1,9 @@
 CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include 
 
-all : bin/print
+bin/c_compiler : bin/c_compiler
+
+all : bin/c_compiler
 
 src/parser.tab.cpp src/parser.tab.hpp : src/parser.y
 	bison -v -d src/parser.y -o src/parser.tab.cpp
@@ -9,9 +11,9 @@ src/parser.tab.cpp src/parser.tab.hpp : src/parser.y
 src/lexer.yy.cpp : src/lexer.flex src/parser.tab.hpp
 	flex -o src/lexer.yy.cpp  src/lexer.flex
 
-bin/print : src/print.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
+bin/c_compiler : src/c_compiler.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o
 	mkdir -p bin
-	g++ $(CPPFLAGS) -o bin/print $^
+	g++ $(CPPFLAGS) -o bin/c_compiler $^
 	
 
 
