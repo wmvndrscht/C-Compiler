@@ -1,0 +1,7 @@
+int f(){
+int a = 5;
+int b = 10;
+double t = 0;
+const double a;
+return 10;
+}

@@ -29,21 +29,31 @@
 %token T_IDENTIFIER
 %token T_RETURN
 %token T_NUMBER
+%token T_COMMA
 
 
 /* non-terminal */
 %type<node> ROOT Translation_Unit External_Declaration 
 %type<node> Function_Definition
-%type<node> Declaration Declarator Init_Declarator_List Init_Declarator
-%type<node>  Direct_Declarator
 %type<cstatement> Compound_Statement
+%type<node> Declaration_List
+%type<node> Declaration 
 %type<node> Statement_List Statement Return_Statement
-%type<node> Expression Primary_Expression
+%type<node> Expression 
+%type<node> Init_Declarator_List Init_Declarator
+%type<node> Initializer
+%type<node> Assignment_Expression Conditional_Expression Logical_OR_Expression
+%type<node> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
+%type<node> AND_Expression Equality_Expression Relational_Expression Shift_Expression
+%type<node> Additive_Expression Multiplicative_Expression Cast_Expression
+%type<node> Unary_Expression Postfix_Expression Primary_Expression
+%type<node> Declarator
+%type<node> Direct_Declarator
+%type<node> Parameter_Type_List Parameter_List Parameter_Declaration
 %type<decspec> Declaration_Specifiers
-%type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier T_IDENTIFIER
+%type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier
+%type<str> T_IDENTIFIER
 %type<number> T_NUMBER
-
-
 
 %%
 
@@ -57,39 +67,81 @@ External_Declaration	:	Declaration 				{$$ = $1;}
 
 Function_Definition	:	Declaration_Specifiers Declarator Compound_Statement {$$ = new FunctionDefinition($1,$2,$3);}
 
+
 Compound_Statement	: T_LCBRACK T_RCBRACK	{$$ = new CompoundStatement(NULL, NULL);}
 										| T_LCBRACK Statement_List T_RCBRACK	{$$ = new CompoundStatement($2, NULL);}
-										/*| T_LCBRACK Declaration_List T_RCBRACK *
-										/* | T_LCBRACK Declaration_List Statement_List T_RCBRACK */
+										| T_LCBRACK Declaration_List T_RCBRACK {$$ = new CompoundStatement(NULL, $2);}
+									  | T_LCBRACK Declaration_List Statement_List T_RCBRACK {$$ = new CompoundStatement($2,$3);}
 
+Declaration_List	: Declaration 	{$$ = $1;}
+									| Declaration_List Declaration {$$ = new DeclarationList($1,$2);}
 
 Declaration 	:	Declaration_Specifiers T_SEMICOLON {$$ = new LoneDeclaration($1);}
 							|	Declaration_Specifiers Init_Declarator_List T_SEMICOLON	{$$ = new Declaration($1,$2); }
 
- /* Declaration_List	: Declaration
-									| Declaration_List Declaration */
 
 Statement_List	: Statement {$$ = $1;}
-								/*| Statement_List	Statement {$$ = $1} */
+								| Statement_List	Statement {$$ = new StatementList($1,$2);}
 
 Statement : Return_Statement	{$$ = $1;}
 
 Return_Statement	:	T_RETURN T_SEMICOLON	{ $$ = new ReturnStatement(); }
 									| T_RETURN Expression T_SEMICOLON {$$ = new ReturnExprStatement($2);}
 
-Expression 	: Primary_Expression {$$ = $1;}
-
-Primary_Expression	: T_IDENTIFIER	{$$ = new ExpressionVariable($1);}
-										| T_NUMBER				{$$ = new Value($1);}
+Expression 	: Assignment_Expression {$$ = $1;}
 
 Init_Declarator_List 	: Init_Declarator {$$ = $1;}
 
-Init_Declarator :	 Declarator {$$ = $1;}
+Init_Declarator :	Declarator T_EQUAL Initializer 	{$$ = new InitDeclarator($1,$3);}
+								|	Declarator 											{$$ = new LoneInitDeclarator($1);} //Here make sure py_translate =0 
+
+Initializer	: Assignment_Expression	{$$ = $1;}
+
+Assignment_Expression	:	Conditional_Expression {$$ = $1;}
+
+Conditional_Expression	: Logical_OR_Expression {$$ = $1;}
+
+Logical_OR_Expression	: Logical_AND_Expression {$$ = $1;}
+
+Logical_AND_Expression	: Inclusive_OR_Expressoin {$$ = $1;}
+
+Inclusive_OR_Expressoin	: Exclusive_OR_Expression {$$ = $1;}
+
+Exclusive_OR_Expression	:	AND_Expression {$$ = $1;}
+
+AND_Expression :	Equality_Expression {$$ = $1;}
+
+Equality_Expression	:	Relational_Expression {$$ = $1;}
+
+Relational_Expression	: Shift_Expression {$$ = $1;}
+
+Shift_Expression : Additive_Expression {$$ = $1;}
+
+Additive_Expression	: Multiplicative_Expression {$$ = $1;}
+
+Multiplicative_Expression : Cast_Expression {$$ = $1;} 
+
+Cast_Expression :	Unary_Expression {$$ = $1;}
+
+Unary_Expression	: Postfix_Expression {$$ = $1;}
+
+Postfix_Expression	: Primary_Expression {$$ = $1;}
+
+Primary_Expression	: T_IDENTIFIER	{$$ = new ExpressionVariable($1);}
+										| T_NUMBER				{$$ = new Value($1);}
 
 Declarator 	:	Direct_Declarator		{$$ = $1;}
 
 Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
 									|	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
+									| Direct_Declarator T_LRBRACK Parameter_Type_List T_RRBRACK {$$ = new ParamListDeclarator($1,$3);}
+
+Parameter_Type_List : Parameter_List {$$ = $1;}
+
+Parameter_List 	: Parameter_Declaration	{$$ = $1;}
+								| Parameter_List T_COMMA  Parameter_Declaration {$$ = new ParamList($1,$3);}
+
+Parameter_Declaration : Declaration_Specifiers Declarator {$$ = new ParamDeclaration($1,$2);}
 
 Declaration_Specifiers	:	Storage_Class_Specifier Declaration_Specifiers 	{$$ = new DeclarationSpecifier(*$1,$2); }
 												|	Storage_Class_Specifier													{$$ = new DeclarationSpecifier(*$1,NULL); }
@@ -117,30 +169,7 @@ Type_Specifier	:	T_VOID			{$$ = new std::string("void");}
 Type_Qualifier	:	T_CONST			{$$ = new std::string("const");}
 								| T_VOLATILE	{$$ = new std::string("volatile");}
 
- /* Assignment_Expression
-						| Expression T_COMMA Assignment_Expression
 
-Assignment_Expression	:	Conditional_Expression
-											| Logical_OR_Expression
-
-
-Conditional_Expression	: Logical_OR_Expression
-
-Logical_OR_Expression	: Logical_AND_Expression
-
-Logical_AND_Expression	: Inclusive_OR_Expressoin
-
-Inclusive_OR_Expressoin	: Exclusive_OR_Expression
-
-Exclusive_OR_Expression	:	Logical_AND_Expression
-
-AND_Expression :	Equality_Expression
-
-Relational_Expression	: Shift_Expression
-
-Shift_Expression : Additive_Expression
-	
-*/
 
 	/*
 		Init_Declarator :	Declarator T_EQUAL Initializer

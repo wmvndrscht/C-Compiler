@@ -66,6 +66,25 @@ public:
 	}
 };
 
+class StatementList : public Node{
+private:
+	const NodePtr statlist;
+	const NodePtr stat;
+public:
+	StatementList(const NodePtr _statlist, const NodePtr _stat) : 
+	statlist(_statlist), stat(_stat){}
+	virtual void print(std::ostream &dst) const override{
+		statlist->print(dst);
+		dst << "\n";
+		stat->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		statlist->py_translate(dst);
+		dst << "\n";
+		stat->py_translate(dst);
+	}
+};
+
 
 
 #endif

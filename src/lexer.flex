@@ -5,12 +5,12 @@
 
 	#include "parser.tab.hpp"
 	#include <string>
-	
+
 %}
 
 IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
  /*include mutiple constants eg hex, oct */
-NUMBER 		 [-]?[1-9][0-9]*
+NUMBER 		 [-]?[0-9]+
 
 %%
 
@@ -43,6 +43,7 @@ NUMBER 		 [-]?[1-9][0-9]*
 "}"									{return T_RCBRACK;}
 "("									{return T_LRBRACK;}
 ")"									{return T_RRBRACK;}
+","									{return T_COMMA;}
 
 
 [ \t\r\n]+ 				{;}

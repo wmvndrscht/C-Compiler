@@ -81,7 +81,9 @@ public:
 		//std::cerr << "[Declaration]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		dst << "Declaration needs adaption later on";
+		// decspec->py_translate(dst); don't believe I need this?
+		// dst << " ";
+		initdeclaratorlist->py_translate(dst);
 	}
 };
 
@@ -122,6 +124,117 @@ public:
 	virtual void py_translate(std::ostream &dst) const override{
 		directdec->py_translate(dst);
 		dst << "()";
+	}
+};
+
+class InitDeclarator : public Node{
+private:
+	const NodePtr dec;
+	const NodePtr init;
+public:
+	InitDeclarator(const NodePtr _dec, const NodePtr _init) : dec(_dec), init(_init){}
+	virtual void print(std::ostream &dst) const override{
+		dec->print(dst);
+		dst << " = ";
+		init->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dec->py_translate(dst);
+		dst << "=";
+		init->py_translate(dst);
+	}
+
+};
+
+class LoneInitDeclarator : public Node {
+private:
+	const NodePtr dec;
+public:
+	LoneInitDeclarator(const NodePtr _dec) : dec(_dec){}
+	virtual void print(std::ostream &dst) const override{
+		dec->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dec->py_translate(dst);
+		dst << "=0";
+	}
+
+};
+
+class DeclarationList : public Node{
+private:
+	const NodePtr dec;
+	const NodePtr declist;
+public:
+	DeclarationList(const NodePtr _dec, const NodePtr _declist) : dec(_dec),
+		declist(_declist){}
+	virtual void print(std::ostream &dst) const override{
+		dec->print(dst);
+		dst << "\n";
+		declist->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dec->py_translate(dst);
+		declist->py_translate(dst);
+	}
+};
+
+
+class ParamListDeclarator : public Node{
+private:
+	const NodePtr dec;
+	const NodePtr paramlist;
+public:
+	ParamListDeclarator(const NodePtr _dec, const NodePtr _paramlist) : 
+		dec(_dec), paramlist(_paramlist){}
+	virtual void print(std::ostream &dst) const override{
+		dec->print(dst);
+		dst << "(";
+		paramlist->print(dst);
+		dst << ")";
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dec->py_translate(dst);
+		dst << "(";
+		paramlist->py_translate(dst);
+		dst << ")";
+	}
+};
+
+class ParamDeclaration : public Node{
+private:
+	const NodePtr decspec;
+	const NodePtr dec;
+public:
+	ParamDeclaration(const NodePtr _decspec, const NodePtr _dec) :
+		decspec(_decspec), dec(_dec){}
+	virtual void print(std::ostream &dst) const override{
+		decspec->print(dst);
+		dec->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		decspec->py_translate(dst);
+		dec->py_translate(dst);
+	}
+
+};
+
+class ParamList : public Node{
+private:
+	const NodePtr paramlist;
+	const NodePtr param;
+public:
+	ParamList(const NodePtr _paramlist, const NodePtr _param): 
+		paramlist(_paramlist), param(_param){}
+	virtual void print(std::ostream &dst) const override{
+		paramlist->print(dst);
+		dst << ",";
+		param->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		paramlist->py_translate(dst);
+		dst << ",";
+		param->py_translate(dst);
 	}
 };
 
