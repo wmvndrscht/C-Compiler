@@ -6,6 +6,8 @@
 #include "ast/ast_declarations.hpp"
 #include "ast/ast_expressions.hpp"
 
-extern const Node *parseAST();
+extern const Node *pyparseAST(const char file[]);
+extern const Node *cparseAST();
+
 
 #endif

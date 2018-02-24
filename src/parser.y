@@ -8,6 +8,7 @@
 	int yylex(void);
 	void yyerror(const char*);
 
+	extern FILE* yyin;
 }
 
 
@@ -152,9 +153,17 @@ Shift_Expression : Additive_Expression
 
 const Node *ast_root; // Definition of variable (to match declaration earlier)
 
-const Node *parseAST()
+const Node *pyparseAST(const char file[])
 {
   ast_root=NULL;
+
+  yyin = fopen(file, "r");
+  yyparse();
+  return ast_root;
+}
+
+const Node *cparseAST(){
+	ast_root=NULL;
   yyparse();
   return ast_root;
 }
