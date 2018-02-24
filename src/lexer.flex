@@ -34,6 +34,10 @@ NUMBER 		 [-]?[0-9]+
 
 "return"						{return T_RETURN;}
 
+"while"							{return T_WHILE;}
+"if"								{return T_IF;}
+"else"							{return T_ELSE;}
+
 {IDENTIFIER}				{yylval.str=new std::string(yytext);return T_IDENTIFIER;}
 {NUMBER}						{yylval.number= new double(strtod(yytext, 0)); return T_NUMBER; }
 

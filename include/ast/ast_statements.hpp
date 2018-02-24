@@ -13,7 +13,7 @@ public:
 		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		dst << "\n **Return; not py yet...** \n";
+		dst << "return";
 	}
 };
 
@@ -85,6 +85,73 @@ public:
 	}
 };
 
+class WhileStatement : public Node{
+private:
+	const NodePtr expr;
+	const NodePtr stat;
+public:
+	WhileStatement(const NodePtr _expr, const NodePtr _stat) : 
+		expr(_expr), stat(_stat){}
+	virtual void print(std::ostream &dst) const override{
+		dst << "while(";
+		expr->print(dst);
+		dst << ")";
+		stat->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << "while(";
+		expr->py_translate(dst);
+		dst << "):\n\t";
+		stat->py_translate(dst);
+	}
+};
 
+
+class IfStatement : public Node{
+private:
+	const NodePtr expr;
+	const NodePtr stat;
+public:
+	IfStatement(const NodePtr _expr, const NodePtr _stat) : expr(_expr), stat(_stat){}
+	virtual void print(std::ostream &dst) const override{
+		dst << "if(";
+		expr->print(dst);
+		dst << ")";
+		stat->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << "if(";
+		expr->py_translate(dst);
+		dst << "):\n\t";
+		stat->py_translate(dst);
+	}
+};
+
+class IfElseStatement : public Node{
+private:
+	const NodePtr expr;
+	const NodePtr ifstat;
+	const NodePtr elsestat;
+public:
+	IfElseStatement(const NodePtr _expr, const NodePtr _ifstat, const NodePtr _elsestat) :
+	  expr(_expr), ifstat(_ifstat), elsestat(_elsestat){}
+	virtual void print(std::ostream &dst) const override{
+		dst << "if(";
+		expr->print(dst);
+		dst << ")";
+		ifstat->print(dst);
+		dst << "\n else";
+		elsestat->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << "if(";
+		expr->py_translate(dst);
+		dst << "):\n\t";
+		ifstat->py_translate(dst);
+		dst << "else:\n\t";
+		elsestat->py_translate(dst);
+	}
+
+};
 
 #endif

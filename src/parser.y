@@ -27,9 +27,9 @@
 %token T_SEMICOLON T_EQUAL 
 %token T_LCBRACK T_RCBRACK T_LRBRACK T_RRBRACK
 %token T_IDENTIFIER
-%token T_RETURN
+%token T_RETURN T_WHILE
 %token T_NUMBER
-%token T_COMMA
+%token T_COMMA T_IF T_ELSE
 
 
 /* non-terminal */
@@ -38,7 +38,8 @@
 %type<cstatement> Compound_Statement
 %type<node> Declaration_List
 %type<node> Declaration 
-%type<node> Statement_List Statement Return_Statement
+%type<node> Statement_List Statement Return_Statement Iteration_Statement
+%type<node> Selection_Statement
 %type<node> Expression 
 %type<node> Init_Declarator_List Init_Declarator
 %type<node> Initializer
@@ -81,9 +82,17 @@ Declaration 	:	Declaration_Specifiers T_SEMICOLON {$$ = new LoneDeclaration($1);
 
 
 Statement_List	: Statement {$$ = $1;}
-								| Statement_List	Statement {$$ = new StatementList($1,$2);}
+								| Statement_List Statement {$$ = new StatementList($1,$2);}
 
-Statement : Return_Statement	{$$ = $1;}
+Statement : Compound_Statement	{$$ = $1;}
+					| Selection_Statement {$$ = $1;}
+					| Iteration_Statement	{$$ = $1;}
+					| Return_Statement	{$$ = $1;}
+
+Selection_Statement : T_IF T_LRBRACK Expression T_RRBRACK Statement T_ELSE Statement {$$ = new IfElseStatement($3,$5,$7);} //need to cover if-else crux
+										| T_IF T_LRBRACK Expression T_RRBRACK Statement {$$ = new IfStatement($3,$5);}
+
+Iteration_Statement : T_WHILE T_LRBRACK Expression T_RRBRACK Statement {$$ = new WhileStatement($3,$5);}
 
 Return_Statement	:	T_RETURN T_SEMICOLON	{ $$ = new ReturnStatement(); }
 									| T_RETURN Expression T_SEMICOLON {$$ = new ReturnExprStatement($2);}
