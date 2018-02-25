@@ -238,6 +238,19 @@ public:
 	}
 };
 
+class AssignmentOperator : public Node{
+private:
+	const std::string *assignop;
+public:
+	AssignmentOperator(const std::string *_assignop) : assignop(_assignop){}
+	virtual void print(std::ostream &dst) const override{
+		dst << *assignop;
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << *assignop;
+	}
+};
+
 // class Declaration : public Node{
 // private:
 // 	const DeclarationSpecifier* decspec;

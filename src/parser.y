@@ -30,7 +30,7 @@
 %token T_RETURN T_WHILE
 %token T_NUMBER
 %token T_COMMA T_IF T_ELSE
-
+%token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN
 
 /* non-terminal */
 %type<node> ROOT Translation_Unit External_Declaration 
@@ -39,10 +39,10 @@
 %type<node> Declaration_List
 %type<node> Declaration 
 %type<node> Statement_List Statement Return_Statement Iteration_Statement
-%type<node> Selection_Statement
+%type<node> Selection_Statement Expression_Statement
 %type<node> Expression 
 %type<node> Init_Declarator_List Init_Declarator
-%type<node> Initializer
+%type<node> Initializer Assignment_Operator
 %type<node> Assignment_Expression Conditional_Expression Logical_OR_Expression
 %type<node> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
 %type<node> AND_Expression Equality_Expression Relational_Expression Shift_Expression
@@ -53,7 +53,7 @@
 %type<node> Parameter_Type_List Parameter_List Parameter_Declaration
 %type<decspec> Declaration_Specifiers
 %type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier
-%type<str> T_IDENTIFIER
+%type<str> T_IDENTIFIER T_EQUAL
 %type<number> T_NUMBER
 
 %%
@@ -87,7 +87,10 @@ Statement_List	: Statement {$$ = $1;}
 Statement : Compound_Statement	{$$ = $1;}
 					| Selection_Statement {$$ = $1;}
 					| Iteration_Statement	{$$ = $1;}
+					| Expression_Statement {$$ = $1;}
 					| Return_Statement	{$$ = $1;}
+
+Expression_Statement : Expression T_SEMICOLON { $$ = new ExprStatement($1);}
 
 Selection_Statement : T_IF T_LRBRACK Expression T_RRBRACK Statement T_ELSE Statement {$$ = new IfElseStatement($3,$5,$7);} //need to cover if-else crux
 										| T_IF T_LRBRACK Expression T_RRBRACK Statement {$$ = new IfStatement($3,$5);}
@@ -107,12 +110,17 @@ Init_Declarator :	Declarator T_EQUAL Initializer 	{$$ = new InitDeclarator($1,$3
 Initializer	: Assignment_Expression	{$$ = $1;}
 
 Assignment_Expression	:	Conditional_Expression {$$ = $1;}
+											| Unary_Expression Assignment_Operator Assignment_Expression {$$ = new AssignExpr($1,$2,$3);}
+
+Assignment_Operator : T_EQUAL { $$ = new AssignmentOperator($1);}
 
 Conditional_Expression	: Logical_OR_Expression {$$ = $1;}
 
 Logical_OR_Expression	: Logical_AND_Expression {$$ = $1;}
+											| Logical_OR_Expression T_OR Logical_AND_Expression { $$ = new ORExpression($1,$3);}
 
 Logical_AND_Expression	: Inclusive_OR_Expressoin {$$ = $1;}
+												| Logical_AND_Expression T_AND Logical_OR_Expression { $$ = new ANDExpression($1,$3);}
 
 Inclusive_OR_Expressoin	: Exclusive_OR_Expression {$$ = $1;}
 
@@ -121,14 +129,19 @@ Exclusive_OR_Expression	:	AND_Expression {$$ = $1;}
 AND_Expression :	Equality_Expression {$$ = $1;}
 
 Equality_Expression	:	Relational_Expression {$$ = $1;}
+										| Equality_Expression T_EQ Relational_Expression {$$ = new EqualityExpression($1,$3);}
 
 Relational_Expression	: Shift_Expression {$$ = $1;}
+											| Relational_Expression T_LTHAN Shift_Expression {$$ = new LessThanExpression($1,$3);}
 
 Shift_Expression : Additive_Expression {$$ = $1;}
 
 Additive_Expression	: Multiplicative_Expression {$$ = $1;}
+										| Additive_Expression T_PLUS Cast_Expression {$$ = new AddExpression($1,$3);}
+										| Additive_Expression T_MINUS Cast_Expression {$$ = new SubExpression($1,$3);} //positive vs neg num
 
 Multiplicative_Expression : Cast_Expression {$$ = $1;} 
+													| Multiplicative_Expression T_TIMES Cast_Expression {$$ = new MultExpression($1,$3);}
 
 Cast_Expression :	Unary_Expression {$$ = $1;}
 

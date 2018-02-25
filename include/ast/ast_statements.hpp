@@ -154,4 +154,18 @@ public:
 
 };
 
+class ExprStatement : public Node{
+private:
+	const NodePtr expr;
+public:
+	ExprStatement(const NodePtr _expr) : expr(_expr){}
+	virtual void print(std::ostream &dst) const override{
+		expr->print(dst);
+		dst << ";";
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		expr->print(dst);
+	}
+};
+
 #endif

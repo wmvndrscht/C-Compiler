@@ -10,7 +10,7 @@
 
 IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
  /*include mutiple constants eg hex, oct */
-NUMBER 		 [-]?[0-9]+
+NUMBER 		 [0-9]+
 
 %%
 
@@ -41,13 +41,21 @@ NUMBER 		 [-]?[0-9]+
 {IDENTIFIER}				{yylval.str=new std::string(yytext);return T_IDENTIFIER;}
 {NUMBER}						{yylval.number= new double(strtod(yytext, 0)); return T_NUMBER; }
 
-"="									{return T_EQUAL;}
+"="									{yylval.str=new std::string(yytext);return T_EQUAL;}
 ";"									{return T_SEMICOLON;}
 "{"									{return T_LCBRACK;}
 "}"									{return T_RCBRACK;}
 "("									{return T_LRBRACK;}
 ")"									{return T_RRBRACK;}
 ","									{return T_COMMA;}
+
+"*"									{return T_TIMES;}
+"+"									{return T_PLUS;}
+"-"									{return T_MINUS;}
+"=="								{return T_EQ;}
+"||"								{return T_OR;}
+"&&"								{return T_AND;}
+"<"									{return T_LTHAN;}
 
 
 [ \t\r\n]+ 				{;}
