@@ -166,6 +166,24 @@ public:
 	}
 };
 
+class GreaterThanExpression : public Node {
+private:
+	const NodePtr lhs;
+	const NodePtr rhs;
+public:
+	GreaterThanExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+	virtual void print(std::ostream &dst) const override{
+		lhs->print(dst);
+		dst << ">";
+		rhs->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		lhs->py_translate(dst);
+		dst << ">";
+		rhs->py_translate(dst);
+	}
+};
+
 class EqualityExpression : public Node {
 private:
 	const NodePtr lhs;
@@ -181,6 +199,78 @@ public:
 		lhs->py_translate(dst);
 		dst << "==";
 		rhs->py_translate(dst);
+	}
+};
+
+
+class LonePostfixExpression : public Node{
+private:
+	const NodePtr expr;
+public:
+	LonePostfixExpression(const NodePtr _expr) : expr(_expr){}
+	virtual void print(std::ostream &dst) const override{
+		expr->print(dst);
+		dst << "()";
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		expr->py_translate(dst);
+		dst << "()";
+	}
+};
+
+class PostfixArguExpression : public Node{
+private:
+	const NodePtr expr;
+	const NodePtr arguexpr;
+public:
+	PostfixArguExpression(const NodePtr _expr, const NodePtr _arguexpr):
+		expr(_expr), arguexpr(_arguexpr){}
+	virtual void print(std::ostream &dst) const override{
+		expr->print(dst);
+		dst << "(";
+		arguexpr->print(dst);
+		dst << ")";
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		expr->py_translate(dst);
+		dst << "(";
+		arguexpr->py_translate(dst);
+		dst << ")";
+	}
+};
+
+class AssignExprList : public Node{
+private:
+	const NodePtr exprlist;
+	const NodePtr expr;
+public:
+	AssignExprList(const NodePtr _exprlist, const NodePtr _expr):
+		exprlist(_exprlist), expr(_expr){}
+	virtual void print(std::ostream &dst) const override{
+		exprlist->print(dst);
+		dst << ",";
+		expr->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		exprlist->py_translate(dst);
+		dst << ",";
+		expr->py_translate(dst);
+	}
+};
+
+class UnaryOpExpr : public Node{
+private:
+	const std::string *op;
+	const NodePtr expr;
+public:
+	UnaryOpExpr(const std::string *_op,const NodePtr _expr) : op(_op),expr(_expr){}
+	virtual void print(std::ostream &dst) const override{
+		dst << *op;
+		expr->print(dst);
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << *op;
+		expr->py_translate(dst);
 	}
 };
 

@@ -13,4 +13,5 @@ bin/
 
 *.DS_Store
 
+tmp/*
 .vagrant

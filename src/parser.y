@@ -30,7 +30,7 @@
 %token T_RETURN T_WHILE
 %token T_NUMBER
 %token T_COMMA T_IF T_ELSE
-%token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN
+%token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN T_GTHAN T_BAND
 
 /* non-terminal */
 %type<node> ROOT Translation_Unit External_Declaration 
@@ -48,12 +48,13 @@
 %type<node> AND_Expression Equality_Expression Relational_Expression Shift_Expression
 %type<node> Additive_Expression Multiplicative_Expression Cast_Expression
 %type<node> Unary_Expression Postfix_Expression Primary_Expression
+%type<node> Argument_Expression_List
 %type<node> Declarator
 %type<node> Direct_Declarator
 %type<node> Parameter_Type_List Parameter_List Parameter_Declaration
 %type<decspec> Declaration_Specifiers
 %type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier
-%type<str> T_IDENTIFIER T_EQUAL
+%type<str> T_IDENTIFIER T_EQUAL Unary_Operator
 %type<number> T_NUMBER
 
 %%
@@ -133,21 +134,34 @@ Equality_Expression	:	Relational_Expression {$$ = $1;}
 
 Relational_Expression	: Shift_Expression {$$ = $1;}
 											| Relational_Expression T_LTHAN Shift_Expression {$$ = new LessThanExpression($1,$3);}
+											| Relational_Expression T_GTHAN Shift_Expression {$$ = new GreaterThanExpression($1,$3);}
 
 Shift_Expression : Additive_Expression {$$ = $1;}
+
+Cast_Expression :	Unary_Expression {$$ = $1;}
+
+Multiplicative_Expression : Cast_Expression {$$ = $1;} 
+													| Multiplicative_Expression T_TIMES Cast_Expression {$$ = new MultExpression($1,$3);}
 
 Additive_Expression	: Multiplicative_Expression {$$ = $1;}
 										| Additive_Expression T_PLUS Cast_Expression {$$ = new AddExpression($1,$3);}
 										| Additive_Expression T_MINUS Cast_Expression {$$ = new SubExpression($1,$3);} //positive vs neg num
 
-Multiplicative_Expression : Cast_Expression {$$ = $1;} 
-													| Multiplicative_Expression T_TIMES Cast_Expression {$$ = new MultExpression($1,$3);}
-
-Cast_Expression :	Unary_Expression {$$ = $1;}
-
 Unary_Expression	: Postfix_Expression {$$ = $1;}
+									| Unary_Operator Cast_Expression {$$ = new UnaryOpExpr($1,$2);}
+
+Unary_Operator : T_BAND	{$$ = new std::string("&");}
+							 | T_TIMES {$$ = new std::string("*");}
+							 | T_PLUS {$$ = new std::string("+");}
+							 | T_MINUS {$$ = new std::string("-");}
+
 
 Postfix_Expression	: Primary_Expression {$$ = $1;}
+										| Postfix_Expression T_LRBRACK T_RRBRACK {$$ = new LonePostfixExpression($1);}
+										| Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK {$$ = new PostfixArguExpression($1,$3);}
+
+Argument_Expression_List 	: Assignment_Expression 	{$$ = $1;}
+													| Argument_Expression_List T_COMMA Assignment_Expression {$$ = new AssignExprList($1,$3);}
 
 Primary_Expression	: T_IDENTIFIER	{$$ = new ExpressionVariable($1);}
 										| T_NUMBER				{$$ = new Value($1);}
@@ -214,6 +228,12 @@ const Node *pyparseAST(const char file[])
 }
 
 const Node *cparseAST(){
+	ast_root=NULL;
+  yyparse();
+  return ast_root;
+}
+
+const Node *pparseAST(){
 	ast_root=NULL;
   yyparse();
   return ast_root;

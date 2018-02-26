@@ -56,6 +56,9 @@ NUMBER 		 [0-9]+
 "||"								{return T_OR;}
 "&&"								{return T_AND;}
 "<"									{return T_LTHAN;}
+">"									{return T_GTHAN;}
+
+"&"									{return T_BAND;}
 
 
 [ \t\r\n]+ 				{;}

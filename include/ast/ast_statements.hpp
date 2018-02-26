@@ -54,12 +54,12 @@ public:
 		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		dst << ":\n";
-		dst << "  ";
+		dst << ":\n  ";
 		if(statlist != NULL){
 			statlist->py_translate(dst);
 		}
 		if(declist != NULL){
+			dst << "\n  ";
 			declist->py_translate(dst);
 		}
 		dst << "\n";
@@ -75,12 +75,12 @@ public:
 	statlist(_statlist), stat(_stat){}
 	virtual void print(std::ostream &dst) const override{
 		statlist->print(dst);
-		dst << "\n";
+		dst << "\n  ";
 		stat->print(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		statlist->py_translate(dst);
-		dst << "\n";
+		dst << "\n  ";
 		stat->py_translate(dst);
 	}
 };

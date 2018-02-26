@@ -84,6 +84,7 @@ public:
 		// decspec->py_translate(dst); don't believe I need this?
 		// dst << " ";
 		initdeclaratorlist->py_translate(dst);
+		dst << "\n  ";
 	}
 };
 
@@ -103,7 +104,7 @@ public:
 		//std::cerr << "[FunctionDefinition]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		dst << "int ";
+		dst << "def ";
 		dec->py_translate(dst);
 		cstatement->py_translate(dst);
 	}
@@ -213,7 +214,6 @@ public:
 		dec->print(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		decspec->py_translate(dst);
 		dec->py_translate(dst);
 	}
 

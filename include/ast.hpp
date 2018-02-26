@@ -8,6 +8,7 @@
 
 extern const Node *pyparseAST(const char file[]);
 extern const Node *cparseAST();
+const Node *pparseAST();
 
 
 #endif

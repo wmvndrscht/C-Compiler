@@ -13,13 +13,15 @@ int main(int argc, char *argv[]){
   	const Node *ast = pyparseAST(argv[2]);
   	std::ofstream output(argv[4]);
   	ast->py_translate(output);
-    output << "\n\nif _name_ == \"_main_\":\n";
+    output << "\n\nif __name__ == \"__main__\":\n";
     output << "\timport sys\n";
     output << "\tret=main()\n";
     output << "\tsys.exit(ret)";
   }
-
-  
+  else if(std::string(argv[1]) == "py"){
+    const Node *ast = pparseAST();
+    ast->py_translate(std::cout);
+  }
   // if(argc < 2){
 	// ast->py_translate(std::cout);
 	// ast_>print();
