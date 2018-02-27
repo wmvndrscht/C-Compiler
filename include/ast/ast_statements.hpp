@@ -1,7 +1,6 @@
 #ifndef ast_statements_hpp
 #define ast_statements_hpp
 
-
 #include <string>
 #include <iostream>
 
@@ -13,6 +12,7 @@ public:
 		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
+		// for(int i =0; i<scopecount;i++){ dst << " ";};
 		dst << "return";
 	}
 };
@@ -28,6 +28,7 @@ public:
 		dst << ";";
 	}
 	virtual void py_translate(std::ostream &dst) const override{
+		// for(int i =0; i<scopecount;i++){ dst << " ";};
 		dst << "return ";
 		retexprstat->py_translate(dst);
 	}
@@ -54,14 +55,19 @@ public:
 		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		dst << ":\n  ";
+		if(!preif){ dst << ":";};
+		dst << "\n";
+		scopecount+=2;
 		if(statlist != NULL){
+			for(int i =0; i<scopecount;i++){ dst << " ";};
 			statlist->py_translate(dst);
 		}
 		if(declist != NULL){
-			dst << "\n  ";
+			dst << "\n";
+			for(int i =0; i<scopecount;i++){ dst << " ";};
 			declist->py_translate(dst);
 		}
+		scopecount-=2;
 		dst << "\n";
 	}
 };
@@ -80,7 +86,8 @@ public:
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		statlist->py_translate(dst);
-		dst << "\n  ";
+		dst << "\n";
+		for(int i =0; i<scopecount;i++){ dst << " ";};
 		stat->py_translate(dst);
 	}
 };
@@ -101,8 +108,11 @@ public:
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "while(";
 		expr->py_translate(dst);
-		dst << "):\n\t";
+		dst << "):\n";
+		scopecount+=2;
+		for(int i =0; i<scopecount;i++){ dst << " ";};
 		stat->py_translate(dst);
+		scopecount-=2;
 	}
 };
 
@@ -122,8 +132,13 @@ public:
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "if(";
 		expr->py_translate(dst);
-		dst << "):\n\t";
+		dst << "):\n";
+		preif = true;
+		scopecount+=2;
+		for(int i =0; i<scopecount;i++){ dst << " ";};
 		stat->py_translate(dst);
+		scopecount-=2;
+		preif = false;
 	}
 };
 
@@ -146,10 +161,19 @@ public:
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "if(";
 		expr->py_translate(dst);
-		dst << "):\n\t";
+		dst << "):\n";
+		scopecount+=2;
+		preif = true;
+		for(int i =0; i<scopecount;i++){ dst << " ";};
 		ifstat->py_translate(dst);
+		scopecount-=2;
+		for(int i =0; i<scopecount;i++){ dst << " ";};
 		dst << "else:\n\t";
+		scopecount+=2;
+		for(int i =0; i<scopecount;i++){ dst << " ";};
 		elsestat->py_translate(dst);
+		scopecount-=2;
+		preif=false;
 	}
 
 };

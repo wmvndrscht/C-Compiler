@@ -2,9 +2,10 @@
 
 #include <fstream>
 
+int scopecount = 0;
+bool preif = false;
 
 int main(int argc, char *argv[]){
-    
   if(argc < 2){
   	const Node *ast = cparseAST();
   	ast->print(std::cout);

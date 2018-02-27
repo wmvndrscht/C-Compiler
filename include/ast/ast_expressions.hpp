@@ -34,6 +34,7 @@ private:
 public:
 	MultExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 	virtual void print(std::ostream &dst) const override{
+		std::cerr << "multexpr";
 		lhs->print(dst);
 		dst << "*";
 		rhs->print(dst);
@@ -56,6 +57,7 @@ public:
 	  const NodePtr _assignexpr) : unaryexpr(_unaryexpr), assignop(_assignop),
 		assignexpr(_assignexpr){}
 	virtual void print(std::ostream &dst) const override{
+		std::cerr << "assignexpr";
 		unaryexpr->print(dst);
 		dst << " ";
 		assignop->print(dst);
@@ -80,6 +82,7 @@ private:
 public:
 	AddExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 	virtual void print(std::ostream &dst) const override{
+		std::cerr << "addexpr";
 		lhs->print(dst);
 		dst << "+";
 		rhs->print(dst);
@@ -99,6 +102,7 @@ private:
 public:
 	SubExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 	virtual void print(std::ostream &dst) const override{
+		std::cerr << "subexpr";
 		lhs->print(dst);
 		dst << "-";
 		rhs->print(dst);
@@ -263,7 +267,7 @@ private:
 	const std::string *op;
 	const NodePtr expr;
 public:
-	UnaryOpExpr(const std::string *_op,const NodePtr _expr) : op(_op),expr(_expr){}
+	UnaryOpExpr(const std::string *_op, const NodePtr _expr) : op(_op),expr(_expr){}
 	virtual void print(std::ostream &dst) const override{
 		dst << *op;
 		expr->print(dst);
