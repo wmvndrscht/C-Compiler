@@ -34,7 +34,6 @@ private:
 public:
 	MultExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 	virtual void print(std::ostream &dst) const override{
-		std::cerr << "multexpr";
 		lhs->print(dst);
 		dst << "*";
 		rhs->print(dst);
@@ -264,17 +263,31 @@ public:
 
 class UnaryOpExpr : public Node{
 private:
-	const std::string *op;
+	const NodePtr op;
 	const NodePtr expr;
 public:
-	UnaryOpExpr(const std::string *_op, const NodePtr _expr) : op(_op),expr(_expr){}
+	UnaryOpExpr(const NodePtr _op, const NodePtr _expr) : op(_op),expr(_expr){}
 	virtual void print(std::ostream &dst) const override{
-		dst << *op;
+		op->print(dst);
 		expr->print(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		dst << *op;
+		op->print(dst);
 		expr->py_translate(dst);
+	}
+};
+
+
+class UnaryOp : public Node{
+private:
+	const std::string op;
+public:
+	UnaryOp(const std::string _op) : op(_op){}
+	virtual void print(std::ostream &dst) const override{
+		dst << op;
+	}
+	virtual void py_translate(std::ostream &dst) const override{
+		dst << op;
 	}
 };
 

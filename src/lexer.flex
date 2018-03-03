@@ -63,11 +63,11 @@ NUMBER 		 [0-9]+
 
 [ \t\r\n]+ 				{;}
 
-.									{fprintf(stderr, "Invalid token\n"); exit(1); }
+.									{fprintf(stderr, "Invalid token\n"); fflush(stderr); exit(1); }
 
 %%
 
 void yyerror(char const *s){
-	fprintf(stderr, "Parse error : %s\n, s");
+	fprintf(stderr, "Parse error : %s\n", s);
 	exit(1);
 }

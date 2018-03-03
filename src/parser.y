@@ -47,14 +47,14 @@
 %type<node> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
 %type<node> AND_Expression Equality_Expression Relational_Expression Shift_Expression
 %type<node> Additive_Expression Multiplicative_Expression Cast_Expression
-%type<node> Unary_Expression Postfix_Expression Primary_Expression
+%type<node> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
 %type<node> Argument_Expression_List
 %type<node> Declarator
 %type<node> Direct_Declarator
 %type<node> Parameter_Type_List Parameter_List Parameter_Declaration
 %type<decspec> Declaration_Specifiers
 %type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier
-%type<str> T_IDENTIFIER T_EQUAL Unary_Operator
+%type<str> T_IDENTIFIER T_EQUAL
 %type<number> T_NUMBER
 
 %%
@@ -138,22 +138,22 @@ Relational_Expression	: Shift_Expression {$$ = $1;}
 
 Shift_Expression : Additive_Expression {$$ = $1;}
 
-Cast_Expression :	Unary_Expression {$$ = $1;}
-
 Unary_Expression	: Postfix_Expression {$$ = $1;}
 									| Unary_Operator Cast_Expression {$$ = new UnaryOpExpr($1,$2);}
 
-Unary_Operator : T_BAND	{$$ = new std::string("&");}
-							 | T_TIMES {$$ = new std::string("*");}
-							 | T_PLUS {$$ = new std::string("+");}
-							 | T_MINUS {$$ = new std::string("-");}
+Unary_Operator : T_BAND	{$$ = new UnaryOp(std::string("&"));} //;new std::string("&");}
+							 | T_TIMES {$$ = new UnaryOp(std::string("*"));} //{$$ = new std::string("*");}
+							 | T_PLUS {$$ = new UnaryOp(std::string("+"));} //{$$ = new std::string("+");}
+							 | T_MINUS {$$ = new UnaryOp(std::string("-"));} //{$$ = new std::string("-");}
+
+Cast_Expression :	Unary_Expression {$$ = $1;}
 
 Multiplicative_Expression : Cast_Expression {$$ = $1;} 
 													| Multiplicative_Expression T_TIMES Cast_Expression {$$ = new MultExpression($1,$3);}
 
 Additive_Expression	: Multiplicative_Expression {$$ = $1;}
-										| Additive_Expression T_PLUS Cast_Expression {$$ = new AddExpression($1,$3);}
-										| Additive_Expression T_MINUS Cast_Expression {$$ = new SubExpression($1,$3);} //positive vs neg num
+										| Additive_Expression T_PLUS  Multiplicative_Expression {$$ = new AddExpression($1,$3);}
+										| Additive_Expression T_MINUS Multiplicative_Expression {$$ = new SubExpression($1,$3);} //positive vs neg num
 
 
 Postfix_Expression	: Primary_Expression {$$ = $1;}

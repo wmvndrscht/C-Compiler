@@ -85,22 +85,22 @@ Grammar
 
    49 Shift_Expression: Additive_Expression
 
-   50 Cast_Expression: Unary_Expression
+   50 Unary_Expression: Postfix_Expression
+   51                 | Unary_Operator Cast_Expression
 
-   51 Unary_Expression: Postfix_Expression
-   52                 | Unary_Operator Cast_Expression
+   52 Unary_Operator: T_BAND
+   53               | T_TIMES
+   54               | T_PLUS
+   55               | T_MINUS
 
-   53 Unary_Operator: T_BAND
-   54               | T_TIMES
-   55               | T_PLUS
-   56               | T_MINUS
+   56 Cast_Expression: Unary_Expression
 
    57 Multiplicative_Expression: Cast_Expression
    58                          | Multiplicative_Expression T_TIMES Cast_Expression
 
    59 Additive_Expression: Multiplicative_Expression
-   60                    | Additive_Expression T_PLUS Cast_Expression
-   61                    | Additive_Expression T_MINUS Cast_Expression
+   60                    | Additive_Expression T_PLUS Multiplicative_Expression
+   61                    | Additive_Expression T_MINUS Multiplicative_Expression
 
    62 Postfix_Expression: Primary_Expression
    63                   | Postfix_Expression T_LRBRACK T_RRBRACK
@@ -185,15 +185,15 @@ T_NUMBER (283) 68
 T_COMMA (284) 66 75
 T_IF (285) 23 24
 T_ELSE (286) 23
-T_TIMES (287) 54 58
-T_PLUS (288) 55 60
-T_MINUS (289) 56 61
+T_TIMES (287) 53 58
+T_PLUS (288) 54 60
+T_MINUS (289) 55 61
 T_EQ (290) 45
 T_OR (291) 38
 T_AND (292) 40
 T_LTHAN (293) 47
 T_GTHAN (294) 48
-T_BAND (295) 53
+T_BAND (295) 52
 
 
 Nonterminals, with rules where they appear
@@ -256,18 +256,18 @@ Relational_Expression (68)
     on left: 46 47 48, on right: 44 45 47 48
 Shift_Expression (69)
     on left: 49, on right: 46 47 48
-Cast_Expression (70)
-    on left: 50, on right: 52 57 58 60 61
-Unary_Expression (71)
-    on left: 51 52, on right: 34 50
-Unary_Operator (72)
-    on left: 53 54 55 56, on right: 52
+Unary_Expression (70)
+    on left: 50 51, on right: 34 56
+Unary_Operator (71)
+    on left: 52 53 54 55, on right: 51
+Cast_Expression (72)
+    on left: 56, on right: 51 57 58
 Multiplicative_Expression (73)
-    on left: 57 58, on right: 58 59
+    on left: 57 58, on right: 58 59 60 61
 Additive_Expression (74)
     on left: 59 60 61, on right: 49 60 61
 Postfix_Expression (75)
-    on left: 62 63 64, on right: 51 63 64
+    on left: 62 63 64, on right: 50 63 64
 Argument_Expression_List (76)
     on left: 65 66, on right: 64 66
 Primary_Expression (77)
@@ -719,9 +719,9 @@ State 38
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -783,9 +783,9 @@ State 39
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -851,30 +851,30 @@ State 43
 
 State 44
 
-   54 Unary_Operator: T_TIMES .
+   53 Unary_Operator: T_TIMES .
 
-    $default  reduce using rule 54 (Unary_Operator)
+    $default  reduce using rule 53 (Unary_Operator)
 
 
 State 45
 
-   55 Unary_Operator: T_PLUS .
+   54 Unary_Operator: T_PLUS .
 
-    $default  reduce using rule 55 (Unary_Operator)
+    $default  reduce using rule 54 (Unary_Operator)
 
 
 State 46
 
-   56 Unary_Operator: T_MINUS .
+   55 Unary_Operator: T_MINUS .
 
-    $default  reduce using rule 56 (Unary_Operator)
+    $default  reduce using rule 55 (Unary_Operator)
 
 
 State 47
 
-   53 Unary_Operator: T_BAND .
+   52 Unary_Operator: T_BAND .
 
-    $default  reduce using rule 53 (Unary_Operator)
+    $default  reduce using rule 52 (Unary_Operator)
 
 
 State 48
@@ -971,26 +971,19 @@ State 58
 
 State 59
 
-   57 Multiplicative_Expression: Cast_Expression .
-
-    $default  reduce using rule 57 (Multiplicative_Expression)
-
-
-State 60
-
    34 Assignment_Expression: Unary_Expression . Assignment_Operator Assignment_Expression
-   50 Cast_Expression: Unary_Expression .
+   56 Cast_Expression: Unary_Expression .
 
     T_EQUAL  shift, and go to state 92
 
-    $default  reduce using rule 50 (Cast_Expression)
+    $default  reduce using rule 56 (Cast_Expression)
 
     Assignment_Operator  go to state 93
 
 
-State 61
+State 60
 
-   52 Unary_Expression: Unary_Operator . Cast_Expression
+   51 Unary_Expression: Unary_Operator . Cast_Expression
 
     T_IDENTIFIER  shift, and go to state 42
     T_NUMBER      shift, and go to state 43
@@ -999,11 +992,18 @@ State 61
     T_MINUS       shift, and go to state 46
     T_BAND        shift, and go to state 47
 
-    Cast_Expression     go to state 94
-    Unary_Expression    go to state 95
-    Unary_Operator      go to state 61
+    Unary_Expression    go to state 94
+    Unary_Operator      go to state 60
+    Cast_Expression     go to state 95
     Postfix_Expression  go to state 64
     Primary_Expression  go to state 65
+
+
+State 61
+
+   57 Multiplicative_Expression: Cast_Expression .
+
+    $default  reduce using rule 57 (Multiplicative_Expression)
 
 
 State 62
@@ -1019,8 +1019,8 @@ State 62
 State 63
 
    49 Shift_Expression: Additive_Expression .
-   60 Additive_Expression: Additive_Expression . T_PLUS Cast_Expression
-   61                    | Additive_Expression . T_MINUS Cast_Expression
+   60 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
+   61                    | Additive_Expression . T_MINUS Multiplicative_Expression
 
     T_PLUS   shift, and go to state 97
     T_MINUS  shift, and go to state 98
@@ -1030,13 +1030,13 @@ State 63
 
 State 64
 
-   51 Unary_Expression: Postfix_Expression .
+   50 Unary_Expression: Postfix_Expression .
    63 Postfix_Expression: Postfix_Expression . T_LRBRACK T_RRBRACK
    64                   | Postfix_Expression . T_LRBRACK Argument_Expression_List T_RRBRACK
 
     T_LRBRACK  shift, and go to state 99
 
-    $default  reduce using rule 51 (Unary_Expression)
+    $default  reduce using rule 50 (Unary_Expression)
 
 
 State 65
@@ -1077,9 +1077,9 @@ State 67
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1161,9 +1161,9 @@ State 71
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1215,9 +1215,9 @@ State 73
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1346,9 +1346,9 @@ State 87
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 95
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1374,9 +1374,9 @@ State 88
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 95
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1396,9 +1396,9 @@ State 89
 
     Relational_Expression      go to state 116
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 95
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1417,9 +1417,9 @@ State 90
     T_BAND        shift, and go to state 47
 
     Shift_Expression           go to state 117
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 95
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1438,9 +1438,9 @@ State 91
     T_BAND        shift, and go to state 47
 
     Shift_Expression           go to state 118
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 95
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1475,9 +1475,9 @@ State 93
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1486,16 +1486,16 @@ State 93
 
 State 94
 
-   52 Unary_Expression: Unary_Operator Cast_Expression .
+   56 Cast_Expression: Unary_Expression .
 
-    $default  reduce using rule 52 (Unary_Expression)
+    $default  reduce using rule 56 (Cast_Expression)
 
 
 State 95
 
-   50 Cast_Expression: Unary_Expression .
+   51 Unary_Expression: Unary_Operator Cast_Expression .
 
-    $default  reduce using rule 50 (Cast_Expression)
+    $default  reduce using rule 51 (Unary_Expression)
 
 
 State 96
@@ -1509,16 +1509,16 @@ State 96
     T_MINUS       shift, and go to state 46
     T_BAND        shift, and go to state 47
 
+    Unary_Expression    go to state 94
+    Unary_Operator      go to state 60
     Cast_Expression     go to state 120
-    Unary_Expression    go to state 95
-    Unary_Operator      go to state 61
     Postfix_Expression  go to state 64
     Primary_Expression  go to state 65
 
 
 State 97
 
-   60 Additive_Expression: Additive_Expression T_PLUS . Cast_Expression
+   60 Additive_Expression: Additive_Expression T_PLUS . Multiplicative_Expression
 
     T_IDENTIFIER  shift, and go to state 42
     T_NUMBER      shift, and go to state 43
@@ -1527,16 +1527,17 @@ State 97
     T_MINUS       shift, and go to state 46
     T_BAND        shift, and go to state 47
 
-    Cast_Expression     go to state 121
-    Unary_Expression    go to state 95
-    Unary_Operator      go to state 61
-    Postfix_Expression  go to state 64
-    Primary_Expression  go to state 65
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
+    Multiplicative_Expression  go to state 121
+    Postfix_Expression         go to state 64
+    Primary_Expression         go to state 65
 
 
 State 98
 
-   61 Additive_Expression: Additive_Expression T_MINUS . Cast_Expression
+   61 Additive_Expression: Additive_Expression T_MINUS . Multiplicative_Expression
 
     T_IDENTIFIER  shift, and go to state 42
     T_NUMBER      shift, and go to state 43
@@ -1545,11 +1546,12 @@ State 98
     T_MINUS       shift, and go to state 46
     T_BAND        shift, and go to state 47
 
-    Cast_Expression     go to state 122
-    Unary_Expression    go to state 95
-    Unary_Operator      go to state 61
-    Postfix_Expression  go to state 64
-    Primary_Expression  go to state 65
+    Unary_Expression           go to state 94
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
+    Multiplicative_Expression  go to state 122
+    Postfix_Expression         go to state 64
+    Primary_Expression         go to state 65
 
 
 State 99
@@ -1575,9 +1577,9 @@ State 99
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1621,9 +1623,9 @@ State 102
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1653,9 +1655,9 @@ State 103
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1710,9 +1712,9 @@ State 106
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1856,14 +1858,20 @@ State 120
 
 State 121
 
-   60 Additive_Expression: Additive_Expression T_PLUS Cast_Expression .
+   58 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
+   60 Additive_Expression: Additive_Expression T_PLUS Multiplicative_Expression .
+
+    T_TIMES  shift, and go to state 96
 
     $default  reduce using rule 60 (Additive_Expression)
 
 
 State 122
 
-   61 Additive_Expression: Additive_Expression T_MINUS Cast_Expression .
+   58 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
+   61 Additive_Expression: Additive_Expression T_MINUS Multiplicative_Expression .
+
+    T_TIMES  shift, and go to state 96
 
     $default  reduce using rule 61 (Additive_Expression)
 
@@ -1955,9 +1963,9 @@ State 132
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -1996,9 +2004,9 @@ State 133
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -2038,9 +2046,9 @@ State 134
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
@@ -2104,9 +2112,9 @@ State 138
     Equality_Expression        go to state 56
     Relational_Expression      go to state 57
     Shift_Expression           go to state 58
-    Cast_Expression            go to state 59
-    Unary_Expression           go to state 60
-    Unary_Operator             go to state 61
+    Unary_Expression           go to state 59
+    Unary_Operator             go to state 60
+    Cast_Expression            go to state 61
     Multiplicative_Expression  go to state 62
     Additive_Expression        go to state 63
     Postfix_Expression         go to state 64
