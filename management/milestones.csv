@@ -5,13 +5,15 @@ LEXER_SIMPLE,Understand Flex; Lexer code lab review; read C89 draft,4,wv116,ed7b
 LEXER_SIMPLE_TESTING,Simple lexer written,3,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Lexer; create tests for independent tokens and group tests.
 PARSER_CODELABREVIEW,Complete lexer lab; code lab; understood AST; understood Bison Tool.,3,wv116,0cce1ce401f4adce130c7a49c1f31fcfebfd4956,Read the lab code; compare with notes; comment code to show understanding.
 PARSER_SIMPLE,Simple lexer written; parser code lab review.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Work on the AST. Create simple tree for simple expressions; working with the Lexer.
-PARSER_SIMPLE_TESTING,Parser simple completed.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Parser; create tests for independent tokens and group tests; start simple thoughŠ—_Š—_..
+PARSER_SIMPLE_TESTING,Parser simple completed.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Parser; create tests for independent tokens and group tests; start simple though_Ñ__Ñ_..
 LEXER_PARSER_INTER1,Simple parser completed and tested.,6,wv116,,Start by implementing more complex parts; adding to the parser as I add to the lexer.
 LEXER_PARSER_INTER2,Inter1 parser completed and tested.,6,wv116,,Start by implementing more complex parts; adding to the parser as I add to the lexer; this I expect to take a long time to split into two.
 CODEGEN_CODELABREVIEW,Complete lexer lab; parser lab; code gen lab.,3,wv116,,Read the lab code; compare with notes; comment code to show understanding.
 CODEGEN_SIMPLEPYTHON,Python syntax; code gen lab review.,5,wv116,,Look at parts of python code gen; implementing the simple parts
 CODEGEN_PYTHONTESTS,Code gen python.,3,wv116,,Write tests for python code gen; starting with very simple.
-CODEGEN_SIMPLEMIPS,MIPS syntax; code gen lab review.,6,wv116,,Look at parts of MIPS code gen; implementing the simple parts
-CODEGEN_MIPSTESTS,Code gen MIPS.,5,wv116,,Write tests for MIPS code gen; starting with very simple.
-CODEGEN_INTERMIPS,Code gen mips simple completed and tested.,7,wv116,,Improving upon previous simple code; to see how to extend better.
-CODEGEN_INTERPYTHON,Code gen python simple completed and tested.,7,wv116,,Improving upon previous simple code; to see how to extend better.
+CODEGEN_STRUCTREWRITE,Python formative,3,wv116,,Reasses structure after comments from formative and 1-1 with FYQ.
+CODEGEN_MIPSINFRARSTRUCTURE,Parser simple completed.,2,wv116,,Building test bench; file arguments; editing parser.
+CODEGEN_SIMPLEMIPS,MIPS syntax; code gen lab review.,6,wv116,,Look at parts of MIPS code gen; implement int main return 0
+PYTHON_TRANSEND,Python formative,5,wv116,,Cover all edge cases of python translation;ensuring all is covered and is reliable.
+CODEGEN_MIPSINTER,codegen_simplemips,6,wv116,,"Work through building local variable, arguments."
+CODEGEN_MIPSINTERLOOPS,codegen_mipsinter,6,wv116,,"for, while loops"
