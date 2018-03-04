@@ -2,6 +2,9 @@ src/*.tab.hpp
 src/*.tab.cpp
 src/*.yy.cpp
 
+
+outputs/*
+
 testpy/out/*
 test/out/
 bin/

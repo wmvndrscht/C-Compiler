@@ -18,14 +18,18 @@ f:
 	.fmask	0x00000000,0
 	.set	noreorder
 	.set	nomacro
-	addiu	$sp,$sp,-8    #allocate 8 bytes on the stack
+#function def
+        addiu	$sp,$sp,-8    #allocate 8 bytes on the stack
 	sw	$fp,4($sp)    #store previous frame pointer
 	move	$fp,$sp       #create new frame pointer
+#return statement
 	move	$2,$0         #move 0 into register 2 for return val
-	move	$sp,$fp       # get back base stack-pointer
+#readjust function def
+        move	$sp,$fp       # get back base stack-pointer
 	lw	$fp,4($sp)    # load the old frame-pointer
 	addiu	$sp,$sp,8     #release 8 bytes from the stack
-	j	$31           #return
+#end by jump and nop
+        j	$31           #return
 	nop
 
 	.set	macro

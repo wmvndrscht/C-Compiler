@@ -218,7 +218,7 @@ Type_Qualifier	:	T_CONST			{$$ = new std::string("const");}
 
 const Node *ast_root; // Definition of variable (to match declaration earlier)
 
-const Node *pyparseAST(const char file[])
+const Node *parseAST(const char file[])
 {
   ast_root=NULL;
 
@@ -227,14 +227,3 @@ const Node *pyparseAST(const char file[])
   return ast_root;
 }
 
-const Node *cparseAST(){
-	ast_root=NULL;
-  yyparse();
-  return ast_root;
-}
-
-const Node *pparseAST(){
-	ast_root=NULL;
-  yyparse();
-  return ast_root;
-}
