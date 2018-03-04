@@ -1,4 +1,0 @@
-working/T001_return_driver.o: In function `main':
-T001_return_driver.c:(.text+0x1c): undefined reference to `f'
-T001_return_driver.c:(.text+0x24): undefined reference to `f'
-collect2: error: ld returned 1 exit status
