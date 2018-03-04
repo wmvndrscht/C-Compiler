@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
   	//const Node *ast = cparseAST();
   	//ast->print(std::cout); 
   	const Node *ast = parseAST("std::cin");
-  	ast->print(std::cout);
+  	ast->print_c(std::cout);
   }
   else if(std::string(argv[1]) == "--translate"){
     const Node *ast = parseAST(argv[2]);
@@ -25,6 +25,10 @@ int main(int argc, char *argv[]){
 
     const Node *ast = parseAST("std::cin");
     ast->py_translate(std::cout);
+  }
+  else if(std::string(argv[1]) == "-S"){
+    const Node *ast = parseAST("std::cin");
+    ast->print_mips(std::cout);
   }
   // if(argc < 2){
 	// ast->py_translate(std::cout);

@@ -15,11 +15,11 @@ public:
 	DeclarationSpecifier(const std::string &_type, 
 		const DeclarationSpecifier* _decspec) : type(_type), decspec(_decspec){}
 	
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << type;
 		if(decspec != NULL){
 			dst << " ";
-			decspec->print(dst);
+			decspec->print_c(dst);
 			//std::cerr << "[DeclarationSpecifier]" << std::endl;
 
 		}
@@ -30,7 +30,7 @@ public:
 			dst << "\n **>1 Declaration Specifier not in spec for formative** \n";
 		}
 	}
-
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class VariableDeclarator : public Node{
@@ -39,7 +39,7 @@ private:
 public:
 	VariableDeclarator(const std::string &_variable) : variable(_variable){}
 
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << " " << variable;
 		//std::cerr << "[VariableDeclarator]" << std::endl;
 	}
@@ -47,7 +47,7 @@ public:
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << variable;
 	}
-
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class LoneDeclaration : public Node {
@@ -56,14 +56,15 @@ private:
 public:
 	LoneDeclaration(const DeclarationSpecifier* _decspec) : decspec(_decspec){}
 
-	virtual void print(std::ostream &dst) const override{
-		decspec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		decspec->print_c(dst);
 		dst << ";";
 		//std::cerr << "[LoneDeclaration]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "\n **Lone Declarationnot in py spec**\n";
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class Declaration : public Node{
@@ -74,9 +75,9 @@ public:
 	Declaration(const DeclarationSpecifier* _decspec,
 		const NodePtr _initdeclaratorlist): decspec(_decspec), initdeclaratorlist(_initdeclaratorlist){}
 
-	virtual void print(std::ostream &dst) const override{
-		decspec->print(dst);
-		initdeclaratorlist->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		decspec->print_c(dst);
+		initdeclaratorlist->print_c(dst);
 		dst << ";";
 		//std::cerr << "[Declaration]" << std::endl;
 	}
@@ -86,6 +87,7 @@ public:
 		initdeclaratorlist->py_translate(dst);
 		dst << "\n  ";
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 //Declaration_Specifiers Declarator Compound_Statement
@@ -97,10 +99,10 @@ private:
 public:
 	FunctionDefinition(const DeclarationSpecifier* _decspec, const NodePtr _dec,
 		const CompoundStatement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
-	virtual void print(std::ostream &dst) const override{
-		decspec->print(dst);
-		dec->print(dst);
-		cstatement->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		decspec->print_c(dst);
+		dec->print_c(dst);
+		cstatement->print_c(dst);
 		//std::cerr << "[FunctionDefinition]" << std::endl;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
@@ -108,7 +110,28 @@ public:
 		dec->py_translate(dst);
 		cstatement->py_translate(dst);
 	}
+	virtual void print_mips(std::ostream &dst) const override{
+		dst << "f:\n";
+		//Setup the frame on the stack for this function call
+		dst << "  addiu $sp,$sp,-8\n"; //start with no params
+		dst << "  sw $fp,4($sp)\n";
+		dst << "  move $fp,$sp\n";
 
+		//now do return expression, will include context later
+		cstatement->print_mips(dst);
+		dst << "\n";
+
+		//restore frame and stack
+		dst << "  move $sp,$fp\n";
+		dst << "  lw $fp,4($sp)\n";
+		dst << "  addiu $sp,$sp,8\n";
+
+		//finish function
+		dst << "  j $31\n";
+		dst << "  nop";
+
+
+	}
 };
 
 class EmptyDeclarator : public Node{
@@ -117,8 +140,8 @@ private:
 public:
 	EmptyDeclarator(const NodePtr _directdec) : directdec(_directdec){}
 
-	virtual void print(std::ostream &dst) const override{
-		directdec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		directdec->print_c(dst);
 		dst << "()";
 		//std::cerr << "[EmptyDeclarator]" << std::endl;
 	}
@@ -126,6 +149,7 @@ public:
 		directdec->py_translate(dst);
 		dst << "()";
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class InitDeclarator : public Node{
@@ -134,17 +158,17 @@ private:
 	const NodePtr init;
 public:
 	InitDeclarator(const NodePtr _dec, const NodePtr _init) : dec(_dec), init(_init){}
-	virtual void print(std::ostream &dst) const override{
-		dec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		dec->print_c(dst);
 		dst << " = ";
-		init->print(dst);
+		init->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dec->py_translate(dst);
 		dst << "=";
 		init->py_translate(dst);
 	}
-
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class LoneInitDeclarator : public Node {
@@ -152,14 +176,14 @@ private:
 	const NodePtr dec;
 public:
 	LoneInitDeclarator(const NodePtr _dec) : dec(_dec){}
-	virtual void print(std::ostream &dst) const override{
-		dec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		dec->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dec->py_translate(dst);
 		dst << "=0";
 	}
-
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class DeclarationList : public Node{
@@ -169,15 +193,17 @@ private:
 public:
 	DeclarationList(const NodePtr _dec, const NodePtr _declist) : dec(_dec),
 		declist(_declist){}
-	virtual void print(std::ostream &dst) const override{
-		dec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		dec->print_c(dst);
 		dst << "\n";
-		declist->print(dst);
+		declist->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dec->py_translate(dst);
 		declist->py_translate(dst);
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
+
 };
 
 
@@ -188,10 +214,10 @@ private:
 public:
 	ParamListDeclarator(const NodePtr _dec, const NodePtr _paramlist) : 
 		dec(_dec), paramlist(_paramlist){}
-	virtual void print(std::ostream &dst) const override{
-		dec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		dec->print_c(dst);
 		dst << "(";
-		paramlist->print(dst);
+		paramlist->print_c(dst);
 		dst << ")";
 	}
 	virtual void py_translate(std::ostream &dst) const override{
@@ -200,6 +226,8 @@ public:
 		paramlist->py_translate(dst);
 		dst << ")";
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
+
 };
 
 class ParamDeclaration : public Node{
@@ -209,14 +237,14 @@ private:
 public:
 	ParamDeclaration(const NodePtr _decspec, const NodePtr _dec) :
 		decspec(_decspec), dec(_dec){}
-	virtual void print(std::ostream &dst) const override{
-		decspec->print(dst);
-		dec->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		decspec->print_c(dst);
+		dec->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dec->py_translate(dst);
 	}
-
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class ParamList : public Node{
@@ -226,16 +254,17 @@ private:
 public:
 	ParamList(const NodePtr _paramlist, const NodePtr _param): 
 		paramlist(_paramlist), param(_param){}
-	virtual void print(std::ostream &dst) const override{
-		paramlist->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		paramlist->print_c(dst);
 		dst << ",";
-		param->print(dst);
+		param->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		paramlist->py_translate(dst);
 		dst << ",";
 		param->py_translate(dst);
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class AssignmentOperator : public Node{
@@ -243,12 +272,14 @@ private:
 	const std::string *assignop;
 public:
 	AssignmentOperator(const std::string *_assignop) : assignop(_assignop){}
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << *assignop;
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << *assignop;
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
+
 };
 
 // class Declaration : public Node{
@@ -259,10 +290,10 @@ public:
 // 	Declaration(const DeclarationSpecifier* _decspec, const NodePtr _dec ) 
 // 	: decspec(_decspec), dec(_dec){}
 	
-// 	virtual void print(std::ostream &dst) const override{
-// 		decspec->print(dst);
+// 	virtual void print_c(std::ostream &dst) const override{
+// 		decspec->print_c(dst);
 // 		dst<<" ";
-// 		dec->print(dst);
+// 		dec->print_c(dst);
 // 	}
 // };
 

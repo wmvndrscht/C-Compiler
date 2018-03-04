@@ -13,8 +13,9 @@ class Node{
 public:
   virtual ~Node(){}
     //! Tell and Node to print itself to the given stream
-  virtual void print(std::ostream &dst) const =0;
+  virtual void print_c(std::ostream &dst) const =0;
   virtual void py_translate(std::ostream &dst) const =0;
+  virtual void print_mips(std::ostream &dst) const =0;
 
 };
 
@@ -27,16 +28,17 @@ public:
 	
 	~TranslationUnit(){ delete left; delete right;}
 	
-	virtual void print(std::ostream &dst) const override{
-		left->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		left->print_c(dst);
 		dst<<"\n";
-		right->print(dst);
+		right->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		left->py_translate(dst);
 		dst<<"\n";
 		right->py_translate(dst);
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 
 };
 

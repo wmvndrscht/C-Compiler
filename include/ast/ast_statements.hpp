@@ -7,7 +7,7 @@
 
 class ReturnStatement : public Node {
 public:
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst<< "return;";
 		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 	}
@@ -15,6 +15,7 @@ public:
 		// for(int i =0; i<scopecount;i++){ dst << " ";};
 		dst << "return";
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class ReturnExprStatement : public Node {
@@ -22,15 +23,19 @@ private:
 	const NodePtr retexprstat;
 public:
 	ReturnExprStatement(const NodePtr _retexprstat) : retexprstat(_retexprstat){}
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << "return ";
-		retexprstat->print(dst);
+		retexprstat->print_c(dst);
 		dst << ";";
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		// for(int i =0; i<scopecount;i++){ dst << " ";};
 		dst << "return ";
 		retexprstat->py_translate(dst);
+	}
+	virtual void print_mips(std::ostream &dst) const override{
+		dst << "  move $2,$";
+		retexprstat->print_mips(dst);//can use dest reg etc
 	}
 };
 
@@ -41,15 +46,15 @@ private:
 public:
 	CompoundStatement(const NodePtr _statlist, const NodePtr _declist) : 
 		statlist(_statlist), declist(_declist){}
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst<< "{";
 		if(statlist != NULL){
 			dst << "\n";
-			statlist->print(dst);
+			statlist->print_c(dst);
 		}
 		if(declist != NULL){
 			dst << "\n";
-			declist->print(dst);
+			declist->print_c(dst);
 		}
 		dst<< "\n}";
 		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
@@ -70,6 +75,9 @@ public:
 		scopecount-=2;
 		dst << "\n";
 	}
+	virtual void print_mips(std::ostream &dst) const override{
+		statlist->print_mips(dst);
+	}
 };
 
 class StatementList : public Node{
@@ -79,10 +87,10 @@ private:
 public:
 	StatementList(const NodePtr _statlist, const NodePtr _stat) : 
 	statlist(_statlist), stat(_stat){}
-	virtual void print(std::ostream &dst) const override{
-		statlist->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		statlist->print_c(dst);
 		dst << "\n  ";
-		stat->print(dst);
+		stat->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		statlist->py_translate(dst);
@@ -90,6 +98,7 @@ public:
 		for(int i =0; i<scopecount;i++){ dst << " ";};
 		stat->py_translate(dst);
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class WhileStatement : public Node{
@@ -99,11 +108,11 @@ private:
 public:
 	WhileStatement(const NodePtr _expr, const NodePtr _stat) : 
 		expr(_expr), stat(_stat){}
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << "while(";
-		expr->print(dst);
+		expr->print_c(dst);
 		dst << ")";
-		stat->print(dst);
+		stat->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "while(";
@@ -114,6 +123,7 @@ public:
 		stat->py_translate(dst);
 		scopecount-=2;
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 
@@ -123,11 +133,11 @@ private:
 	const NodePtr stat;
 public:
 	IfStatement(const NodePtr _expr, const NodePtr _stat) : expr(_expr), stat(_stat){}
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << "if(";
-		expr->print(dst);
+		expr->print_c(dst);
 		dst << ")";
-		stat->print(dst);
+		stat->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "if(";
@@ -140,6 +150,7 @@ public:
 		scopecount-=2;
 		preif = false;
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class IfElseStatement : public Node{
@@ -150,13 +161,13 @@ private:
 public:
 	IfElseStatement(const NodePtr _expr, const NodePtr _ifstat, const NodePtr _elsestat) :
 	  expr(_expr), ifstat(_ifstat), elsestat(_elsestat){}
-	virtual void print(std::ostream &dst) const override{
+	virtual void print_c(std::ostream &dst) const override{
 		dst << "if(";
-		expr->print(dst);
+		expr->print_c(dst);
 		dst << ")";
-		ifstat->print(dst);
+		ifstat->print_c(dst);
 		dst << "\n else";
-		elsestat->print(dst);
+		elsestat->print_c(dst);
 	}
 	virtual void py_translate(std::ostream &dst) const override{
 		dst << "if(";
@@ -175,7 +186,7 @@ public:
 		scopecount-=2;
 		preif=false;
 	}
-
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 class ExprStatement : public Node{
@@ -183,13 +194,14 @@ private:
 	const NodePtr expr;
 public:
 	ExprStatement(const NodePtr _expr) : expr(_expr){}
-	virtual void print(std::ostream &dst) const override{
-		expr->print(dst);
+	virtual void print_c(std::ostream &dst) const override{
+		expr->print_c(dst);
 		dst << ";";
 	}
 	virtual void py_translate(std::ostream &dst) const override{
-		expr->print(dst);
+		expr->print_c(dst);
 	}
+	virtual void print_mips(std::ostream &dst) const override{}
 };
 
 #endif
