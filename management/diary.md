@@ -30,7 +30,8 @@ Title: So Clear (Junip)
 
 Moral: Started simple makes things clearer
 
-Good start now, just need to fix some compiler errors in order for simple thing to get going
+Good start now, just need to fix some compiler errors in order for simple 
+thing to get going
 
 17/02/2018
 
@@ -39,12 +40,46 @@ Title: Highway to Hell (ACDC)
 Moral: Get used to obscure bugs making your efficiency 1/100th of what you planned
 
 Yeah........hit hard by stupid bugs and not very helpful error messages :-)
-Luckily I jumped off the highway in the evening having fixed the bugs, getting lexer, parser etc working!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Luckily I jumped off the highway in the evening having fixed the bugs,
+getting lexer, parser etc working!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 23/02/2018
 
 Title: Mojo Pin
 
-Moral: Tough to pin a mojo for this repitition here, possibly a partner would be nice so repitition is lowered slightly, do I prefer ideas then asking others to execute?
+Moral: Tough to pin a mojo for this repitition here, possibly a partner
+would be nice so repitition is lowered slightly, do I prefer ideas then 
+asking others to execute?
 
-Soooo....finished mvp for c translate equivalent of python formative, now to get py_translate to work.....interestingly brings back more added functionality for files etc, ahhhh headaches to remember this stuff....oh well once structure is in place it's so easy to use just like testbench :) Do I add NULL and keep classes generic, do I do more types of numbers or generic, we'll see ;)
+Soooo....finished mvp for c translate equivalent of python formative,
+now to get py_translate to work.....interestingly brings back more added 
+functionality for files etc, ahhhh headaches to remember this stuff....oh 
+well once structure is in place it's so easy to use just like testbench :)
+Do I add NULL and keep classes generic, do I do more types of numbers 
+or generic, we'll see ;)
+
+04/03/2018
+
+Title: Moon (Kid Rancescoli)
+
+Moral : Get through the atmosphere (codegen initial structure) 
+as hard and long as it takes. I'm learning a lot and improving, it's fun
+but every corner comes another great challenge, only 4 weeks left though :)
+
+
+Python---:
+After submitting the Python formative with reasonable success, it seems 
+I am currently on track - let's keep it this way. My structure definitely
+needs improving as feedback from fyq and dt, simple changes like splitting
+declarations, statements etc instead of flat nodeptr. 
+Next Steps---: Tidy up python environment and edge cases if(1) if()
+if() else() etc
+
+C_CODEGEN---:
+Hmmm....yes getting the foundations and thinking is hard work, but that's
+where the fun lies. It will take a while and some complex things to get
+the foundations laid.
+Next Steps-------: Ensure I can build context well and instructions etc
+nicely. Get things working, then clean (python and test_cases) then advance.
+
+
