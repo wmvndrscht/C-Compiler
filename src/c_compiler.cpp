@@ -28,6 +28,12 @@ int main(int argc, char *argv[]){
   }
   else if(std::string(argv[1]) == "-S"){
     const Node *ast = parseAST("std::cin");
+    std::cout << ".global f\n";
+    std::cout << ".align 2\n";
+    //.nopmips16
+    //.nomicromips
+    //.ent
+    //.type
     ast->print_mips(std::cout);
   }
   // if(argc < 2){

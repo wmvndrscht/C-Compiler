@@ -2,13 +2,10 @@ src/*.tab.hpp
 src/*.tab.cpp
 src/*.yy.cpp
 
-working/*
-
-outputs/*
-
-testpy/out/*
-test/out/
-bin/
+test/c_translate/out/*
+test/py_translate/tmp/*
+test/mips_test/working/*
+test/py_mips_test/outputs/*
 
 **/*.o
 *.output
@@ -17,5 +14,4 @@ bin/
 
 *.DS_Store
 
-tmp/*
 .vagrant

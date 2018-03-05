@@ -17,19 +17,19 @@ if [[ "$?" -ne 0 ]]; then
 	echo "Build failed.";
 fi
 echo""
-mkdir -p test/out
+mkdir -p test/c_translate/out
 
 echo "===================================="
 
 PASSED=0
 CHECKED=0
 
-for i in test/in/*.txt; do
+for i in test/c_translate/in/*.txt; do
 	echo "=================================="
 	echo "Input file : ${i}"
 	BASENAME=$(basename $i .txt)
-	cat $i | ${DOCS2UNIX} | ./bin/c_compiler > test/out/$BASENAME.stdout.txt 2> test/out/$BASENAME.stderr.txt
-	diff <(cat test/ref/$BASENAME.stdout.txt | ${DOCS2UNIX}) <(cat test/out/$BASENAME.stdout.txt) > test/out/$BASENAME.diff.txt
+	cat $i | ${DOCS2UNIX} | ./bin/c_compiler > test/c_translate/out/$BASENAME.stdout.txt 2> test/c_translate/out/$BASENAME.stderr.txt
+	diff <(cat test/c_translate/ref/$BASENAME.stdout.txt | ${DOCS2UNIX}) <(cat test/c_translate/out/$BASENAME.stdout.txt) > test/c_translate/out/$BASENAME.diff.txt
 	if [[ "$?" -ne "0" ]]; then
 		echo -e "\nERROR"
 	else

@@ -9,13 +9,13 @@ fi
 if [[ "$2" != "" ]] ; then
     working_dir="$2"
 else
-    working_dir="outputs"
+    working_dir="test/py_mips_test/outputs"
 fi
 
 if [[ "$3" != "" ]] ; then
     input_dir="$3"
 else
-    input_dir="inputs"
+    input_dir="test/py_mips_test/inputs"
 fi
 
 if [[ ! -f bin/c_compiler ]] ; then

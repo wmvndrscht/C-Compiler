@@ -1,5 +1,5 @@
 int f();
 
 int main(){
-  return (0 == f());
+  return f();
 }
