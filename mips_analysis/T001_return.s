@@ -1,4 +1,4 @@
-	.file	1 "f1.c"
+	.file	1 "T001_return.c"
 	.section .mdebug.abi32
 	.previous
 	.nan	legacy
@@ -21,7 +21,7 @@ f:
 	addiu	$sp,$sp,-8
 	sw	$fp,4($sp)
 	move	$fp,$sp
-	li	$2,1			# 0x1
+	move	$2,$0
 	move	$sp,$fp
 	lw	$fp,4($sp)
 	addiu	$sp,$sp,8
@@ -33,4 +33,3 @@ f:
 	.end	f
 	.size	f, .-f
 	.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609"
-gtgtgt€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kdgtgtgtgtgtgtgtgtgt€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kdgtgtgtgtgt:wq:qa
