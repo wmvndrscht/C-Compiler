@@ -1,6 +1,10 @@
 %code requires{
 
 	#include "ast.hpp"
+	#include "ast/ast_node.hpp"
+	#include "ast/ast_statements.hpp"
+	#include "ast/ast_declarations.hpp"
+	#include "ast/ast_expressions.hpp"
 	#include <cassert>
 
 	extern const Node *ast_root;
