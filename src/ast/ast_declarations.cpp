@@ -14,7 +14,6 @@ void DeclarationSpecifier::print_c(std::ostream &dst) const {
 	}
 }
 
-
 void DeclarationSpecifier::py_translate(std::ostream &dst) const {
 	dst << type;
 	if( decspec != NULL){
@@ -58,23 +57,23 @@ void LoneDeclaration::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
-Declaration::Declaration(const DeclarationSpecifier* _decspec,
-	const NodePtr _initdeclaratorlist): decspec(_decspec), initdeclaratorlist(_initdeclaratorlist){}
+TheDeclaration::TheDeclaration(const DeclarationSpecifier* _decspec,
+	const Declaration* _initdeclaratorlist): decspec(_decspec), initdeclaratorlist(_initdeclaratorlist){}
 
-void Declaration::print_c(std::ostream &dst) const {
+void TheDeclaration::print_c(std::ostream &dst) const {
 	decspec->print_c(dst);
 	initdeclaratorlist->print_c(dst);
 	dst << ";";
 	//std::cerr << "[Declaration]" << std::endl;
 }
-void Declaration::py_translate(std::ostream &dst) const {
+void TheDeclaration::py_translate(std::ostream &dst) const {
 	// decspec->py_translate(dst); don't believe I need this?
 	// dst << " ";
 	initdeclaratorlist->py_translate(dst);
 	dst << "\n  ";
 }
 
-void Declaration::print_mips(std::ostream &dst, context& program) const {}
+void TheDeclaration::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
@@ -153,7 +152,7 @@ std::string EmptyDeclarator::get_Label() const{
 
 //-----------------------------------------------------------------------
 
-InitDeclarator::InitDeclarator(const NodePtr _dec, const NodePtr _init) : dec(_dec), init(_init){}
+InitDeclarator::InitDeclarator(const Declaration* _dec, const NodePtr _init) : dec(_dec), init(_init){}
 
 void InitDeclarator::print_c(std::ostream &dst) const {
 	dec->print_c(dst);
@@ -171,7 +170,7 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
-LoneInitDeclarator::LoneInitDeclarator(const NodePtr _dec) : dec(_dec){}
+LoneInitDeclarator::LoneInitDeclarator(const Declaration* _dec) : dec(_dec){}
 
 void LoneInitDeclarator::print_c(std::ostream &dst) const {
 	dec->print_c(dst);
@@ -185,7 +184,7 @@ void LoneInitDeclarator::py_translate(std::ostream &dst) const {
 void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {}
 //-----------------------------------------------------------------------
 
-DeclarationList::DeclarationList(const NodePtr _dec, const NodePtr _declist) : dec(_dec),
+DeclarationList::DeclarationList(const Declaration* _dec, const Declaration* _declist) : dec(_dec),
 	declist(_declist){}
 
 void DeclarationList::print_c(std::ostream &dst) const {
@@ -204,7 +203,7 @@ void DeclarationList::print_mips(std::ostream &dst, context& program) const {}
 //-----------------------------------------------------------------------
 
 
-ParamListDeclarator::ParamListDeclarator(const Declarator *_dec, const NodePtr _paramlist) : 
+ParamListDeclarator::ParamListDeclarator(const Declarator *_dec, const Declaration* _paramlist) : 
 	dec(_dec), paramlist(_paramlist){}
 
 void ParamListDeclarator::print_c(std::ostream &dst) const {
@@ -229,7 +228,7 @@ std::string ParamListDeclarator::get_Label() const{
 
 //-----------------------------------------------------------------------
 
-ParamDeclaration::ParamDeclaration(const NodePtr _decspec, const NodePtr _dec) :
+ParamDeclaration::ParamDeclaration(const Declaration* _decspec, const Declaration* _dec) :
 	decspec(_decspec), dec(_dec){}
 
 void ParamDeclaration::print_c(std::ostream &dst) const {
@@ -245,7 +244,7 @@ void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
-ParamList::ParamList(const NodePtr _paramlist, const NodePtr _param): 
+ParamList::ParamList(const Declaration* _paramlist, const Declaration* _param): 
 	paramlist(_paramlist), param(_param){}
 
 void ParamList::print_c(std::ostream &dst) const {

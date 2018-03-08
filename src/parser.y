@@ -22,7 +22,8 @@
 	const CompoundStatement* cstatement;
 	std::string *str;
 	double *number;
-	const Declarator *dec;
+	const Declarator *decl;
+	const Declaration *dec;
 }
 
 /* token terminal */
@@ -38,41 +39,121 @@
 %token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN T_GTHAN T_BAND
 
 /* non-terminal */
+/* --------------------------- Start node  ------------------------------- */
 %type<node> ROOT Translation_Unit External_Declaration 
-%type<node> Function_Definition
+/* Statement */
+
+/* --------------------------- Declaration ------------------------------- */
+%type<dec> Function_Definition
+%type<dec> Declaration_List
+%type<dec> Declaration Assignment_Operator
+%type<dec> Init_Declarator_List Init_Declarator
+%type<decl> Declarator
+%type<decl> Direct_Declarator
+%type<decspec> Declaration_Specifiers
+%type<dec> Parameter_Type_List Parameter_List Parameter_Declaration
+
+
+/* --------------------------- Statement ------------------------------- */
 %type<cstatement> Compound_Statement
-%type<node> Declaration_List
-%type<node> Declaration 
 %type<node> Statement_List Statement Return_Statement Iteration_Statement
 %type<node> Selection_Statement Expression_Statement
-%type<node> Expression 
-%type<node> Init_Declarator_List Init_Declarator
-%type<node> Initializer Assignment_Operator
+
+/* --------------------------- Expression ------------------------------- */
+
+%type<node> Expression Initializer
 %type<node> Assignment_Expression Conditional_Expression Logical_OR_Expression
 %type<node> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
 %type<node> AND_Expression Equality_Expression Relational_Expression Shift_Expression
 %type<node> Additive_Expression Multiplicative_Expression Cast_Expression
 %type<node> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
 %type<node> Argument_Expression_List
-%type<dec> Declarator
-%type<dec> Direct_Declarator
-%type<node> Parameter_Type_List Parameter_List Parameter_Declaration
-%type<decspec> Declaration_Specifiers
+
+/* --------------------------- Other ------------------------------- */
+
 %type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier
 %type<str> T_IDENTIFIER T_EQUAL
 %type<number> T_NUMBER
 
+/* Begin the parse tree!!!!!!!!!! */
+
 %%
+
+/* --------------------------- START NODE  ------------------------------- */
+
 
 ROOT:	Translation_Unit 	{ ast_root = $1; }
 
 Translation_Unit	:	External_Declaration 	{$$ = $1;}
 									| Translation_Unit External_Declaration	{$$ = new TranslationUnit($1, $2);}
 
+
+
+
+/* --------------------------- DECLARATION ------------------------------- */
+
+
 External_Declaration	:	Declaration 				{$$ = $1;}
 											| Function_Definition	{$$ = $1;}
 
 Function_Definition	:	Declaration_Specifiers Declarator Compound_Statement {$$ = new FunctionDefinition($1,$2,$3);}
+
+Declaration_List	: Declaration 	{$$ = $1;}
+									| Declaration_List Declaration {$$ = new DeclarationList($1,$2);}
+
+Declaration 	:	Declaration_Specifiers T_SEMICOLON {$$ = new LoneDeclaration($1);}
+							|	Declaration_Specifiers Init_Declarator_List T_SEMICOLON	{$$ = new TheDeclaration($1,$2); }
+
+
+Parameter_Type_List : Parameter_List {$$ = $1;}
+
+Parameter_List 	: Parameter_Declaration	{$$ = $1;}
+								| Parameter_List T_COMMA  Parameter_Declaration {$$ = new ParamList($1,$3);}
+
+Parameter_Declaration : Declaration_Specifiers Declarator {$$ = new ParamDeclaration($1,$2);}
+
+Init_Declarator_List 	: Init_Declarator {$$ = $1;}
+
+Init_Declarator :	Declarator T_EQUAL Initializer 	{$$ = new InitDeclarator($1,$3);}
+								|	Declarator 											{$$ = new LoneInitDeclarator($1);} //Here make sure py_translate =0 
+
+Declarator 	:	Direct_Declarator		{$$ = $1;}
+
+Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
+									|	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
+									| Direct_Declarator T_LRBRACK Parameter_Type_List T_RRBRACK {$$ = new ParamListDeclarator($1,$3);}
+
+
+Declaration_Specifiers	:	Storage_Class_Specifier Declaration_Specifiers 	{$$ = new DeclarationSpecifier(*$1,$2); }
+												|	Storage_Class_Specifier													{$$ = new DeclarationSpecifier(*$1,NULL); }
+												| Type_Specifier Declaration_Specifiers						{$$ = new DeclarationSpecifier(*$1,$2); }				 
+												| Type_Specifier																	{$$ = new DeclarationSpecifier(*$1,NULL); }	
+												| Type_Qualifier Declaration_Specifiers						{$$ = new DeclarationSpecifier(*$1,$2); }
+												| Type_Qualifier																	{$$ = new DeclarationSpecifier(*$1,NULL); }
+
+Storage_Class_Specifier	:	T_TYPEDEF		{$$ = new std::string("typedef");}	
+												| T_EXTERN		{$$ = new std::string("extern");}
+												| T_STATIC		{$$ = new std::string("static");}
+												| T_AUTO			{$$ = new std::string("auto");}
+												| T_REGISTER	{$$ = new std::string("register");}
+
+Type_Specifier	:	T_VOID			{$$ = new std::string("void");}
+								| T_CHAR			{$$ = new std::string("char");}
+								| T_SHORT			{$$ = new std::string("short");}
+								| T_INT				{$$ = new std::string("int");}
+								| T_LONG			{$$ = new std::string("long");}
+								| T_FLOAT			{$$ = new std::string("float");}
+								| T_DOUBLE		{$$ = new std::string("double");}
+								| T_SIGNED 		{$$ = new std::string("signed");}
+								| T_UNSIGNED	{$$ = new std::string("unsigned");}
+
+Type_Qualifier	:	T_CONST			{$$ = new std::string("const");}
+								| T_VOLATILE	{$$ = new std::string("volatile");}
+
+
+
+
+/* --------------------------- STATEMENT ------------------------------- */
 
 
 Compound_Statement	: T_LCBRACK T_RCBRACK	{$$ = new CompoundStatement(NULL, NULL);}
@@ -80,11 +161,6 @@ Compound_Statement	: T_LCBRACK T_RCBRACK	{$$ = new CompoundStatement(NULL, NULL)
 										| T_LCBRACK Declaration_List T_RCBRACK {$$ = new CompoundStatement(NULL, $2);}
 									  | T_LCBRACK Declaration_List Statement_List T_RCBRACK {$$ = new CompoundStatement($2,$3);}
 
-Declaration_List	: Declaration 	{$$ = $1;}
-									| Declaration_List Declaration {$$ = new DeclarationList($1,$2);}
-
-Declaration 	:	Declaration_Specifiers T_SEMICOLON {$$ = new LoneDeclaration($1);}
-							|	Declaration_Specifiers Init_Declarator_List T_SEMICOLON	{$$ = new Declaration($1,$2); }
 
 
 Statement_List	: Statement {$$ = $1;}
@@ -106,12 +182,14 @@ Iteration_Statement : T_WHILE T_LRBRACK Expression T_RRBRACK Statement {$$ = new
 Return_Statement	:	T_RETURN T_SEMICOLON	{ $$ = new ReturnStatement(); }
 									| T_RETURN Expression T_SEMICOLON {$$ = new ReturnExprStatement($2);}
 
+
+
+
+/* --------------------------- EXPRESSION ------------------------------- */
+
+
 Expression 	: Assignment_Expression {$$ = $1;}
 
-Init_Declarator_List 	: Init_Declarator {$$ = $1;}
-
-Init_Declarator :	Declarator T_EQUAL Initializer 	{$$ = new InitDeclarator($1,$3);}
-								|	Declarator 											{$$ = new LoneInitDeclarator($1);} //Here make sure py_translate =0 
 
 Initializer	: Assignment_Expression	{$$ = $1;}
 
@@ -171,44 +249,9 @@ Argument_Expression_List 	: Assignment_Expression 	{$$ = $1;}
 Primary_Expression	: T_IDENTIFIER	{$$ = new ExpressionVariable($1);}
 										| T_NUMBER				{$$ = new Value($1);}
 
-Declarator 	:	Direct_Declarator		{$$ = $1;}
 
-Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
-									|	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
-									| Direct_Declarator T_LRBRACK Parameter_Type_List T_RRBRACK {$$ = new ParamListDeclarator($1,$3);}
 
-Parameter_Type_List : Parameter_List {$$ = $1;}
 
-Parameter_List 	: Parameter_Declaration	{$$ = $1;}
-								| Parameter_List T_COMMA  Parameter_Declaration {$$ = new ParamList($1,$3);}
-
-Parameter_Declaration : Declaration_Specifiers Declarator {$$ = new ParamDeclaration($1,$2);}
-
-Declaration_Specifiers	:	Storage_Class_Specifier Declaration_Specifiers 	{$$ = new DeclarationSpecifier(*$1,$2); }
-												|	Storage_Class_Specifier													{$$ = new DeclarationSpecifier(*$1,NULL); }
-												| Type_Specifier Declaration_Specifiers						{$$ = new DeclarationSpecifier(*$1,$2); }				 
-												| Type_Specifier																	{$$ = new DeclarationSpecifier(*$1,NULL); }	
-												| Type_Qualifier Declaration_Specifiers						{$$ = new DeclarationSpecifier(*$1,$2); }
-												| Type_Qualifier																	{$$ = new DeclarationSpecifier(*$1,NULL); }
-
-Storage_Class_Specifier	:	T_TYPEDEF		{$$ = new std::string("typedef");}	
-												| T_EXTERN		{$$ = new std::string("extern");}
-												| T_STATIC		{$$ = new std::string("static");}
-												| T_AUTO			{$$ = new std::string("auto");}
-												| T_REGISTER	{$$ = new std::string("register");}
-
-Type_Specifier	:	T_VOID			{$$ = new std::string("void");}
-								| T_CHAR			{$$ = new std::string("char");}
-								| T_SHORT			{$$ = new std::string("short");}
-								| T_INT				{$$ = new std::string("int");}
-								| T_LONG			{$$ = new std::string("long");}
-								| T_FLOAT			{$$ = new std::string("float");}
-								| T_DOUBLE		{$$ = new std::string("double");}
-								| T_SIGNED 		{$$ = new std::string("signed");}
-								| T_UNSIGNED	{$$ = new std::string("unsigned");}
-
-Type_Qualifier	:	T_CONST			{$$ = new std::string("const");}
-								| T_VOLATILE	{$$ = new std::string("volatile");}
 
 
 
