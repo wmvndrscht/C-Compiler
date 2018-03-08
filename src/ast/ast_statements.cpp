@@ -1,6 +1,7 @@
 #include "../../include/ast/ast_statements.hpp"
 
 
+
 //----------------------------------------------------------------------
 	void ReturnStatement::print_c(std::ostream &dst) const {
 		dst<< "return;";
@@ -10,7 +11,7 @@
 		// for(int i =0; i<scopecount;i++){ dst << " ";};
 		dst << "return";
 	}
-	void ReturnStatement::print_mips(std::ostream &dst) const {}
+	void ReturnStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
@@ -25,9 +26,10 @@ void ReturnExprStatement::py_translate(std::ostream &dst) const {
 	dst << "return ";
 	retexprstat->py_translate(dst);
 }
-void ReturnExprStatement::print_mips(std::ostream &dst) const {
-	dst << "  move $2,$";
-	retexprstat->print_mips(dst);//can use dest reg etc
+void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const {
+	dst << "\tmove $2,$";
+	retexprstat->print_mips(dst,program);//can use dest reg etc
+	dst << "\n";
 }
 
 
@@ -67,8 +69,8 @@ void CompoundStatement::py_translate(std::ostream &dst) const {
 	dst << "\n";
 }
 
-void CompoundStatement::print_mips(std::ostream &dst) const {
-	statlist->print_mips(dst);
+void CompoundStatement::print_mips(std::ostream &dst, context &program) const {
+	statlist->print_mips(dst,program);
 }
 
 //----------------------------------------------------------------------
@@ -87,7 +89,7 @@ void StatementList::py_translate(std::ostream &dst) const {
 	for(int i =0; i<scopecount;i++){ dst << " ";};
 	stat->py_translate(dst);
 }
-void StatementList::print_mips(std::ostream &dst) const {}
+void StatementList::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
@@ -111,7 +113,7 @@ void WhileStatement::py_translate(std::ostream &dst) const {
 	scopecount-=2;
 }
 
-void WhileStatement::print_mips(std::ostream &dst) const {}
+void WhileStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
@@ -136,7 +138,7 @@ void IfStatement::py_translate(std::ostream &dst) const {
 	preif = false;
 }
 
-void IfStatement::print_mips(std::ostream &dst) const {}
+void IfStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
@@ -170,7 +172,7 @@ void IfElseStatement::py_translate(std::ostream &dst) const {
 	preif=false;
 }
 
-void IfElseStatement::print_mips(std::ostream &dst) const {}
+void IfElseStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
@@ -185,6 +187,6 @@ void ExprStatement::py_translate(std::ostream &dst) const {
 	expr->print_c(dst);
 }
 
-void ExprStatement::print_mips(std::ostream &dst) const {}
+void ExprStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------

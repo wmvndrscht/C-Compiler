@@ -18,6 +18,6 @@ void TranslationUnit::py_translate(std::ostream &dst) const{
 	right->py_translate(dst);
 }
 
-void TranslationUnit::print_mips(std::ostream &dst) const{
+void TranslationUnit::print_mips(std::ostream &dst, context &program) const{
 
 }

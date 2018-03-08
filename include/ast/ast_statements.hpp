@@ -12,7 +12,7 @@ class ReturnStatement : public Node {
 public:
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class ReturnExprStatement : public Node {
@@ -22,7 +22,7 @@ public:
 	ReturnExprStatement(const NodePtr _retexprstat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class CompoundStatement : public Node{
@@ -33,7 +33,7 @@ public:
 	CompoundStatement(const NodePtr _statlist, const NodePtr _declist);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class StatementList : public Node{
@@ -44,7 +44,7 @@ public:
 	StatementList(const NodePtr _statlist, const NodePtr _stat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class WhileStatement : public Node{
@@ -55,7 +55,7 @@ public:
 	WhileStatement(const NodePtr _expr, const NodePtr _stat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
@@ -67,7 +67,7 @@ public:
 	IfStatement(const NodePtr _expr, const NodePtr _stat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class IfElseStatement : public Node{
@@ -79,7 +79,7 @@ public:
 	IfElseStatement(const NodePtr _expr, const NodePtr _ifstat, const NodePtr _elsestat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class ExprStatement : public Node{
@@ -89,7 +89,7 @@ public:
 	ExprStatement(const NodePtr _expr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 #endif

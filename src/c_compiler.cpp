@@ -38,7 +38,8 @@ int main(int argc, char *argv[]){
     //.nomicromips
     //.ent
     //.type
-    ast->print_mips(std::cout);
+    context program;
+    ast->print_mips(std::cout, program);
   }
   // if(argc < 2){
 	// ast->py_translate(std::cout);

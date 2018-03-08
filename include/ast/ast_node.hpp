@@ -5,6 +5,8 @@
 #include <iostream>
 #include <memory>
 
+#include "../codegen/context.hpp"
+
 class Node;
 
 typedef const Node *NodePtr;
@@ -15,7 +17,7 @@ public:
     //! Tell and Node to print itself to the given stream
   virtual void print_c(std::ostream &dst) const =0;
   virtual void py_translate(std::ostream &dst) const =0;
-  virtual void print_mips(std::ostream &dst) const =0;
+  virtual void print_mips(std::ostream &dst, context &program) const =0;
 
 };
 
@@ -31,7 +33,7 @@ public:
 	
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
@@ -42,7 +44,7 @@ public:
 //     //! Tell and Node to print itself to the given stream
 //   virtual void print_c(std::ostream &dst) const =0;
 //   virtual void py_translate(std::ostream &dst) const =0;
-//   virtual void print_mips(std::ostream &dst) const =0;
+//   virtual void print_mips(std::ostream &dst, context &program) const =0;
 
 // };
 
@@ -65,7 +67,7 @@ public:
 // 		dst<<"\n";
 // 		right->py_translate(dst);
 // 	}
-// 	virtual void print_mips(std::ostream &dst) const override{}
+// 	virtual void print_mips(std::ostream &dst, context &program) const override{}
 
 // };
 

@@ -11,7 +11,7 @@ public:
 	ExpressionVariable(const std::string* _variable);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class Value : public Node {
@@ -21,7 +21,7 @@ public:
 	Value(const double* _number);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class MultExpression : public Node {
@@ -32,7 +32,7 @@ public:
 	MultExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class AssignExpr : public Node {
@@ -45,7 +45,7 @@ public:
 	  const NodePtr _assignexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
@@ -57,7 +57,7 @@ public:
 	AddExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class SubExpression : public Node{
@@ -68,7 +68,7 @@ public:
 	SubExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 //Reduce this by inheriting lhs and rhs??
@@ -80,7 +80,7 @@ public:
 	ORExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class ANDExpression : public Node {
@@ -91,7 +91,7 @@ public:
 	ANDExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class LessThanExpression : public Node {
@@ -102,7 +102,7 @@ public:
 	LessThanExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class GreaterThanExpression : public Node {
@@ -113,7 +113,7 @@ public:
 	GreaterThanExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class EqualityExpression : public Node {
@@ -124,7 +124,7 @@ public:
 	EqualityExpression(const NodePtr _lhs, const NodePtr _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
@@ -135,7 +135,7 @@ public:
 	LonePostfixExpression(const NodePtr _expr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class PostfixArguExpression : public Node{
@@ -146,7 +146,7 @@ public:
 	PostfixArguExpression(const NodePtr _expr, const NodePtr _arguexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class AssignExprList : public Node{
@@ -157,7 +157,7 @@ public:
 	AssignExprList(const NodePtr _exprlist, const NodePtr _expr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 class UnaryOpExpr : public Node{
@@ -168,7 +168,7 @@ public:
 	UnaryOpExpr(const NodePtr _op, const NodePtr _expr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
@@ -179,7 +179,7 @@ public:
 	UnaryOp(const std::string _op);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 #endif

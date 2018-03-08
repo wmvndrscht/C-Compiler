@@ -22,7 +22,7 @@ void DeclarationSpecifier::py_translate(std::ostream &dst) const {
 	}
 }
 
-void DeclarationSpecifier::print_mips(std::ostream &dst) const {}
+void DeclarationSpecifier::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
@@ -35,7 +35,12 @@ void VariableDeclarator::print_c(std::ostream &dst) const {
 void VariableDeclarator::py_translate(std::ostream &dst) const {
 	dst << variable;
 }
-void VariableDeclarator::print_mips(std::ostream &dst) const {}
+void VariableDeclarator::print_mips(std::ostream &dst, context& program) const {}
+
+std::string VariableDeclarator::get_Label() const{
+	return variable;
+}
+
 
 //-----------------------------------------------------------------------
 
@@ -49,7 +54,7 @@ void LoneDeclaration::print_c(std::ostream &dst) const {
 void LoneDeclaration::py_translate(std::ostream &dst) const {
 	dst << "\n **Lone Declarationnot in py spec**\n";
 }
-void LoneDeclaration::print_mips(std::ostream &dst) const {}
+void LoneDeclaration::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
@@ -69,11 +74,11 @@ void Declaration::py_translate(std::ostream &dst) const {
 	dst << "\n  ";
 }
 
-void Declaration::print_mips(std::ostream &dst) const {}
+void Declaration::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
-FunctionDefinition::FunctionDefinition(const DeclarationSpecifier* _decspec, const NodePtr _dec,
+FunctionDefinition::FunctionDefinition(const DeclarationSpecifier* _decspec, const Declarator *_dec,
 	const CompoundStatement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
 
 void FunctionDefinition::print_c(std::ostream &dst) const {
@@ -89,31 +94,44 @@ void FunctionDefinition::py_translate(std::ostream &dst) const {
 	cstatement->py_translate(dst);
 }
 
-void FunctionDefinition::print_mips(std::ostream &dst) const {
-	dst << "f:\n";
-	//Setup the frame on the stack for this function call
-	dst << "  addiu $sp,$sp,-8\n"; //start with no params
-	dst << "  sw $fp,4($sp)\n";
-	dst << "  move $fp,$sp\n";
+void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 
+	std::string label = dec->get_Label();
+
+	//FrameSize will eventually be = tempvariables + local variables + 8 + paramarguments;
+	//Find these or should I print mips and then gather the params?
+	int FrameSize = 8;
+	dst << label << ":\n";
+	//Setup the frame on the stack for this function call
+
+
+	//may create own instructions class to do the printing more clearly
+	//Adjust stack for this function
+	dst << "\t" << "addiu $sp,$sp,-" << FrameSize << "\n";
+	//Store old frame pointer
+	dst << "\t" << "sw $fp," << FrameSize-4 << "($sp)\n";
+	//Set new frame pointer
+	dst << "\t" << "move $fp,$sp\n";
+
+	dst << "\n";
 	//now do return expression, will include context later
-	cstatement->print_mips(dst);
+	cstatement->print_mips(dst, program);
 	dst << "\n";
 
 	//restore frame and stack
-	dst << "  move $sp,$fp\n";
-	dst << "  lw $fp,4($sp)\n";
-	dst << "  addiu $sp,$sp,8\n";
+	dst << "\t" << "move $sp,$fp\n";
+	dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
+	dst << "\t" << "addiu $sp,$sp," << FrameSize << "\n";
 
 	//finish function
-	dst << "  j $31\n";
-	dst << "  nop";
+	dst << "\t" << "j $31\n";
+	dst << "\t" << "nop";
 
 }
 
 //-----------------------------------------------------------------------
 
-EmptyDeclarator::EmptyDeclarator(const NodePtr _directdec) : directdec(_directdec){}
+EmptyDeclarator::EmptyDeclarator(const Declarator *_directdec) : directdec(_directdec){}
 
 void EmptyDeclarator::print_c(std::ostream &dst) const {
 	directdec->print_c(dst);
@@ -126,7 +144,12 @@ void EmptyDeclarator::py_translate(std::ostream &dst) const {
 	dst << "()";
 }
 
-void EmptyDeclarator::print_mips(std::ostream &dst) const {}
+void EmptyDeclarator::print_mips(std::ostream &dst, context& program) const {}
+
+
+std::string EmptyDeclarator::get_Label() const{
+	return directdec->get_Label();
+}
 
 //-----------------------------------------------------------------------
 
@@ -144,7 +167,7 @@ void InitDeclarator::py_translate(std::ostream &dst) const {
 	init->py_translate(dst);
 }
 
-void InitDeclarator::print_mips(std::ostream &dst) const {}
+void InitDeclarator::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
@@ -159,7 +182,7 @@ void LoneInitDeclarator::py_translate(std::ostream &dst) const {
 	dst << "=0";
 }
 
-void LoneInitDeclarator::print_mips(std::ostream &dst) const {}
+void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {}
 //-----------------------------------------------------------------------
 
 DeclarationList::DeclarationList(const NodePtr _dec, const NodePtr _declist) : dec(_dec),
@@ -176,12 +199,12 @@ void DeclarationList::print_c(std::ostream &dst) const {
 	declist->py_translate(dst);
 }
 
-void DeclarationList::print_mips(std::ostream &dst) const {}
+void DeclarationList::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
 
-ParamListDeclarator::ParamListDeclarator(const NodePtr _dec, const NodePtr _paramlist) : 
+ParamListDeclarator::ParamListDeclarator(const Declarator *_dec, const NodePtr _paramlist) : 
 	dec(_dec), paramlist(_paramlist){}
 
 void ParamListDeclarator::print_c(std::ostream &dst) const {
@@ -198,7 +221,11 @@ void ParamListDeclarator::py_translate(std::ostream &dst) const {
 	dst << ")";
 }
 
-void ParamListDeclarator::print_mips(std::ostream &dst) const {}
+void ParamListDeclarator::print_mips(std::ostream &dst, context& program) const {}
+
+std::string ParamListDeclarator::get_Label() const{
+	return dec->get_Label();
+}
 
 //-----------------------------------------------------------------------
 
@@ -214,7 +241,7 @@ void ParamDeclaration::py_translate(std::ostream &dst) const {
 	dec->py_translate(dst);
 }
 
-void ParamDeclaration::print_mips(std::ostream &dst) const {}
+void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
@@ -233,7 +260,7 @@ void ParamList::py_translate(std::ostream &dst) const {
 	param->py_translate(dst);
 }
 
-void ParamList::print_mips(std::ostream &dst) const {}
+void ParamList::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------
 
@@ -247,6 +274,6 @@ void AssignmentOperator::print_c(std::ostream &dst) const {
 	dst << *assignop;
 }
 
-void AssignmentOperator::print_mips(std::ostream &dst) const {}
+void AssignmentOperator::print_mips(std::ostream &dst, context& program) const {}
 
 //-----------------------------------------------------------------------

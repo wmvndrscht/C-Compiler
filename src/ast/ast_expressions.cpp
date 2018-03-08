@@ -12,7 +12,7 @@ void ExpressionVariable::py_translate(std::ostream &dst) const {
 	dst << *variable;
 }
 
-void ExpressionVariable::print_mips(std::ostream &dst) const {
+void ExpressionVariable::print_mips(std::ostream &dst, context &program) const {
 	dst << *variable;
 }
 
@@ -29,7 +29,7 @@ void Value::py_translate(std::ostream &dst) const {
 	dst << *number;
 }
 
-void Value::print_mips(std::ostream &dst) const {
+void Value::print_mips(std::ostream &dst, context &program) const {
 	dst << *number;
 }
 
@@ -39,9 +39,11 @@ void Value::print_mips(std::ostream &dst) const {
 MultExpression::MultExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void MultExpression::print_c(std::ostream &dst) const {
+	dst << "(";
 	lhs->print_c(dst);
-	dst << "*";
+	dst << ")*(";
 	rhs->print_c(dst);
+	dst << ")";
 }
 
 void MultExpression::py_translate(std::ostream &dst) const {
@@ -50,7 +52,7 @@ void MultExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void MultExpression::print_mips(std::ostream &dst) const {}
+void MultExpression::print_mips(std::ostream &dst, context &program) const {}
 
 
 //-----------------------------------------------------------------------------
@@ -61,7 +63,6 @@ AssignExpr::AssignExpr(const NodePtr _unaryexpr, const NodePtr _assignop,
 	assignexpr(_assignexpr){}
 
 void AssignExpr::print_c(std::ostream &dst) const {
-	std::cerr << "assignexpr";
 	unaryexpr->print_c(dst);
 	dst << " ";
 	assignop->print_c(dst);
@@ -77,17 +78,18 @@ void AssignExpr::py_translate(std::ostream &dst) const {
 	assignexpr->py_translate(dst);
 }
 
-void AssignExpr::print_mips(std::ostream &dst) const {}
+void AssignExpr::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
 AddExpression::AddExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void AddExpression::print_c(std::ostream &dst) const {
-	std::cerr << "addexpr";
+	dst << "(";
 	lhs->print_c(dst);
-	dst << "+";
+	dst << ")+(";
 	rhs->print_c(dst);
+	dst << ")";
 }
 
 void AddExpression::py_translate(std::ostream &dst) const {
@@ -96,7 +98,7 @@ void AddExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void AddExpression::print_mips(std::ostream &dst) const {}
+void AddExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
@@ -104,10 +106,11 @@ void AddExpression::print_mips(std::ostream &dst) const {}
 SubExpression::SubExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void SubExpression::print_c(std::ostream &dst) const {
-	std::cerr << "subexpr";
+	dst << "(";
 	lhs->print_c(dst);
-	dst << "-";
+	dst << ")-(";
 	rhs->print_c(dst);
+	dst << ")";
 }
 
 void SubExpression::py_translate(std::ostream &dst) const {
@@ -116,7 +119,7 @@ void SubExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void SubExpression::print_mips(std::ostream &dst) const {}
+void SubExpression::print_mips(std::ostream &dst, context &program) const {}
 
 
 //-----------------------------------------------------------------------------
@@ -133,7 +136,7 @@ void ORExpression::py_translate(std::ostream &dst) const {
 	dst << " or ";
 	rhs->py_translate(dst);
 }
-void ORExpression::print_mips(std::ostream &dst) const {}
+void ORExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
@@ -152,7 +155,7 @@ void ANDExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void ANDExpression::print_mips(std::ostream &dst) const {}
+void ANDExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
@@ -170,7 +173,7 @@ void LessThanExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void LessThanExpression::print_mips(std::ostream &dst) const {}
+void LessThanExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
@@ -189,7 +192,7 @@ void GreaterThanExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void GreaterThanExpression::print_mips(std::ostream &dst) const {}
+void GreaterThanExpression::print_mips(std::ostream &dst, context &program) const {}
 
 
 //-----------------------------------------------------------------------------
@@ -209,7 +212,7 @@ void EqualityExpression::py_translate(std::ostream &dst) const {
 	rhs->py_translate(dst);
 }
 
-void EqualityExpression::print_mips(std::ostream &dst) const {}
+void EqualityExpression::print_mips(std::ostream &dst, context &program) const {}
 //-----------------------------------------------------------------------------
 
 
@@ -225,7 +228,7 @@ void LonePostfixExpression::py_translate(std::ostream &dst) const {
 	dst << "()";
 }
 
-void LonePostfixExpression::print_mips(std::ostream &dst) const {}
+void LonePostfixExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
@@ -247,7 +250,7 @@ void PostfixArguExpression::py_translate(std::ostream &dst) const {
 	dst << ")";
 }
 
-void PostfixArguExpression::print_mips(std::ostream &dst) const {}
+void PostfixArguExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
@@ -266,15 +269,18 @@ void AssignExprList::py_translate(std::ostream &dst) const {
 	expr->py_translate(dst);
 }
 
-void AssignExprList::print_mips(std::ostream &dst) const {}
+void AssignExprList::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
 UnaryOpExpr::UnaryOpExpr(const NodePtr _op, const NodePtr _expr) : op(_op),expr(_expr){}
 
 void UnaryOpExpr::print_c(std::ostream &dst) const {
+	dst << "[";
 	op->print_c(dst);
+	dst << "]{";
 	expr->print_c(dst);
+	dst << "}";
 }
 
 void UnaryOpExpr::py_translate(std::ostream &dst) const {
@@ -282,7 +288,7 @@ void UnaryOpExpr::py_translate(std::ostream &dst) const {
 	expr->py_translate(dst);
 }
 
-void UnaryOpExpr::print_mips(std::ostream &dst) const {}
+void UnaryOpExpr::print_mips(std::ostream &dst, context &program) const {}
 //-----------------------------------------------------------------------------
 
 UnaryOp::UnaryOp(const std::string _op) : op(_op){}
@@ -295,6 +301,6 @@ void UnaryOp::py_translate(std::ostream &dst) const {
 	dst << op;
 }
 
-void UnaryOp::print_mips(std::ostream &dst) const {}
+void UnaryOp::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------

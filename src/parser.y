@@ -22,6 +22,7 @@
 	const CompoundStatement* cstatement;
 	std::string *str;
 	double *number;
+	const Declarator *dec;
 }
 
 /* token terminal */
@@ -53,8 +54,8 @@
 %type<node> Additive_Expression Multiplicative_Expression Cast_Expression
 %type<node> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
 %type<node> Argument_Expression_List
-%type<node> Declarator
-%type<node> Direct_Declarator
+%type<dec> Declarator
+%type<dec> Direct_Declarator
 %type<node> Parameter_Type_List Parameter_List Parameter_Declaration
 %type<decspec> Declaration_Specifiers
 %type<str> Storage_Class_Specifier Type_Qualifier Type_Specifier
