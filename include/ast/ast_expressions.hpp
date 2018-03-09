@@ -10,7 +10,7 @@ private:
 public:
 	ExpressionVariable(const std::string* _variable);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -20,7 +20,7 @@ private:
 public:
 	Value(const double* _number);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -31,7 +31,7 @@ private:
 public:
 	MultExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -44,7 +44,7 @@ public:
 	AssignExpr(const Expression* _unaryexpr, const Declaration* _assignop,
 	  const Expression* _assignexpr);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -56,7 +56,7 @@ private:
 public:
 	AddExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -67,7 +67,7 @@ private:
 public:
 	SubExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -79,7 +79,7 @@ private:
 public:
 	ORExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -90,7 +90,7 @@ private:
 public:
 	ANDExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -101,7 +101,7 @@ private:
 public:
 	LessThanExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -112,7 +112,7 @@ private:
 public:
 	GreaterThanExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -123,7 +123,7 @@ private:
 public:
 	EqualityExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -134,7 +134,7 @@ private:
 public:
 	LonePostfixExpression(const Expression* _expr);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -145,7 +145,7 @@ private:
 public:
 	PostfixArguExpression(const Expression* _expr, const Expression* _arguexpr);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -156,7 +156,7 @@ private:
 public:
 	AssignExprList(const Expression* _exprlist, const Expression* _expr);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -167,7 +167,7 @@ private:
 public:
 	UnaryOpExpr(const Expression* _op, const Expression* _expr);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -178,7 +178,7 @@ private:
 public:
 	UnaryOp(const std::string _op);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 

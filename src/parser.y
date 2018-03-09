@@ -27,7 +27,6 @@
 	// const CompoundStatement* cstatement;
 	std::string *str;
 	double *number;
-	const Declarator *decl;
 
 }
 
@@ -53,8 +52,8 @@
 %type<dec> Declaration_List
 %type<dec> Declaration Assignment_Operator
 %type<dec> Init_Declarator_List Init_Declarator
-%type<decl> Declarator
-%type<decl> Direct_Declarator
+%type<dec> Declarator
+%type<dec> Direct_Declarator
 %type<decspec> Declaration_Specifiers
 %type<dec> Parameter_Type_List Parameter_List Parameter_Declaration
 
@@ -118,6 +117,7 @@ Parameter_List 	: Parameter_Declaration	{$$ = $1;}
 Parameter_Declaration : Declaration_Specifiers Declarator {$$ = new ParamDeclaration($1,$2);}
 
 Init_Declarator_List 	: Init_Declarator {$$ = $1;}
+											| Init_Declarator_List T_COMMA Init_Declarator {$$ = new InitDeclaratorList($1,$3);}
 
 Init_Declarator :	Declarator T_EQUAL Initializer 	{$$ = new InitDeclarator($1,$3);}
 								|	Declarator 											{$$ = new LoneInitDeclarator($1);} //Here make sure py_translate =0 

@@ -6,10 +6,14 @@
 
 #include <fstream>
 
-int scopecount = 0;
+global gbl;
+
 bool preif = false;
 
 int main(int argc, char *argv[]){
+  scope scp;
+  scp.count = 0;
+  gbl.var.push_back("");
   if(argc < 2){
   	//const Node *ast = cparseAST();
   	//ast->print(std::cout); 
@@ -19,7 +23,7 @@ int main(int argc, char *argv[]){
   else if(std::string(argv[1]) == "--translate"){
     const Node *ast = parseAST(argv[2]);
     std::ofstream output(argv[4]);
-    ast->py_translate(output);
+    ast->py_translate(output,scp);
     output << "\n\nif __name__ == \"__main__\":\n";
     output << "\timport sys\n";
     output << "\tret=main()\n";
@@ -28,7 +32,7 @@ int main(int argc, char *argv[]){
   else if(std::string(argv[1]) == "py"){
 
     const Node *ast = parseAST("std::cin");
-    ast->py_translate(std::cout);
+    ast->py_translate(std::cout,scp);
   }
   else if(std::string(argv[1]) == "-S"){
     const Node *ast = parseAST("std::cin");

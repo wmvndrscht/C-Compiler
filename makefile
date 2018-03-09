@@ -23,3 +23,4 @@ clean :
 	rm src/*.o
 	rm bin/*
 	rm src/*.yy.cpp
+	rm src/ast/*.o

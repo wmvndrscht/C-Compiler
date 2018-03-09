@@ -8,8 +8,8 @@ void ReturnStatement::print_c(std::ostream &dst) const {
 	dst<< "return;";
 	//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 }
-void ReturnStatement::py_translate(std::ostream &dst) const {
-	// for(int i =0; i<scopecount;i++){ dst << " ";};
+void ReturnStatement::py_translate(std::ostream &dst, const scope &scp) const {
+	// for(int i =0; i<scp.count;i++){ dst << " ";};
 	dst << "return";
 }
 void ReturnStatement::print_mips(std::ostream &dst, context &program) const {}
@@ -22,10 +22,10 @@ void ReturnExprStatement::print_c(std::ostream &dst) const {
 	retexprstat->print_c(dst);
 	dst << ";";
 }
-void ReturnExprStatement::py_translate(std::ostream &dst) const {
-	// for(int i =0; i<scopecount;i++){ dst << " ";};
+void ReturnExprStatement::py_translate(std::ostream &dst, const scope &scp) const {
+	// for(int i =0; i<scp.count;i++){ dst << " ";};
 	dst << "return ";
-	retexprstat->py_translate(dst);
+	retexprstat->py_translate(dst,scp);
 }
 void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const {
 	dst << "\tmove $2,$";
@@ -41,32 +41,37 @@ CompoundStatement::CompoundStatement(const Statement* _statlist, const Declarati
 
 void CompoundStatement::print_c(std::ostream &dst) const {
 	dst<< "{";
-	if(declist != NULL){
-		dst << "\n";
-		declist->print_c(dst);
-	}
 	if(statlist != NULL){
 		dst << "\n";
 		statlist->print_c(dst);
+	}
+	if(declist != NULL){
+		dst << "\n";
+		declist->print_c(dst);
 	}
 	dst<< "\n}";
 	//std::cerr << "[EmptyCompoundStatement]" << std::endl;
 }
 
-void CompoundStatement::py_translate(std::ostream &dst) const {
-	if(!preif){ dst << ":";};
+void CompoundStatement::py_translate(std::ostream &dst, const scope &scp) const {
+	if(!preif){ dst << ":";}
+	for(int i=1;i<gbl.var.size();i++){
+		dst << "\n";
+		for(int i =0; i<scp.count;i++){ dst << " ";};
+		dst << "global " << gbl.var[i];
+	}
 	dst << "\n";
-	scopecount+=2;
+	// scp.count+=2;
 	if(declist != NULL){
 		dst << "\n";
-		for(int i =0; i<scopecount;i++){ dst << " ";};
-		declist->py_translate(dst);
+		for(int i =0; i<scp.count;i++){ dst << " ";};
+		declist->py_translate(dst,scp);
 	}
 	if(statlist != NULL){
-		for(int i =0; i<scopecount;i++){ dst << " ";};
-		statlist->py_translate(dst);
+		for(int i =0; i<scp.count;i++){ dst << " ";};
+		statlist->py_translate(dst,scp);
 	}
-	scopecount-=2;
+	// scp.count-=2;
 	dst << "\n";
 }
 
@@ -84,11 +89,11 @@ void StatementList::print_c(std::ostream &dst) const {
 	dst << "\n  ";
 	stat->print_c(dst);
 }
-void StatementList::py_translate(std::ostream &dst) const {
-	statlist->py_translate(dst);
+void StatementList::py_translate(std::ostream &dst, const scope &scp) const {
+	statlist->py_translate(dst,scp);
 	dst << "\n";
-	for(int i =0; i<scopecount;i++){ dst << " ";};
-	stat->py_translate(dst);
+	for(int i =0; i<scp.count;i++){ dst << " ";};
+	stat->py_translate(dst,scp);
 }
 void StatementList::print_mips(std::ostream &dst, context &program) const {}
 
@@ -104,14 +109,14 @@ void WhileStatement::print_c(std::ostream &dst) const {
 	stat->print_c(dst);
 }
 
-void WhileStatement::py_translate(std::ostream &dst) const {
+void WhileStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "while(";
-	expr->py_translate(dst);
+	expr->py_translate(dst,scp);
 	dst << "):\n";
-	scopecount+=2;
-	for(int i =0; i<scopecount;i++){ dst << " ";};
-	stat->py_translate(dst);
-	scopecount-=2;
+	// scp.count+=2;
+	for(int i =0; i<scp.count;i++){ dst << " ";};
+	stat->py_translate(dst,increment(scp));
+	// scp.count-=2;
 }
 
 void WhileStatement::print_mips(std::ostream &dst, context &program) const {}
@@ -127,15 +132,15 @@ void IfStatement::print_c(std::ostream &dst) const {
 	stat->print_c(dst);
 }
 
-void IfStatement::py_translate(std::ostream &dst) const {
+void IfStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "if(";
-	expr->py_translate(dst);
+	expr->py_translate(dst,scp);
 	dst << "):\n";
 	preif = true;
-	scopecount+=2;
-	for(int i =0; i<scopecount;i++){ dst << " ";};
-	stat->py_translate(dst);
-	scopecount-=2;
+	// scp.count+=2;
+	for(int i =0; i<scp.count;i++){ dst << " ";};
+	stat->py_translate(dst,increment(scp));
+	// scp.count-=2;
 	preif = false;
 }
 
@@ -156,21 +161,22 @@ void IfElseStatement::print_c(std::ostream &dst) const {
 	elsestat->print_c(dst);
 }
 
-void IfElseStatement::py_translate(std::ostream &dst) const {
+void IfElseStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "if(";
-	expr->py_translate(dst);
+	expr->py_translate(dst,scp);
 	dst << "):\n";
-	scopecount+=2;
+	// scp.count+=2;
 	preif = true;
-	for(int i =0; i<scopecount;i++){ dst << " ";};
-	ifstat->py_translate(dst);
-	scopecount-=2;
-	for(int i =0; i<scopecount;i++){ dst << " ";};
-	dst << "else:\n\t";
-	scopecount+=2;
-	for(int i =0; i<scopecount;i++){ dst << " ";};
-	elsestat->py_translate(dst);
-	scopecount-=2;
+	for(int i =0; i<scp.count;i++){ dst << " ";};
+	ifstat->py_translate(dst,increment(scp));
+	// scp.count-=2;
+	for(int i =0; i<scp.count;i++){ dst << " ";};
+	// dst << "else:\n\t";
+		dst << "else:\n\t";
+	// scp.count+=2;
+	for(int i =0; i<scp.count;i++){ dst << " ";};
+	elsestat->py_translate(dst,increment(scp));
+	// scp.count-=2;
 	preif=false;
 }
 
@@ -185,7 +191,7 @@ void ExprStatement::print_c(std::ostream &dst) const {
 	dst << ";";
 }
 
-void ExprStatement::py_translate(std::ostream &dst) const {
+void ExprStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	expr->print_c(dst);
 }
 

@@ -12,7 +12,7 @@
 class ReturnStatement : public Statement {
 public:
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -22,7 +22,7 @@ private:
 public:
 	ReturnExprStatement(const NodePtr _retexprstat);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -33,7 +33,7 @@ private:
 public:
 	CompoundStatement(const Statement* _statlist, const Declaration* _declist);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -44,7 +44,7 @@ private:
 public:
 	StatementList(const Statement* _statlist, const Statement* _stat);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -55,7 +55,7 @@ private:
 public:
 	WhileStatement(const NodePtr _expr, const Statement* _stat);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -67,7 +67,7 @@ private:
 public:
 	IfStatement(const NodePtr _expr, const Statement* _stat);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -79,7 +79,7 @@ private:
 public:
 	IfElseStatement(const NodePtr _expr, const Statement* _ifstat, const Statement* _elsestat);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
@@ -89,7 +89,7 @@ private:
 public:
 	ExprStatement(const NodePtr _expr);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 

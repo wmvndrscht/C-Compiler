@@ -8,10 +8,6 @@
 #include "ast_node.hpp"
 
 
-class Declarator : public Declaration{
-public:
-	virtual std::string get_Label() const =0;
-};
 
 class DeclarationSpecifier : public Declaration{
 private:
@@ -23,19 +19,22 @@ public:
 		const DeclarationSpecifier* _decspec);
 	
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
-class VariableDeclarator : public Declarator {
+class VariableDeclarator : public Declaration {
 private:
 	const std::string variable;
 public:
 	VariableDeclarator(const std::string &_variable);
 
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
 	virtual std::string get_Label() const override;
 };
 
@@ -45,8 +44,10 @@ private:
 public:
 	LoneDeclaration(const DeclarationSpecifier* _decspec);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
 class TheDeclaration : public Declaration{
@@ -58,78 +59,90 @@ public:
 		const Declaration *_initdeclaratorlist);
 
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
 //Declaration_Specifiers Declarator Compound_Statement
 class FunctionDefinition : public Declaration{
 private:
 	const DeclarationSpecifier* decspec;
-	const Declarator *dec;
+	const Declaration *dec;
 	const Statement* cstatement;
 public:
-	FunctionDefinition(const DeclarationSpecifier* _decspec, const Declarator *_dec,
+	FunctionDefinition(const DeclarationSpecifier* _decspec, const Declaration *_dec,
 		const Statement* _cstatement);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
-};
-
-class EmptyDeclarator : public Declarator{
-private:
-	const Declarator *directdec;
-public:
-	EmptyDeclarator(const Declarator *_directdec);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
 	virtual std::string get_Label() const override;
 };
 
-class InitDeclarator : public Declaration{
+class EmptyDeclarator : public Declaration{
+private:
+	const Declaration *directdec;
+public:
+	EmptyDeclarator(const Declaration *_directdec);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
+};
+
+class InitDeclarator : public Declaration {
 private:
 	const Declaration *dec;
 	const NodePtr init;
 public:
 	InitDeclarator(const Declaration *_dec, const NodePtr _init);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
-class LoneInitDeclarator : public Declaration{
+class LoneInitDeclarator : public Declaration {
 private:
 	const Declaration *dec;
 public:
 	LoneInitDeclarator(const Declaration *_dec);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
 class DeclarationList : public Declaration{
 private:
-	const Declaration *dec;
 	const Declaration *declist;
+	const Declaration *dec;
 public:
-	DeclarationList(const Declaration *_dec, const Declaration *_declist);
+	DeclarationList(const Declaration *_declist, const Declaration *_dec);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 
 };
 
 
-class ParamListDeclarator : public Declarator{
+class ParamListDeclarator : public Declaration{
 private:
-	const Declarator *dec;
+	const Declaration *dec;
 	const Declaration *paramlist;
 public:
-	ParamListDeclarator(const Declarator *_dec, const Declaration *_paramlist);
+	ParamListDeclarator(const Declaration *_dec, const Declaration *_paramlist);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
 	virtual std::string get_Label() const override;
 };
 
@@ -140,8 +153,10 @@ private:
 public:
 	ParamDeclaration(const Declaration *_decspec, const Declaration *_dec);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
 class ParamList : public Declaration{
@@ -151,8 +166,10 @@ private:
 public:
 	ParamList(const Declaration *_paramlist, const Declaration *_param);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
 class AssignmentOperator : public Declaration{
@@ -161,10 +178,24 @@ private:
 public:
 	AssignmentOperator(const std::string *_assignop);
 	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
 };
 
+class InitDeclaratorList : public Declaration{
+private:
+	const Declaration* declist;
+	const Declaration* dec;
+public:
+	InitDeclaratorList(const Declaration *_declist, const Declaration *_dec);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
+};
 
 
 // class Declaration : public Declaration{
@@ -201,7 +232,7 @@ public:
 
 // 		}
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dst << type;
 // 		if( decspec != NULL){
 // 			dst << "\n **>1 Declaration Specifier not in spec for formative** \n";
@@ -221,7 +252,7 @@ public:
 // 		//std::cerr << "[VariableDeclarator]" << std::endl;
 // 	}
 
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dst << variable;
 // 	}
 // 	virtual void print_mips(std::ostream &dst, context &program) const override{}
@@ -238,7 +269,7 @@ public:
 // 		dst << ";";
 // 		//std::cerr << "[LoneDeclaration]" << std::endl;
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dst << "\n **Lone Declarationnot in py spec**\n";
 // 	}
 // 	virtual void print_mips(std::ostream &dst, context &program) const override{}
@@ -258,7 +289,7 @@ public:
 // 		dst << ";";
 // 		//std::cerr << "[Declaration]" << std::endl;
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		// decspec->py_translate(dst); don't believe I need this?
 // 		// dst << " ";
 // 		initdeclaratorlist->py_translate(dst);
@@ -282,7 +313,7 @@ public:
 // 		cstatement->print_c(dst);
 // 		//std::cerr << "[FunctionDefinition]" << std::endl;
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dst << "def ";
 // 		dec->py_translate(dst);
 // 		cstatement->py_translate(dst);
@@ -322,7 +353,7 @@ public:
 // 		dst << "()";
 // 		//std::cerr << "[EmptyDeclarator]" << std::endl;
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		directdec->py_translate(dst);
 // 		dst << "()";
 // 	}
@@ -340,7 +371,7 @@ public:
 // 		dst << " = ";
 // 		init->print_c(dst);
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dec->py_translate(dst);
 // 		dst << "=";
 // 		init->py_translate(dst);
@@ -356,7 +387,7 @@ public:
 // 	virtual void print_c(std::ostream &dst) const override{
 // 		dec->print_c(dst);
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dec->py_translate(dst);
 // 		dst << "=0";
 // 	}
@@ -375,7 +406,7 @@ public:
 // 		dst << "\n";
 // 		declist->print_c(dst);
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dec->py_translate(dst);
 // 		declist->py_translate(dst);
 // 	}
@@ -397,7 +428,7 @@ public:
 // 		paramlist->print_c(dst);
 // 		dst << ")";
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dec->py_translate(dst);
 // 		dst << "(";
 // 		paramlist->py_translate(dst);
@@ -418,7 +449,7 @@ public:
 // 		decspec->print_c(dst);
 // 		dec->print_c(dst);
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dec->py_translate(dst);
 // 	}
 // 	virtual void print_mips(std::ostream &dst, context &program) const override{}
@@ -436,7 +467,7 @@ public:
 // 		dst << ",";
 // 		param->print_c(dst);
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		paramlist->py_translate(dst);
 // 		dst << ",";
 // 		param->py_translate(dst);
@@ -452,7 +483,7 @@ public:
 // 	virtual void print_c(std::ostream &dst) const override{
 // 		dst << *assignop;
 // 	}
-// 	virtual void py_translate(std::ostream &dst) const override{
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override{
 // 		dst << *assignop;
 // 	}
 // 	virtual void print_mips(std::ostream &dst, context &program) const override{}

@@ -2,7 +2,7 @@
 
 
 
-
+#include <vector>
 
 //----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ void DeclarationSpecifier::print_c(std::ostream &dst) const {
 	}
 }
 
-void DeclarationSpecifier::py_translate(std::ostream &dst) const {
+void DeclarationSpecifier::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << type;
 	if( decspec != NULL){
 		dst << "\n **>1 Declaration Specifier not in spec for formative** \n";
@@ -25,6 +25,8 @@ void DeclarationSpecifier::py_translate(std::ostream &dst) const {
 }
 
 void DeclarationSpecifier::print_mips(std::ostream &dst, context& program) const {}
+std::string DeclarationSpecifier::get_name() const {return "not implemented";}
+std::string DeclarationSpecifier::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ void VariableDeclarator::print_c(std::ostream &dst) const {
 	dst << " " << variable;
 }
 
-void VariableDeclarator::py_translate(std::ostream &dst) const {
+void VariableDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << variable;
 }
 void VariableDeclarator::print_mips(std::ostream &dst, context& program) const {}
@@ -42,6 +44,8 @@ void VariableDeclarator::print_mips(std::ostream &dst, context& program) const {
 std::string VariableDeclarator::get_Label() const{
 	return variable;
 }
+std::string VariableDeclarator::get_name() const {return "not implemented";}
+
 
 
 //-----------------------------------------------------------------------
@@ -53,10 +57,13 @@ void LoneDeclaration::print_c(std::ostream &dst) const {
 	dst << ";";
 	//std::cerr << "[LoneDeclaration]" << std::endl;
 }
-void LoneDeclaration::py_translate(std::ostream &dst) const {
+void LoneDeclaration::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "\n **Lone Declarationnot in py spec**\n";
 }
 void LoneDeclaration::print_mips(std::ostream &dst, context& program) const {}
+
+std::string LoneDeclaration::get_name() const {return "not implemented";}
+std::string LoneDeclaration::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
@@ -69,18 +76,25 @@ void TheDeclaration::print_c(std::ostream &dst) const {
 	dst << ";";
 	//std::cerr << "[Declaration]" << std::endl;
 }
-void TheDeclaration::py_translate(std::ostream &dst) const {
-	// decspec->py_translate(dst); don't believe I need this?
+void TheDeclaration::py_translate(std::ostream &dst, const scope &scp) const {
+	// decspec->py_translate(dst,scp); don't believe I need this?
 	// dst << " ";
-	initdeclaratorlist->py_translate(dst);
-	dst << "\n  ";
+
+	if(scp.count == 0){
+		std::string name = initdeclaratorlist->get_name();
+		gbl.var.push_back( name );
+	}
+	initdeclaratorlist->py_translate(dst,scp);
+	dst << "\n";
 }
 
 void TheDeclaration::print_mips(std::ostream &dst, context& program) const {}
+std::string TheDeclaration::get_name() const {return "not implemented";}
+std::string TheDeclaration::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
-FunctionDefinition::FunctionDefinition(const DeclarationSpecifier* _decspec, const Declarator *_dec,
+FunctionDefinition::FunctionDefinition(const DeclarationSpecifier* _decspec, const Declaration *_dec,
 	const Statement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
 
 void FunctionDefinition::print_c(std::ostream &dst) const {
@@ -90,10 +104,13 @@ void FunctionDefinition::print_c(std::ostream &dst) const {
 	//std::cerr << "[FunctionDefinition]" << std::endl;
 }
 
-void FunctionDefinition::py_translate(std::ostream &dst) const {
+void FunctionDefinition::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "def ";
-	dec->py_translate(dst);
-	cstatement->py_translate(dst);
+	dec->py_translate(dst,scp);
+	// for(int i=1;i<gbl.var.size();i++){
+	// 	dst << "\n\t" << gbl.var[i];
+	// }
+	cstatement->py_translate(dst,increment(scp));
 }
 
 void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
@@ -131,9 +148,12 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 
 }
 
+std::string FunctionDefinition::get_name() const {return "not implemented";}
+std::string FunctionDefinition::get_Label() const {return "not implemented";}
+
 //-----------------------------------------------------------------------
 
-EmptyDeclarator::EmptyDeclarator(const Declarator *_directdec) : directdec(_directdec){}
+EmptyDeclarator::EmptyDeclarator(const Declaration *_directdec) : directdec(_directdec){}
 
 void EmptyDeclarator::print_c(std::ostream &dst) const {
 	directdec->print_c(dst);
@@ -141,8 +161,8 @@ void EmptyDeclarator::print_c(std::ostream &dst) const {
 	//std::cerr << "[EmptyDeclarator]" << std::endl;
 }
 
-void EmptyDeclarator::py_translate(std::ostream &dst) const {
-	directdec->py_translate(dst);
+void EmptyDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	directdec->py_translate(dst,scp);
 	dst << "()";
 }
 
@@ -152,6 +172,8 @@ void EmptyDeclarator::print_mips(std::ostream &dst, context& program) const {}
 std::string EmptyDeclarator::get_Label() const{
 	return directdec->get_Label();
 }
+
+std::string EmptyDeclarator::get_name() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
@@ -163,13 +185,21 @@ void InitDeclarator::print_c(std::ostream &dst) const {
 	init->print_c(dst);
 }
 
-void InitDeclarator::py_translate(std::ostream &dst) const {
-	dec->py_translate(dst);
+void InitDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	dec->py_translate(dst,scp);
 	dst << "=";
-	init->py_translate(dst);
+	init->py_translate(dst,scp);
 }
 
 void InitDeclarator::print_mips(std::ostream &dst, context& program) const {}
+
+std::string InitDeclarator::get_name() const{
+	return dec->get_Label();
+}
+
+std::string InitDeclarator::get_Label() const {return "not implemented";}
+
+
 
 //-----------------------------------------------------------------------
 
@@ -179,34 +209,44 @@ void LoneInitDeclarator::print_c(std::ostream &dst) const {
 	dec->print_c(dst);
 }
 
-void LoneInitDeclarator::py_translate(std::ostream &dst) const {
-	dec->py_translate(dst);
+void LoneInitDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	dec->py_translate(dst,scp);
 	dst << "=0";
 }
 
 void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {}
-//-----------------------------------------------------------------------
 
-DeclarationList::DeclarationList(const Declaration* _dec, const Declaration* _declist) : dec(_dec),
-	declist(_declist){}
-
-void DeclarationList::print_c(std::ostream &dst) const {
-	dec->print_c(dst);
-	dst << "\n";
-	declist->print_c(dst);
+std::string LoneInitDeclarator::get_name() const{
+	return dec->get_Label();
 }
 
- void DeclarationList::py_translate(std::ostream &dst) const {
-	dec->py_translate(dst);
-	declist->py_translate(dst);
+std::string LoneInitDeclarator::get_Label() const {return "not implemented";}
+
+//-----------------------------------------------------------------------
+
+DeclarationList::DeclarationList(const Declaration* _declist, const Declaration* _dec) : declist(_declist),
+	dec(_dec){}
+
+void DeclarationList::print_c(std::ostream &dst) const {
+	declist->print_c(dst);
+	dst << "\n";
+	dec->print_c(dst);
+}
+
+ void DeclarationList::py_translate(std::ostream &dst, const scope &scp) const {
+	declist->py_translate(dst,scp);
+	dec->py_translate(dst,scp);
 }
 
 void DeclarationList::print_mips(std::ostream &dst, context& program) const {}
 
+std::string DeclarationList::get_name() const {return "not implemented";}
+std::string DeclarationList::get_Label() const {return "not implemented";}
+
 //-----------------------------------------------------------------------
 
 
-ParamListDeclarator::ParamListDeclarator(const Declarator *_dec, const Declaration* _paramlist) : 
+ParamListDeclarator::ParamListDeclarator(const Declaration *_dec, const Declaration* _paramlist) : 
 	dec(_dec), paramlist(_paramlist){}
 
 void ParamListDeclarator::print_c(std::ostream &dst) const {
@@ -216,10 +256,10 @@ void ParamListDeclarator::print_c(std::ostream &dst) const {
 	dst << ")";
 }
 
-void ParamListDeclarator::py_translate(std::ostream &dst) const {
-	dec->py_translate(dst);
+void ParamListDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	dec->py_translate(dst,scp);
 	dst << "(";
-	paramlist->py_translate(dst);
+	paramlist->py_translate(dst,scp);
 	dst << ")";
 }
 
@@ -228,6 +268,8 @@ void ParamListDeclarator::print_mips(std::ostream &dst, context& program) const 
 std::string ParamListDeclarator::get_Label() const{
 	return dec->get_Label();
 }
+
+std::string ParamListDeclarator::get_name() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
@@ -239,11 +281,14 @@ void ParamDeclaration::print_c(std::ostream &dst) const {
 	dec->print_c(dst);
 }
 
-void ParamDeclaration::py_translate(std::ostream &dst) const {
-	dec->py_translate(dst);
+void ParamDeclaration::py_translate(std::ostream &dst, const scope &scp) const {
+	dec->py_translate(dst,scp);
 }
 
 void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {}
+
+std::string ParamDeclaration::get_name() const {return "not implemented";}
+std::string ParamDeclaration::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
@@ -256,13 +301,16 @@ void ParamList::print_c(std::ostream &dst) const {
 	param->print_c(dst);
 }
 
-void ParamList::py_translate(std::ostream &dst) const {
-	paramlist->py_translate(dst);
+void ParamList::py_translate(std::ostream &dst, const scope &scp) const {
+	paramlist->py_translate(dst,scp);
 	dst << ",";
-	param->py_translate(dst);
+	param->py_translate(dst,scp);
 }
 
 void ParamList::print_mips(std::ostream &dst, context& program) const {}
+
+std::string ParamList::get_name() const {return "not implemented";}
+std::string ParamList::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
@@ -272,10 +320,35 @@ void AssignmentOperator::print_c(std::ostream &dst) const {
 	dst << *assignop;
 }
 
- void AssignmentOperator::py_translate(std::ostream &dst) const {
+ void AssignmentOperator::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << *assignop;
 }
 
 void AssignmentOperator::print_mips(std::ostream &dst, context& program) const {}
 
+std::string AssignmentOperator::get_name() const {return "not implemented";}
+std::string AssignmentOperator::get_Label() const {return "not implemented";}
+
 //-----------------------------------------------------------------------
+
+InitDeclaratorList::InitDeclaratorList(const Declaration *_declist, const Declaration *_dec) : declist(_declist),
+	dec(_dec){}
+
+void InitDeclaratorList::print_c(std::ostream &dst) const {
+	declist->print_c(dst);
+	dst << "\n";
+	dec->print_c(dst);
+}
+
+ void InitDeclaratorList::py_translate(std::ostream &dst, const scope &scp) const {
+	declist->py_translate(dst,scp);
+	dec->py_translate(dst,scp);
+}
+
+void InitDeclaratorList::print_mips(std::ostream &dst, context& program) const {}
+
+std::string InitDeclaratorList::get_name() const{
+	return dec->get_name();
+}
+
+std::string InitDeclaratorList::get_Label() const {return "not implemented";}

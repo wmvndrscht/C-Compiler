@@ -1,7 +1,8 @@
 #ifndef ast_hpp
 #define ast_hpp
 
-extern int scopecount;
+// extern int scopecount;
+
 extern bool preif;
 
 #include "ast/ast_node.hpp"
