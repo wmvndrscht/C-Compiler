@@ -4,7 +4,7 @@
 #include "../ast.hpp"
 #include "ast_node.hpp"
 
-class ExpressionVariable : public Node {
+class ExpressionVariable : public Expression {
 private:
 	const std::string *variable;
 public:
@@ -14,7 +14,7 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class Value : public Node {
+class Value : public Expression {
 private:
 	const double *number;
 public:
@@ -24,155 +24,155 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class MultExpression : public Node {
+class MultExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	MultExpression(const NodePtr _lhs, const NodePtr _rhs);
+	MultExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class AssignExpr : public Node {
+class AssignExpr : public Expression {
 private:
-	const NodePtr unaryexpr;
-	const NodePtr assignop;
-	const NodePtr assignexpr;
+	const Expression* unaryexpr;
+	const Declaration* assignop;
+	const Expression* assignexpr;
 public:
-	AssignExpr(const NodePtr _unaryexpr, const NodePtr _assignop,
-	  const NodePtr _assignexpr);
+	AssignExpr(const Expression* _unaryexpr, const Declaration* _assignop,
+	  const Expression* _assignexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
-class AddExpression : public Node{
+class AddExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	AddExpression(const NodePtr _lhs, const NodePtr _rhs);
+	AddExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class SubExpression : public Node{
+class SubExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	SubExpression(const NodePtr _lhs, const NodePtr _rhs);
+	SubExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 //Reduce this by inheriting lhs and rhs??
-class ORExpression : public Node {
+class ORExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	ORExpression(const NodePtr _lhs, const NodePtr _rhs);
+	ORExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class ANDExpression : public Node {
+class ANDExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	ANDExpression(const NodePtr _lhs, const NodePtr _rhs);
+	ANDExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class LessThanExpression : public Node {
+class LessThanExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	LessThanExpression(const NodePtr _lhs, const NodePtr _rhs);
+	LessThanExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class GreaterThanExpression : public Node {
+class GreaterThanExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	GreaterThanExpression(const NodePtr _lhs, const NodePtr _rhs);
+	GreaterThanExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class EqualityExpression : public Node {
+class EqualityExpression : public Expression {
 private:
-	const NodePtr lhs;
-	const NodePtr rhs;
+	const Expression* lhs;
+	const Expression* rhs;
 public:
-	EqualityExpression(const NodePtr _lhs, const NodePtr _rhs);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
-};
-
-
-class LonePostfixExpression : public Node{
-private:
-	const NodePtr expr;
-public:
-	LonePostfixExpression(const NodePtr _expr);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
-};
-
-class PostfixArguExpression : public Node{
-private:
-	const NodePtr expr;
-	const NodePtr arguexpr;
-public:
-	PostfixArguExpression(const NodePtr _expr, const NodePtr _arguexpr);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
-};
-
-class AssignExprList : public Node{
-private:
-	const NodePtr exprlist;
-	const NodePtr expr;
-public:
-	AssignExprList(const NodePtr _exprlist, const NodePtr _expr);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
-};
-
-class UnaryOpExpr : public Node{
-private:
-	const NodePtr op;
-	const NodePtr expr;
-public:
-	UnaryOpExpr(const NodePtr _op, const NodePtr _expr);
+	EqualityExpression(const Expression* _lhs, const Expression* _rhs);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
 
-class UnaryOp : public Node{
+class LonePostfixExpression : public Expression {
+private:
+	const Expression* expr;
+public:
+	LonePostfixExpression(const Expression* _expr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class PostfixArguExpression : public Expression {
+private:
+	const Expression* expr;
+	const Expression* arguexpr;
+public:
+	PostfixArguExpression(const Expression* _expr, const Expression* _arguexpr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class AssignExprList : public Expression {
+private:
+	const Expression* exprlist;
+	const Expression* expr;
+public:
+	AssignExprList(const Expression* _exprlist, const Expression* _expr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class UnaryOpExpr : public Expression {
+private:
+	const Expression* op;
+	const Expression* expr;
+public:
+	UnaryOpExpr(const Expression* _op, const Expression* _expr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
+class UnaryOp : public Expression {
 private:
 	const std::string op;
 public:

@@ -37,6 +37,29 @@ public:
 };
 
 
+class Declaration : public Node{
+public:
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class Statement : public Node {
+public:
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
+class Expression : public Node {
+public:
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
 
 // class Node{
 // public:

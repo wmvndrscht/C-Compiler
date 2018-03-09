@@ -3,15 +3,16 @@
 
 
 //----------------------------------------------------------------------
-	void ReturnStatement::print_c(std::ostream &dst) const {
-		dst<< "return;";
-		//std::cerr << "[EmptyCompoundStatement]" << std::endl;
-	}
-	void ReturnStatement::py_translate(std::ostream &dst) const {
-		// for(int i =0; i<scopecount;i++){ dst << " ";};
-		dst << "return";
-	}
-	void ReturnStatement::print_mips(std::ostream &dst, context &program) const {}
+
+void ReturnStatement::print_c(std::ostream &dst) const {
+	dst<< "return;";
+	//std::cerr << "[EmptyCompoundStatement]" << std::endl;
+}
+void ReturnStatement::py_translate(std::ostream &dst) const {
+	// for(int i =0; i<scopecount;i++){ dst << " ";};
+	dst << "return";
+}
+void ReturnStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
@@ -35,18 +36,18 @@ void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const 
 
 //----------------------------------------------------------------------
 
-CompoundStatement::CompoundStatement(const NodePtr _statlist, const NodePtr _declist) : 
+CompoundStatement::CompoundStatement(const Statement* _statlist, const Declaration* _declist) : 
 	statlist(_statlist), declist(_declist){}
 
 void CompoundStatement::print_c(std::ostream &dst) const {
 	dst<< "{";
-	if(statlist != NULL){
-		dst << "\n";
-		statlist->print_c(dst);
-	}
 	if(declist != NULL){
 		dst << "\n";
 		declist->print_c(dst);
+	}
+	if(statlist != NULL){
+		dst << "\n";
+		statlist->print_c(dst);
 	}
 	dst<< "\n}";
 	//std::cerr << "[EmptyCompoundStatement]" << std::endl;
@@ -56,14 +57,14 @@ void CompoundStatement::py_translate(std::ostream &dst) const {
 	if(!preif){ dst << ":";};
 	dst << "\n";
 	scopecount+=2;
-	if(statlist != NULL){
-		for(int i =0; i<scopecount;i++){ dst << " ";};
-		statlist->py_translate(dst);
-	}
 	if(declist != NULL){
 		dst << "\n";
 		for(int i =0; i<scopecount;i++){ dst << " ";};
 		declist->py_translate(dst);
+	}
+	if(statlist != NULL){
+		for(int i =0; i<scopecount;i++){ dst << " ";};
+		statlist->py_translate(dst);
 	}
 	scopecount-=2;
 	dst << "\n";
@@ -75,7 +76,7 @@ void CompoundStatement::print_mips(std::ostream &dst, context &program) const {
 
 //----------------------------------------------------------------------
 
-StatementList::StatementList(const NodePtr _statlist, const NodePtr _stat) : 
+StatementList::StatementList(const Statement* _statlist, const Statement* _stat) : 
 statlist(_statlist), stat(_stat){}
 
 void StatementList::print_c(std::ostream &dst) const {
@@ -93,7 +94,7 @@ void StatementList::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
-WhileStatement::WhileStatement(const NodePtr _expr, const NodePtr _stat) : 
+WhileStatement::WhileStatement(const NodePtr _expr, const Statement* _stat) : 
 	expr(_expr), stat(_stat){}
 
 void WhileStatement::print_c(std::ostream &dst) const {
@@ -117,7 +118,7 @@ void WhileStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
-IfStatement::IfStatement(const NodePtr _expr, const NodePtr _stat) : expr(_expr), stat(_stat){}
+IfStatement::IfStatement(const NodePtr _expr, const Statement* _stat) : expr(_expr), stat(_stat){}
 
 void IfStatement::print_c(std::ostream &dst) const {
 	dst << "if(";
@@ -142,7 +143,8 @@ void IfStatement::print_mips(std::ostream &dst, context &program) const {}
 
 //----------------------------------------------------------------------
 
-IfElseStatement::IfElseStatement(const NodePtr _expr, const NodePtr _ifstat, const NodePtr _elsestat) :
+IfElseStatement::IfElseStatement(const NodePtr _expr, const Statement* _ifstat, 
+	const Statement* _elsestat) :
   expr(_expr), ifstat(_ifstat), elsestat(_elsestat){}
 
 void IfElseStatement::print_c(std::ostream &dst) const {

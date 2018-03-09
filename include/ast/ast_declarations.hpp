@@ -6,11 +6,7 @@
 
 #include "../ast.hpp"
 #include "ast_node.hpp"
-#include "ast_statements.hpp"
 
-
-class Declaration : public Node{
-};
 
 class Declarator : public Declaration{
 public:
@@ -71,10 +67,10 @@ class FunctionDefinition : public Declaration{
 private:
 	const DeclarationSpecifier* decspec;
 	const Declarator *dec;
-	const CompoundStatement* cstatement;
+	const Statement* cstatement;
 public:
 	FunctionDefinition(const DeclarationSpecifier* _decspec, const Declarator *_dec,
-		const CompoundStatement* _cstatement);
+		const Statement* _cstatement);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;

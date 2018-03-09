@@ -21,3 +21,27 @@ void TranslationUnit::py_translate(std::ostream &dst) const{
 void TranslationUnit::print_mips(std::ostream &dst, context &program) const{
 
 }
+
+//-------------------------------Declaration-----------------------------------
+
+void Declaration::print_c(std::ostream &dst) const {}
+
+void Declaration::py_translate(std::ostream &dst) const{}
+
+void Declaration::print_mips(std::ostream &dst, context &program) const{}
+
+//------------------------------Statement---------------------------------
+
+void Statement::print_c(std::ostream &dst) const {}
+
+void Statement::py_translate(std::ostream &dst) const{}
+
+void Statement::print_mips(std::ostream &dst, context &program) const{}
+
+//------------------------------Expression--------------------------------
+
+void Expression::print_c(std::ostream &dst) const {}
+
+void Expression::py_translate(std::ostream &dst) const{}
+
+void Expression::print_mips(std::ostream &dst, context &program) const{}

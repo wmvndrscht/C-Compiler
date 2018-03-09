@@ -8,14 +8,15 @@
 #include "../ast.hpp"
 #include "ast_node.hpp"
 
-class ReturnStatement : public Node {
+
+class ReturnStatement : public Statement {
 public:
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class ReturnExprStatement : public Node {
+class ReturnExprStatement : public Statement {
 private:
 	const NodePtr retexprstat;
 public:
@@ -25,64 +26,64 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class CompoundStatement : public Node{
+class CompoundStatement : public Statement{
 private:
-	const NodePtr statlist;
-	const NodePtr declist;
+	const Statement* statlist;
+	const Declaration* declist;
 public:
-	CompoundStatement(const NodePtr _statlist, const NodePtr _declist);
+	CompoundStatement(const Statement* _statlist, const Declaration* _declist);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class StatementList : public Node{
+class StatementList : public Statement{
 private:
-	const NodePtr statlist;
-	const NodePtr stat;
+	const Statement* statlist;
+	const Statement* stat;
 public:
-	StatementList(const NodePtr _statlist, const NodePtr _stat);
+	StatementList(const Statement* _statlist, const Statement* _stat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class WhileStatement : public Node{
-private:
-	const NodePtr expr;
-	const NodePtr stat;
-public:
-	WhileStatement(const NodePtr _expr, const NodePtr _stat);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
-};
-
-
-class IfStatement : public Node{
+class WhileStatement : public Statement{
 private:
 	const NodePtr expr;
-	const NodePtr stat;
+	const Statement* stat;
 public:
-	IfStatement(const NodePtr _expr, const NodePtr _stat);
+	WhileStatement(const NodePtr _expr, const Statement* _stat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class IfElseStatement : public Node{
+
+class IfStatement : public Statement{
 private:
 	const NodePtr expr;
-	const NodePtr ifstat;
-	const NodePtr elsestat;
+	const Statement* stat;
 public:
-	IfElseStatement(const NodePtr _expr, const NodePtr _ifstat, const NodePtr _elsestat);
+	IfStatement(const NodePtr _expr, const Statement* _stat);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class ExprStatement : public Node{
+class IfElseStatement : public Statement{
+private:
+	const NodePtr expr;
+	const Statement* ifstat;
+	const Statement* elsestat;
+public:
+	IfElseStatement(const NodePtr _expr, const Statement* _ifstat, const Statement* _elsestat);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class ExprStatement : public Statement{
 private:
 	const NodePtr expr;
 public:

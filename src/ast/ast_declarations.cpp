@@ -1,6 +1,9 @@
 #include "../../include/ast/ast_declarations.hpp"
 
 
+
+
+
 //----------------------------------------------------------------------
 
 DeclarationSpecifier::DeclarationSpecifier(const std::string &_type, 
@@ -78,7 +81,7 @@ void TheDeclaration::print_mips(std::ostream &dst, context& program) const {}
 //-----------------------------------------------------------------------
 
 FunctionDefinition::FunctionDefinition(const DeclarationSpecifier* _decspec, const Declarator *_dec,
-	const CompoundStatement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
+	const Statement* _cstatement) :  decspec(_decspec), dec(_dec), cstatement(_cstatement){}
 
 void FunctionDefinition::print_c(std::ostream &dst) const {
 	decspec->print_c(dst);

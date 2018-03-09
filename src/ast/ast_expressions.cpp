@@ -36,7 +36,7 @@ void Value::print_mips(std::ostream &dst, context &program) const {
 //-----------------------------------------------------------------------------
 
 
-MultExpression::MultExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+MultExpression::MultExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void MultExpression::print_c(std::ostream &dst) const {
 	dst << "(";
@@ -58,8 +58,8 @@ void MultExpression::print_mips(std::ostream &dst, context &program) const {}
 //-----------------------------------------------------------------------------
 
 
-AssignExpr::AssignExpr(const NodePtr _unaryexpr, const NodePtr _assignop,
- const NodePtr _assignexpr) : unaryexpr(_unaryexpr), assignop(_assignop),
+AssignExpr::AssignExpr(const Expression* _unaryexpr, const Declaration* _assignop,
+ const Expression* _assignexpr) : unaryexpr(_unaryexpr), assignop(_assignop),
 	assignexpr(_assignexpr){}
 
 void AssignExpr::print_c(std::ostream &dst) const {
@@ -82,7 +82,7 @@ void AssignExpr::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
-AddExpression::AddExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+AddExpression::AddExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void AddExpression::print_c(std::ostream &dst) const {
 	dst << "(";
@@ -103,7 +103,7 @@ void AddExpression::print_mips(std::ostream &dst, context &program) const {}
 //-----------------------------------------------------------------------------
 
 
-SubExpression::SubExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+SubExpression::SubExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void SubExpression::print_c(std::ostream &dst) const {
 	dst << "(";
@@ -125,7 +125,7 @@ void SubExpression::print_mips(std::ostream &dst, context &program) const {}
 //-----------------------------------------------------------------------------
 
 //Reduce this by inheriting lhs and rhs??
-ORExpression::ORExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+ORExpression::ORExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 void ORExpression::print_c(std::ostream &dst) const {
 	lhs->print_c(dst);
 	dst << "||";
@@ -141,7 +141,7 @@ void ORExpression::print_mips(std::ostream &dst, context &program) const {}
 //-----------------------------------------------------------------------------
 
 
-ANDExpression::ANDExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+ANDExpression::ANDExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void ANDExpression::print_c(std::ostream &dst) const {
 	lhs->print_c(dst);
@@ -159,7 +159,7 @@ void ANDExpression::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
-LessThanExpression::LessThanExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+LessThanExpression::LessThanExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void LessThanExpression::print_c(std::ostream &dst) const {
 	lhs->print_c(dst);
@@ -178,7 +178,7 @@ void LessThanExpression::print_mips(std::ostream &dst, context &program) const {
 //-----------------------------------------------------------------------------
 
 
-GreaterThanExpression::GreaterThanExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+GreaterThanExpression::GreaterThanExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void GreaterThanExpression::print_c(std::ostream &dst) const {
 	lhs->print_c(dst);
@@ -198,7 +198,7 @@ void GreaterThanExpression::print_mips(std::ostream &dst, context &program) cons
 //-----------------------------------------------------------------------------
 
 
-EqualityExpression::EqualityExpression(const NodePtr _lhs, const NodePtr _rhs) : lhs(_lhs),rhs(_rhs){}
+EqualityExpression::EqualityExpression(const Expression* _lhs, const Expression* _rhs) : lhs(_lhs),rhs(_rhs){}
 
 void EqualityExpression::print_c(std::ostream &dst) const {
 	lhs->print_c(dst);
@@ -216,7 +216,7 @@ void EqualityExpression::print_mips(std::ostream &dst, context &program) const {
 //-----------------------------------------------------------------------------
 
 
-LonePostfixExpression::LonePostfixExpression(const NodePtr _expr) : expr(_expr){}
+LonePostfixExpression::LonePostfixExpression(const Expression* _expr) : expr(_expr){}
 
 void LonePostfixExpression::print_c(std::ostream &dst) const {
 	expr->print_c(dst);
@@ -233,7 +233,7 @@ void LonePostfixExpression::print_mips(std::ostream &dst, context &program) cons
 //-----------------------------------------------------------------------------
 
 
-PostfixArguExpression::PostfixArguExpression(const NodePtr _expr, const NodePtr _arguexpr):
+PostfixArguExpression::PostfixArguExpression(const Expression* _expr, const Expression* _arguexpr):
 expr(_expr), arguexpr(_arguexpr){}
 
 void PostfixArguExpression::print_c(std::ostream &dst) const {
@@ -254,7 +254,7 @@ void PostfixArguExpression::print_mips(std::ostream &dst, context &program) cons
 
 //-----------------------------------------------------------------------------
 
-AssignExprList::AssignExprList(const NodePtr _exprlist, const NodePtr _expr):
+AssignExprList::AssignExprList(const Expression* _exprlist, const Expression* _expr):
 	exprlist(_exprlist), expr(_expr){}
 
 void AssignExprList::print_c(std::ostream &dst) const {
@@ -273,7 +273,7 @@ void AssignExprList::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
 
-UnaryOpExpr::UnaryOpExpr(const NodePtr _op, const NodePtr _expr) : op(_op),expr(_expr){}
+UnaryOpExpr::UnaryOpExpr(const Expression* _op, const Expression* _expr) : op(_op),expr(_expr){}
 
 void UnaryOpExpr::print_c(std::ostream &dst) const {
 	dst << "[";

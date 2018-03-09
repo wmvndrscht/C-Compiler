@@ -18,12 +18,17 @@
 
 %union{
 	const Node *node;
+	const Declaration *dec;
+	const Statement* stat;
+	const Expression* expr;
+
+
 	const DeclarationSpecifier *decspec;
-	const CompoundStatement* cstatement;
+	// const CompoundStatement* cstatement;
 	std::string *str;
 	double *number;
 	const Declarator *decl;
-	const Declaration *dec;
+
 }
 
 /* token terminal */
@@ -55,19 +60,19 @@
 
 
 /* --------------------------- Statement ------------------------------- */
-%type<cstatement> Compound_Statement
-%type<node> Statement_List Statement Return_Statement Iteration_Statement
-%type<node> Selection_Statement Expression_Statement
+%type<stat> Compound_Statement
+%type<stat> Statement_List Statement Return_Statement Iteration_Statement
+%type<stat> Selection_Statement Expression_Statement
 
 /* --------------------------- Expression ------------------------------- */
 
-%type<node> Expression Initializer
-%type<node> Assignment_Expression Conditional_Expression Logical_OR_Expression
-%type<node> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
-%type<node> AND_Expression Equality_Expression Relational_Expression Shift_Expression
-%type<node> Additive_Expression Multiplicative_Expression Cast_Expression
-%type<node> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
-%type<node> Argument_Expression_List
+%type<expr> Expression Initializer
+%type<expr> Assignment_Expression Conditional_Expression Logical_OR_Expression
+%type<expr> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
+%type<expr> AND_Expression Equality_Expression Relational_Expression Shift_Expression
+%type<expr> Additive_Expression Multiplicative_Expression Cast_Expression
+%type<expr> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
+%type<expr> Argument_Expression_List
 
 /* --------------------------- Other ------------------------------- */
 
@@ -159,7 +164,7 @@ Type_Qualifier	:	T_CONST			{$$ = new std::string("const");}
 Compound_Statement	: T_LCBRACK T_RCBRACK	{$$ = new CompoundStatement(NULL, NULL);}
 										| T_LCBRACK Statement_List T_RCBRACK	{$$ = new CompoundStatement($2, NULL);}
 										| T_LCBRACK Declaration_List T_RCBRACK {$$ = new CompoundStatement(NULL, $2);}
-									  | T_LCBRACK Declaration_List Statement_List T_RCBRACK {$$ = new CompoundStatement($2,$3);}
+									  | T_LCBRACK Declaration_List Statement_List T_RCBRACK {$$ = new CompoundStatement($3,$2);}
 
 
 
