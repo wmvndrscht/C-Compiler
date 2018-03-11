@@ -1,4 +1,0 @@
-  File "test/py_mips_test/outputs/f16.py", line 3
-    if(5):
-     ^
-IndentationError: expected an indented block
