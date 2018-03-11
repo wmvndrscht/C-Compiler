@@ -14,6 +14,11 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
+
+class ArithmeticExpression : public Expression{
+
+};
+
 class Value : public Expression {
 private:
 	const double *number;
@@ -24,7 +29,7 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class MultExpression : public Expression {
+class MultExpression : public ArithmeticExpression {
 private:
 	const Expression* lhs;
 	const Expression* rhs;

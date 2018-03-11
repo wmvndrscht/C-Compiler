@@ -30,7 +30,8 @@ void Value::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void Value::print_mips(std::ostream &dst, context &program) const {
-	dst << *number;
+	
+	dst << "\tli $" << program.getlReg() << "," << *number <<"\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -98,7 +99,20 @@ void AddExpression::py_translate(std::ostream &dst, const scope &scp) const {
 	rhs->py_translate(dst,scp);
 }
 
-void AddExpression::print_mips(std::ostream &dst, context &program) const {}
+void AddExpression::print_mips(std::ostream &dst, context &program) const {
+	//evaluate expression
+	//pass value into destReg
+	int dReg = program.getlReg();
+	//Run lhs where value is stored into lReg
+	lhs->print_mips(dst,program);
+	//Adjust availReg for rhs
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\taddu $" << dReg << ",$" << dReg <<
+		",$" << program.getlReg() << "\n";
+	program.freeReg();
+
+}
 
 //-----------------------------------------------------------------------------
 

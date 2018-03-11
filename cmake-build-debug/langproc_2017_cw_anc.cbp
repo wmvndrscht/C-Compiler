@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="langproc_2017_cw_anc"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="langproc_2017_cw_anc">
+				<Option output="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/langproc_2017_cw_anc" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 langproc_2017_cw_anc"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="langproc_2017_cw_anc/fast">
+				<Option output="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/langproc_2017_cw_anc" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 langproc_2017_cw_anc/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/include/ast.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/include/ast/ast_declarations.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/include/ast/ast_expressions.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/include/ast/ast_node.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/include/ast/ast_statements.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/include/codegen/context.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/1-regexes/histogram.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/1-regexes/histogram_main.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/include/ast.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/include/ast/ast_expression.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/include/ast/ast_functions.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/include/ast/ast_operators.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/include/ast/ast_primitives.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/src/eval_expr.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/src/maths_lexer.yy.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/src/maths_parser.tab.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/src/maths_parser.tab.hpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/labcode/2-parsers/src/print_canonical.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/makefile">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/T001_return.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/T002_return5.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/T003_returnadd.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/T004_returnsub.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/T005_returnmult.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/f.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/f1.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/f2.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/fc.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/fexpr.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/function_arg/arg0.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/function_arg/arg1.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/function_arg/arg2.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/function_arg/arg3.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/function_arg/arg4.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/function_arg/arg5.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/paramdec/param0.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/paramdec/param1.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/paramdec/param2.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/paramdec/param4.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/paramdec/paramarg.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/mips_analysis/testbig.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/ast/ast_declarations.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/ast/ast_expressions.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/ast/ast_node.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/ast/ast_statements.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/c_compiler.cpp">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/lexer.flex">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/src/parser.y">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0001_lonedec.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0002_lonedec2.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0003_vardec.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0004_emptyfunc.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0005_emptyfuncscope.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0006_return.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0007_returnnum.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0008_returnvar.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0009_initdec.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0010_decinfunc.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0011_declistinfunc.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0012_decstatinfunc.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0013_statlistinfunc.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0014_funcparam.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0015_multfuncparam.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/in/T0016_multadderror.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0001_lonedec.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0001_lonedec.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0001_lonedec.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0002_lonedec2.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0002_lonedec2.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0002_lonedec2.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0003_vardec.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0003_vardec.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0003_vardec.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0004_emptyfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0004_emptyfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0004_emptyfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0005_emptyfuncscope.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0005_emptyfuncscope.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0005_emptyfuncscope.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0006_return.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0006_return.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0006_return.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0007_returnnum.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0007_returnnum.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0007_returnnum.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0008_returnvar.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0008_returnvar.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0008_returnvar.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0009_initdec.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0009_initdec.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0009_initdec.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0010_decinfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0010_decinfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0010_decinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_declistinfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_declistinfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_declistinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_multdecinfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_multdecinfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_multdecinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_statdecinfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_statdecinfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0011_statdecinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0012_decstatinfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0012_decstatinfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0012_decstatinfunc.stdout.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0012_decstatinfunc.stdout.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0012_decstatinfunc.stdout.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0012_decstatinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0013_statlistinfunc.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0013_statlistinfunc.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0013_statlistinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0014_funcparam.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0014_funcparam.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0014_funcparam.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0015_multfuncparam.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0015_multfuncparam.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0015_multfuncparam.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0016_multadderror.diff.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0016_multadderror.stderr.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/out/T0016_multadderror.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0001_lonedec.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0002_lonedec2.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0003_vardec.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0004_emptyfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0005_emptyfuncscope.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0006_return.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0007_returnnum.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0008_returnvar.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0009_initdec.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0010_decinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0011_declistinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0012_decstatinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0013_statlistinfunc.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0014_funcparam.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/c_translate/ref/T0015_multfuncparam.stdout.txt">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/mips_test/testin/T001_return.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/mips_test/testin/T001_return_driver.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/mips_test/testin/T002_return5.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/mips_test/testin/T003_returnadd.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/mips_test/testin/T004_returnsub.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/mips_test/testin/T005_returnmult.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f00.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f01.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f02.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f03.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f04.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f05.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f06.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f07.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f08.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f09.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f10.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f11.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f12.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f13.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f14.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f15.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f16.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_mips_test/inputs/f17.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f0.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f1.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f2.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f3.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f4.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f5.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f6.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f7.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f8.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test/py_translate/formative/f9.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_c_translate.sh">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/ATOF.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/FOR_N.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/GLOBAL.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/IF_ELSE_F.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/IF_ELSE_T.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/IF_F.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/IF_T.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/LOCAL_ARRAY.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/MAIN.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_deliverable/test_cases/SELF_RECURSION.c">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_mips_compile.sh">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_py_mips_compile.sh">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/test_py_translate_formative.sh">
+			<Option target="langproc_2017_cw_anc"/>
+		</Unit>
+		<Unit filename="/home/wmvndrscht/work/compiler/langproc-2017-cw-anc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

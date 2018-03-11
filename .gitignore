@@ -7,6 +7,9 @@ test/py_translate/tmp/*
 test/mips_test/working/*
 test/py_mips_test/outputs/*
 
+*.idea
+.idea/*
+
 **/*.o
 *.output
 *.log

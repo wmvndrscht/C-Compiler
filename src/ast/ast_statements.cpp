@@ -28,7 +28,8 @@ void ReturnExprStatement::py_translate(std::ostream &dst, const scope &scp) cons
 	retexprstat->py_translate(dst,scp);
 }
 void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const {
-	dst << "\tmove $2,$";
+	program.setdestReg(2);
+	// dst << "\tmove $" << program.destReg << ",$3";
 	retexprstat->print_mips(dst,program);//can use dest reg etc
 	dst << "\n";
 }

@@ -3,6 +3,8 @@
 #include "ast/ast_statements.hpp"
 #include "ast/ast_declarations.hpp"
 #include "ast/ast_expressions.hpp"
+#include "../include/ast/ast_node.hpp"
+#include "../include/ast.hpp"
 
 #include <fstream>
 
@@ -42,7 +44,7 @@ int main(int argc, char *argv[]){
     //.nomicromips
     //.ent
     //.type
-    context program;
+    context program(2,2,3,3);
     ast->print_mips(std::cout, program);
   }
   // if(argc < 2){
