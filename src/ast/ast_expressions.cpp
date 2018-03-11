@@ -53,7 +53,17 @@ void MultExpression::py_translate(std::ostream &dst, const scope &scp) const {
 	rhs->py_translate(dst,scp);
 }
 
-void MultExpression::print_mips(std::ostream &dst, context &program) const {}
+void MultExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getlReg();
+
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tmultu $"  << dReg <<
+		",$" << program.getlReg() << "\n";
+	dst << "\tmflo $" << dReg << "\n";
+	program.freeReg();
+}
 
 
 //-----------------------------------------------------------------------------
@@ -133,7 +143,17 @@ void SubExpression::py_translate(std::ostream &dst, const scope &scp) const {
 	rhs->py_translate(dst,scp);
 }
 
-void SubExpression::print_mips(std::ostream &dst, context &program) const {}
+void SubExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getlReg();
+	//Run lhs where value is stored into lReg
+	lhs->print_mips(dst,program);
+	//Adjust availReg for rhs
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tsubu $" << dReg << ",$" << dReg <<
+		",$" << program.getlReg() << "\n";
+	program.freeReg();
+}
 
 
 //-----------------------------------------------------------------------------
@@ -226,7 +246,28 @@ void EqualityExpression::py_translate(std::ostream &dst, const scope &scp) const
 	rhs->py_translate(dst,scp);
 }
 
-void EqualityExpression::print_mips(std::ostream &dst, context &program) const {}
+void EqualityExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getlReg();
+	std::string eq = program.createLabel();
+	std::string end = program.createLabel();
+
+	//Run lhs where value is stored into lReg
+	lhs->print_mips(dst,program);
+	//Adjust availReg for rhs
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tbeq $" << dReg << ",$" << program.getlReg() <<
+		"," << eq << "\n";
+	dst << "\tnop\n";
+	dst << "\tli $" << dReg << ",0\n";
+	dst << "\tb " << end << "\n";
+	dst << eq << ":\n";
+	dst << "\tli $" << dReg << ",1\n";
+	dst << end <<":\n";
+
+
+	program.freeReg();
+}
 //-----------------------------------------------------------------------------
 
 
@@ -318,3 +359,19 @@ void UnaryOp::py_translate(std::ostream &dst, const scope &scp) const {
 void UnaryOp::print_mips(std::ostream &dst, context &program) const {}
 
 //-----------------------------------------------------------------------------
+
+ParenExpr::ParenExpr(const Expression* _expr) : expr(_expr){}
+
+void ParenExpr::print_c(std::ostream &dst) const {
+	dst << "(";
+	expr->print_c(dst);
+	dst << ")";
+}
+
+void ParenExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	dst << "\nParenExpr - not in spec\n";
+}
+
+void ParenExpr::print_mips(std::ostream &dst, context &program) const {
+	expr->print_mips(dst,program);
+}

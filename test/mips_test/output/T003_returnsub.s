@@ -7,7 +7,7 @@ f:
 
 	li $2,5
 	li $3,5
-	addu $2,$2,$3
+	subu $2,$2,$3
 
 
 	move $sp,$fp

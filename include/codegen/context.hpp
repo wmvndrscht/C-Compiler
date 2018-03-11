@@ -22,9 +22,10 @@ private:
 	int lReg;
 	int rReg;
 	int availReg;
+	int lcount;
 public:
-	context(int _destReg, int _lReg, int _rReg, int _availReg): 
-	destReg(_destReg), lReg(_availReg), rReg(_rReg), availReg(_availReg){}
+	context(int _destReg, int _lReg, int _rReg, int _availReg, int _lcount): 
+	destReg(_destReg), lReg(_lReg), rReg(_rReg), availReg(_availReg), lcount(_lcount){}
 	
 	void assignReg(){
 		if( availReg == 3){
@@ -59,18 +60,22 @@ public:
 
 	void freeReg(){
 		if(availReg == 3){
+			lReg = 2;
 			return;
 		}
 		else if( (8 < availReg && availReg < 16) || availReg == 25){
 			availReg-=1;
+			lReg = 3;
 			return;
 		}
 		else if( availReg == 8){
 			availReg = 3;
+			lReg = 2;
 			return;
 		}
 		else if(availReg == 24){
 			availReg=15;
+			lReg = 14;
 			return;
 		}
 		else{
@@ -93,6 +98,11 @@ public:
 	}
 	int getdestReg(){
 		return destReg;
+	}
+
+	std::string createLabel(){
+		lcount+=1;
+		return std::string("L")+std::to_string(lcount);
 	}
 
 

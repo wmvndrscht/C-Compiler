@@ -44,7 +44,9 @@ int main(int argc, char *argv[]){
     //.nomicromips
     //.ent
     //.type
-    context program(2,2,3,3);
+    //
+    //context(int _destReg, int _lReg, int _rReg, int _availReg)
+    context program(2,2,3,3,0);
     ast->print_mips(std::cout, program);
   }
   // if(argc < 2){

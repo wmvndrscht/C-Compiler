@@ -67,7 +67,7 @@
 
 %type<expr> Expression Initializer
 %type<expr> Assignment_Expression Conditional_Expression Logical_OR_Expression
-%type<expr> Logical_AND_Expression Inclusive_OR_Expressoin Exclusive_OR_Expression
+%type<expr> Logical_AND_Expression Inclusive_OR_Expression Exclusive_OR_Expression
 %type<expr> AND_Expression Equality_Expression Relational_Expression Shift_Expression
 %type<expr> Additive_Expression Multiplicative_Expression Cast_Expression
 %type<expr> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
@@ -208,10 +208,10 @@ Conditional_Expression	: Logical_OR_Expression {$$ = $1;}
 Logical_OR_Expression	: Logical_AND_Expression {$$ = $1;}
 											| Logical_OR_Expression T_OR Logical_AND_Expression { $$ = new ORExpression($1,$3);}
 
-Logical_AND_Expression	: Inclusive_OR_Expressoin {$$ = $1;}
+Logical_AND_Expression	: Inclusive_OR_Expression {$$ = $1;}
 												| Logical_AND_Expression T_AND Logical_OR_Expression { $$ = new ANDExpression($1,$3);}
 
-Inclusive_OR_Expressoin	: Exclusive_OR_Expression {$$ = $1;}
+Inclusive_OR_Expression	: Exclusive_OR_Expression {$$ = $1;}
 
 Exclusive_OR_Expression	:	AND_Expression {$$ = $1;}
 
@@ -253,6 +253,7 @@ Argument_Expression_List 	: Assignment_Expression 	{$$ = $1;}
 
 Primary_Expression	: T_IDENTIFIER	{$$ = new ExpressionVariable($1);}
 										| T_NUMBER				{$$ = new Value($1);}
+										| T_LRBRACK Expression T_RRBRACK {$$ = new ParenExpr($2);}
 
 
 

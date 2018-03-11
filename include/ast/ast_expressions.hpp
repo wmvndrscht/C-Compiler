@@ -187,4 +187,14 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
+class ParenExpr : public Expression{
+private:
+	const Expression* expr;
+public:
+	ParenExpr(const Expression* _expr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
 #endif

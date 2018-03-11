@@ -41,7 +41,7 @@ for DRIVER in $workingin/*_driver.c ; do
     
     # Run the actual executable
     qemu-mips $workingout/${NAME}.elf
-    if [[ $? -ne 0 ]]; then
+    if [[ $? -ne 1 ]]; then
         >&2 echo "ERROR : Testcase returned $?, but expected 0."
     fi
 

@@ -7,7 +7,13 @@ f:
 
 	li $2,5
 	li $3,5
-	addu $2,$2,$3
+	beq $2,$3,L1
+	nop
+	li $2,0
+	b L2
+L1:
+	li $2,1
+L2:
 
 
 	move $sp,$fp

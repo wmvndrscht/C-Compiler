@@ -5,9 +5,10 @@ f:
 	sw $fp,4($sp)
 	move $fp,$sp
 
-	li $2,5
-	li $3,5
-	addu $2,$2,$3
+	li $2,1
+	li $3,2
+	multu $2,$3
+	mflo $2
 
 
 	move $sp,$fp
