@@ -1,0 +1,4 @@
+  File "test/py_mips_test/outputs/f11.py", line 5
+    while(t<n):
+    ^
+IndentationError: unexpected indent

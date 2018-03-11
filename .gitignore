@@ -5,7 +5,7 @@ src/*.yy.cpp
 test/c_translate/out/*
 test/py_translate/tmp/*
 test/mips_test/working/*
-test/py_mips_test/outputs/*
+test/py_mips_test/output/*
 
 *.idea
 .idea/*
