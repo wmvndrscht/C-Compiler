@@ -77,7 +77,12 @@ void CompoundStatement::py_translate(std::ostream &dst, const scope &scp) const 
 }
 
 void CompoundStatement::print_mips(std::ostream &dst, context &program) const {
-	statlist->print_mips(dst,program);
+	if(declist!=NULL){
+		declist->print_mips(dst,program);
+	}
+	if(statlist!=NULL){
+		statlist->print_mips(dst,program);
+	}
 }
 
 //----------------------------------------------------------------------

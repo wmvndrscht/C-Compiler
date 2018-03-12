@@ -2,8 +2,10 @@
 
 
 
-context::context(int _destReg, int _nReg, int _lcount) :
-	destReg(_destReg), nReg(_nReg), lcount(_lcount){}
+context::context(int _destReg, int _nReg, int _lcount,
+	std::unordered_map<std::string, int> _localMap, int _FrameSize) :
+	destReg(_destReg), nReg(_nReg), lcount(_lcount), localMap(_localMap),
+	FrameSize(_FrameSize){}
 
 
 void context::assignReg(){
@@ -74,4 +76,26 @@ int context::getdestReg(){
 std::string context::createLabel(){
 	lcount+=1;
 	return std::string("L")+std::to_string(lcount);
+}
+
+//FrameStack stuff
+
+bool context::checkVar(std::string name){
+	return (localMap.count(name) > 0);
+}
+
+void context::incFrameSize(){
+	FrameSize+=4;
+}
+
+int context::getFrameSize(){
+	return FrameSize;
+}
+
+void context::addlocal(std::string name, int offset){
+	localMap.insert(std::make_pair(name,offset));
+}
+
+int context::getlocalOffset(std::string name){
+	return localMap[name];
 }

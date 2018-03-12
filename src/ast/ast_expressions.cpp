@@ -13,7 +13,13 @@ void ExpressionVariable::py_translate(std::ostream &dst, const scope &scp) const
 }
 
 void ExpressionVariable::print_mips(std::ostream &dst, context &program) const {
-	dst << *variable;
+	// dst << *variable;
+	dst << "\n#Expressionvar\n";
+	dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getlocalOffset(*variable) << "($fp)" << "\n";
+
+	// dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
+
+
 }
 
 //-----------------------------------------------------------------------------

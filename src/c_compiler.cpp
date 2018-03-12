@@ -5,8 +5,10 @@
 #include "ast/ast_expressions.hpp"
 #include "../include/ast/ast_node.hpp"
 #include "../include/ast.hpp"
+#include "codegen/context.hpp"
 
 #include <fstream>
+#include <unordered_map>
 
 global gbl;
 
@@ -47,7 +49,10 @@ int main(int argc, char *argv[]){
     //
     //context(int _destReg, int _lReg, int _rReg, int _availReg)
     // context program(2,2,3,3,0);
-    context program(2,2,0);
+
+    std::unordered_map<std::string, int> lMap;
+
+    context program(2,2,0,lMap,8);
     ast->print_mips(std::cout, program);
   }
   // if(argc < 2){

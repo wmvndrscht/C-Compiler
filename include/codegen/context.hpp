@@ -4,6 +4,9 @@
 #include <string>
 #include <iostream>
 
+#include <unordered_map>
+
+
 // class context{
 //   public:
 //     stackpointer;
@@ -24,15 +27,32 @@ private:
 	int destReg;
 	int nReg;
 	int lcount;
+	std::unordered_map<std::string, int> localMap;
+	int FrameSize;
+
 public:
-	context(int _destReg, int _nReg, int _lcount);
+	context(int _destReg, int _nReg, int _lcount, std::unordered_map<std::string, int> _localMap, int _FrameSize);
+	
+	//General Register functions
 	void assignReg();
 	void freeReg();
+
+	//specific regfunctions
 	void setdestReg(int dest);
 	void setnReg(int reg);
 	int getnReg();
 	int getdestReg();
+
+	//label function
 	std::string createLabel();
+
+
+	//map functions
+	bool checkVar(std::string name);
+	void incFrameSize();
+	int getFrameSize();
+	void addlocal(std::string name, int offset);
+	int getlocalOffset(std::string name);
 
 };
 

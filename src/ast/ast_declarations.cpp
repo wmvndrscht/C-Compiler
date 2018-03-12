@@ -39,12 +39,19 @@ void VariableDeclarator::print_c(std::ostream &dst) const {
 void VariableDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << variable;
 }
-void VariableDeclarator::print_mips(std::ostream &dst, context& program) const {}
+void VariableDeclarator::print_mips(std::ostream &dst, context& program) const {
+	int dReg = program.getnReg();
+	program.assignReg();
+	dst << "\tlw $" << dReg <<",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
 
 std::string VariableDeclarator::get_Label() const{
 	return variable;
 }
-std::string VariableDeclarator::get_name() const {return "not implemented";}
+std::string VariableDeclarator::get_name() const {
+	return variable;
+}
 
 
 
@@ -88,7 +95,32 @@ void TheDeclaration::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "\n";
 }
 
-void TheDeclaration::print_mips(std::ostream &dst, context& program) const {}
+void TheDeclaration::print_mips(std::ostream &dst, context& program) const {
+	//The Declaration-> decspec & init_declarator_list (init_declarator)
+
+	initdeclaratorlist->print_mips(dst,program);
+
+	//get the Name
+	// std::string name = initdeclaratorlist->get_name();
+	// int value = initdeclaratorlist->get_Value
+
+
+	// program.assignVar()
+	// //Check if already on stack
+	// 	//if on stack update value
+	// 		//load value of expression
+	// 		//move expression into register
+	// 		//store register into mem at offset
+
+	// 	//else increment frame size
+	// 	//varibale offset = frame size
+	// 	//load value of expression
+	// 	//move expression into mem at offset
+	// 	//push onto map with name and offset
+	// 	//adjust frame pointer and stack pointer 9f
+
+
+}
 std::string TheDeclaration::get_name() const {return "not implemented";}
 std::string TheDeclaration::get_Label() const {return "not implemented";}
 
@@ -139,8 +171,8 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 
 	//restore frame and stack
 	dst << "\t" << "move $sp,$fp\n";
-	dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
-	dst << "\t" << "addiu $sp,$sp," << FrameSize << "\n";
+	dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
 
 	//finish function
 	dst << "\t" << "j $31\n";
@@ -191,7 +223,47 @@ void InitDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
 	init->py_translate(dst,scp);
 }
 
-void InitDeclarator::print_mips(std::ostream &dst, context& program) const {}
+void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
+	//get the Name
+	std::string name = dec->get_name();
+
+	program.setdestReg(2);
+	program.setnReg(2);
+
+	init->print_mips(dst,program);
+
+
+	if( program.checkVar(name) ){
+		dst << "\tlw $3," << program.getlocalOffset(name) << "($fp)\n";
+		dst << "\tmove $3,$2 \n";
+		dst << "\tsw $3," << program.getlocalOffset(name) << "($fp)\n";
+	}
+	else{
+		program.incFrameSize();
+		dst << "\taddiu $sp,$sp,-4\n";
+		dst << "\tmove $fp,$sp\n";
+		program.addlocal(name, program.getFrameSize() );
+		dst << "\n#local var:" << name <<" at offset " << program.getFrameSize() << "\n";
+		dst << "\tsw $2," << program.getFrameSize() - program.getlocalOffset(name) << "($fp)\n";
+		dst << "\n#offset adjusted = " << program.getFrameSize() - program.getlocalOffset(name) << "\n";
+	}
+
+// lw	$3,0($fp)
+
+	// program.assignVar()
+	// //Check if already on stack
+	// 	//if on stack update value
+	// 		//load value of expression
+	// 		//move expression into register
+	// 		//store register into mem at offset
+
+	// 	//else increment frame size
+	// 	//varibale offset = frame size
+	// 	//load value of expression
+	// 	//move expression into mem at offset
+	// 	//push onto map with name and offset
+	// 	//adjust frame pointer and stack pointer 9f
+}
 
 std::string InitDeclarator::get_name() const{
 	return dec->get_Label();
@@ -238,7 +310,10 @@ void DeclarationList::print_c(std::ostream &dst) const {
 	dec->py_translate(dst,scp);
 }
 
-void DeclarationList::print_mips(std::ostream &dst, context& program) const {}
+void DeclarationList::print_mips(std::ostream &dst, context& program) const {
+	declist->print_mips(dst,program);
+	dec->print_mips(dst,program);
+}
 
 std::string DeclarationList::get_name() const {return "not implemented";}
 std::string DeclarationList::get_Label() const {return "not implemented";}
@@ -345,7 +420,10 @@ void InitDeclaratorList::print_c(std::ostream &dst) const {
 	dec->py_translate(dst,scp);
 }
 
-void InitDeclaratorList::print_mips(std::ostream &dst, context& program) const {}
+void InitDeclaratorList::print_mips(std::ostream &dst, context& program) const {
+	declist->print_mips(dst,program);
+	dec->print_mips(dst,program);
+}
 
 std::string InitDeclaratorList::get_name() const{
 	return dec->get_name();
