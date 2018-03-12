@@ -41,6 +41,7 @@
 %token T_NUMBER
 %token T_COMMA T_IF T_ELSE
 %token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN T_GTHAN T_BAND
+%token T_FSLASH T_MODULO T_LSHIFT T_RSHIFT T_LTEQ T_GTEQ T_NEQ T_EXOR T_BOR
 
 /* non-terminal */
 /* --------------------------- Start node  ------------------------------- */
@@ -212,19 +213,29 @@ Logical_AND_Expression	: Inclusive_OR_Expression {$$ = $1;}
 												| Logical_AND_Expression T_AND Logical_OR_Expression { $$ = new ANDExpression($1,$3);}
 
 Inclusive_OR_Expression	: Exclusive_OR_Expression {$$ = $1;}
+												| Inclusive_OR_Expression T_EXOR Exclusive_OR_Expression {$$ = new ExclusiveORExpression($1,$3);}
+
 
 Exclusive_OR_Expression	:	AND_Expression {$$ = $1;}
+												| Exclusive_OR_Expression T_BOR AND_Expression {$$ = new InclusiveORExpression($1,$3);}
 
 AND_Expression :	Equality_Expression {$$ = $1;}
+							 |  AND_Expression T_BAND Equality_Expression {$$ = new BANDExpression($1,$3);}
 
 Equality_Expression	:	Relational_Expression {$$ = $1;}
 										| Equality_Expression T_EQ Relational_Expression {$$ = new EqualityExpression($1,$3);}
+										| Equality_Expression T_NEQ Relational_Expression {$$ = new NEQExpression($1,$3);}
 
 Relational_Expression	: Shift_Expression {$$ = $1;}
 											| Relational_Expression T_LTHAN Shift_Expression {$$ = new LessThanExpression($1,$3);}
 											| Relational_Expression T_GTHAN Shift_Expression {$$ = new GreaterThanExpression($1,$3);}
+											| Relational_Expression T_LTEQ Shift_Expression {$$ = new LTEQExpression($1,$3);}
+											| Relational_Expression T_GTEQ Shift_Expression {$$ = new GTEQExpression($1,$3);}
+
 
 Shift_Expression : Additive_Expression {$$ = $1;}
+								 | Shift_Expression T_LSHIFT Additive_Expression {$$ = new LshiftExpression($1,$3);}
+								 | Shift_Expression T_RSHIFT Additive_Expression {$$ = new RshiftExpression($1,$3);}
 
 Unary_Expression	: Postfix_Expression {$$ = $1;}
 									| Unary_Operator Cast_Expression {$$ = new UnaryOpExpr($1,$2);}
@@ -238,6 +249,8 @@ Cast_Expression :	Unary_Expression {$$ = $1;}
 
 Multiplicative_Expression : Cast_Expression {$$ = $1;} 
 													| Multiplicative_Expression T_TIMES Cast_Expression {$$ = new MultExpression($1,$3);}
+													| Multiplicative_Expression T_FSLASH Cast_Expression {$$ = new DivExpression($1,$3);}
+													| Multiplicative_Expression T_MODULO Cast_Expression {$$ = new ModExpression($1,$3);}
 
 Additive_Expression	: Multiplicative_Expression {$$ = $1;}
 										| Additive_Expression T_PLUS  Multiplicative_Expression {$$ = new AddExpression($1,$3);}

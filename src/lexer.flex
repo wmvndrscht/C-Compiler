@@ -57,8 +57,19 @@ NUMBER 		 [0-9]+
 "&&"								{return T_AND;}
 "<"									{return T_LTHAN;}
 ">"									{return T_GTHAN;}
-
 "&"									{return T_BAND;}
+
+"/"									{return T_FSLASH;}
+"%"									{return T_MODULO;}
+"<<"								{return T_LSHIFT;}
+">>"								{return T_RSHIFT;}
+"<="								{return T_LTEQ;}
+">="								{return T_GTEQ;}
+"!="								{return T_NEQ;}
+"^"									{return T_EXOR;}
+"|"									{return T_BOR;}
+
+
 
 "//".* 							{;}
 

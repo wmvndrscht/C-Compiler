@@ -46,7 +46,8 @@ int main(int argc, char *argv[]){
     //.type
     //
     //context(int _destReg, int _lReg, int _rReg, int _availReg)
-    context program(2,2,3,3,0);
+    // context program(2,2,3,3,0);
+    context program(2,2,0);
     ast->print_mips(std::cout, program);
   }
   // if(argc < 2){

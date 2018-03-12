@@ -42,13 +42,13 @@ CompoundStatement::CompoundStatement(const Statement* _statlist, const Declarati
 
 void CompoundStatement::print_c(std::ostream &dst) const {
 	dst<< "{";
-	if(statlist != NULL){
-		dst << "\n";
-		statlist->print_c(dst);
-	}
 	if(declist != NULL){
 		dst << "\n";
 		declist->print_c(dst);
+	}
+	if(statlist != NULL){
+		dst << "\n";
+		statlist->print_c(dst);
 	}
 	dst<< "\n}";
 	//std::cerr << "[EmptyCompoundStatement]" << std::endl;

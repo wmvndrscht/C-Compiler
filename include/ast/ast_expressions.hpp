@@ -197,4 +197,120 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
+
+class DivExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	DivExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class ModExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	ModExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+//
+
+class LshiftExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	LshiftExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
+class RshiftExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	RshiftExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class LTEQExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	LTEQExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class GTEQExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	GTEQExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class NEQExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	NEQExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class BANDExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	BANDExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class ExclusiveORExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	ExclusiveORExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class InclusiveORExpression : public Expression {
+private:
+	const Expression* lhs;
+	const Expression* rhs;
+public:
+	InclusiveORExpression(const Expression* _lhs, const Expression* _rhs);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
+
 #endif

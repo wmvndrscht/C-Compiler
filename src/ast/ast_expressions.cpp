@@ -31,7 +31,7 @@ void Value::py_translate(std::ostream &dst, const scope &scp) const {
 
 void Value::print_mips(std::ostream &dst, context &program) const {
 	
-	dst << "\tli $" << program.getlReg() << "," << *number <<"\n";
+	dst << "\tli $" << program.getnReg() << "," << *number <<"\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -54,13 +54,13 @@ void MultExpression::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void MultExpression::print_mips(std::ostream &dst, context &program) const {
-	int dReg = program.getlReg();
+	int dReg = program.getnReg();
 
 	lhs->print_mips(dst,program);
 	program.assignReg();
 	rhs->print_mips(dst,program);
 	dst << "\tmultu $"  << dReg <<
-		",$" << program.getlReg() << "\n";
+		",$" << program.getnReg() << "\n";
 	dst << "\tmflo $" << dReg << "\n";
 	program.freeReg();
 }
@@ -112,14 +112,14 @@ void AddExpression::py_translate(std::ostream &dst, const scope &scp) const {
 void AddExpression::print_mips(std::ostream &dst, context &program) const {
 	//evaluate expression
 	//pass value into destReg
-	int dReg = program.getlReg();
+	int dReg = program.getnReg();
 	//Run lhs where value is stored into lReg
 	lhs->print_mips(dst,program);
 	//Adjust availReg for rhs
 	program.assignReg();
 	rhs->print_mips(dst,program);
 	dst << "\taddu $" << dReg << ",$" << dReg <<
-		",$" << program.getlReg() << "\n";
+		",$" << program.getnReg() << "\n";
 	program.freeReg();
 
 }
@@ -144,14 +144,14 @@ void SubExpression::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void SubExpression::print_mips(std::ostream &dst, context &program) const {
-	int dReg = program.getlReg();
+	int dReg = program.getnReg();
 	//Run lhs where value is stored into lReg
 	lhs->print_mips(dst,program);
 	//Adjust availReg for rhs
 	program.assignReg();
 	rhs->print_mips(dst,program);
 	dst << "\tsubu $" << dReg << ",$" << dReg <<
-		",$" << program.getlReg() << "\n";
+		",$" << program.getnReg() << "\n";
 	program.freeReg();
 }
 
@@ -207,7 +207,15 @@ void LessThanExpression::py_translate(std::ostream &dst, const scope &scp) const
 	rhs->py_translate(dst,scp);
 }
 
-void LessThanExpression::print_mips(std::ostream &dst, context &program) const {}
+void LessThanExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tslt $" << dReg << ",$" << dReg <<
+		",$" <<  program.getnReg() << "\n";
+	program.freeReg();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -226,7 +234,15 @@ void GreaterThanExpression::py_translate(std::ostream &dst, const scope &scp) co
 	rhs->py_translate(dst,scp);
 }
 
-void GreaterThanExpression::print_mips(std::ostream &dst, context &program) const {}
+void GreaterThanExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tslt $" << dReg << ",$" << program.getnReg() <<
+		",$" <<  dReg << "\n";
+	program.freeReg();
+}
 
 
 //-----------------------------------------------------------------------------
@@ -247,7 +263,7 @@ void EqualityExpression::py_translate(std::ostream &dst, const scope &scp) const
 }
 
 void EqualityExpression::print_mips(std::ostream &dst, context &program) const {
-	int dReg = program.getlReg();
+	int dReg = program.getnReg();
 	std::string eq = program.createLabel();
 	std::string end = program.createLabel();
 
@@ -256,7 +272,7 @@ void EqualityExpression::print_mips(std::ostream &dst, context &program) const {
 	//Adjust availReg for rhs
 	program.assignReg();
 	rhs->print_mips(dst,program);
-	dst << "\tbeq $" << dReg << ",$" << program.getlReg() <<
+	dst << "\tbeq $" << dReg << ",$" << program.getnReg() <<
 		"," << eq << "\n";
 	dst << "\tnop\n";
 	dst << "\tli $" << dReg << ",0\n";
@@ -375,3 +391,279 @@ void ParenExpr::py_translate(std::ostream &dst, const scope &scp) const {
 void ParenExpr::print_mips(std::ostream &dst, context &program) const {
 	expr->print_mips(dst,program);
 }
+
+//-----------------------------------------------------------------------------
+DivExpression::DivExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void DivExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "/";
+	rhs->print_c(dst);
+}
+
+void DivExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "/";
+	rhs->py_translate(dst,scp);
+}
+
+void DivExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tdiv $"  << dReg <<
+		",$" << program.getnReg() << "\n";
+	dst << "\tmflo $" << dReg << "\n";
+	program.freeReg();
+}
+
+//-----------------------------------------------------------------------------
+ModExpression::ModExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void ModExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "%";
+	rhs->print_c(dst);
+}
+
+void ModExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "%";
+	rhs->py_translate(dst,scp);
+}
+
+void ModExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	dst << "\n\t #ModExpression \n";
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tdiv $"  << dReg <<
+		",$" << program.getnReg() << "\n";
+	dst << "\tmfhi $" << dReg << "\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+LshiftExpression::LshiftExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void LshiftExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "<<";
+	rhs->print_c(dst);
+}
+
+void LshiftExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "<<";
+	rhs->py_translate(dst,scp);
+}
+
+void LshiftExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tsll $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+RshiftExpression::RshiftExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void RshiftExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << ">>";
+	rhs->print_c(dst);
+}
+
+void RshiftExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << ">>";
+	rhs->py_translate(dst,scp);
+}
+
+void RshiftExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tsra $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+LTEQExpression::LTEQExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void LTEQExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "<=";
+	rhs->print_c(dst);
+}
+
+void LTEQExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "<=";
+	rhs->py_translate(dst,scp);
+}
+
+void LTEQExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tslt $" << dReg << ",$" << program.getnReg() <<
+		",$" << dReg << "\n";
+	dst << "\txori $" << dReg << ",1\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+GTEQExpression::GTEQExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void GTEQExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << ">=";
+	rhs->print_c(dst);
+}
+
+void GTEQExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << ">=";
+	rhs->py_translate(dst,scp);
+}
+
+void GTEQExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tslt $" << dReg << ",$" << dReg <<
+		",$" <<  program.getnReg() << "\n";
+	dst << "\txori $" << dReg << ",1\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+NEQExpression::NEQExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void NEQExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "!=";
+	rhs->print_c(dst);
+}
+
+void NEQExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "!=";
+	rhs->py_translate(dst,scp);
+}
+
+void NEQExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	std::string eq = program.createLabel();
+	std::string end = program.createLabel();
+
+	//Run lhs where value is stored into lReg
+	lhs->print_mips(dst,program);
+	//Adjust availReg for rhs
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tbne $" << dReg << ",$" << program.getnReg() <<
+		"," << eq << "\n";
+	dst << "\tnop\n";
+	dst << "\tli $" << dReg << ",0\n";
+	dst << "\tb " << end << "\n";
+	dst << eq << ":\n";
+	dst << "\tli $" << dReg << ",1\n";
+	dst << end <<":\n";
+
+
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+BANDExpression::BANDExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void BANDExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "&";
+	rhs->print_c(dst);
+}
+
+void BANDExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "&";
+	rhs->py_translate(dst,scp);
+}
+
+void BANDExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	dst << "\n\t #XORExpression \n";
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tand $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+ExclusiveORExpression::ExclusiveORExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void ExclusiveORExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "^";
+	rhs->print_c(dst);
+}
+
+void ExclusiveORExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "^";
+	rhs->py_translate(dst,scp);
+}
+
+void ExclusiveORExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	dst << "\n\t #XORExpression \n";
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\txor $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+InclusiveORExpression::InclusiveORExpression(const Expression* _lhs, const Expression* _rhs) : 
+	lhs(_lhs),rhs(_rhs){}
+
+void InclusiveORExpression::print_c(std::ostream &dst) const {
+	lhs->print_c(dst);
+	dst << "|";
+	rhs->print_c(dst);
+}
+
+void InclusiveORExpression::py_translate(std::ostream &dst, const scope &scp) const {
+	lhs->py_translate(dst,scp);
+	dst << "|";
+	rhs->py_translate(dst,scp);
+}
+
+void InclusiveORExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	dst << "\n\t #XORExpression \n";
+	lhs->print_mips(dst,program);
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tor $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
