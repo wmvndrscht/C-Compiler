@@ -95,7 +95,23 @@ void AssignExpr::py_translate(std::ostream &dst, const scope &scp) const {
 	assignexpr->py_translate(dst,scp);
 }
 
-void AssignExpr::print_mips(std::ostream &dst, context &program) const {}
+void AssignExpr::print_mips(std::ostream &dst, context &program) const {
+	//load value into getnReg
+
+	//DON"T KNOW HOW TO GET NAME OF LEFT SIDE, REQUIRES EITHER EXPRESSION ADD OR SOMETHING
+
+	unaryexpr->print_mips(dst,program);
+	int destReg = program.getnReg();
+	// std::string name = unaryexpr::g->get_name();
+	std::string name = "a";
+	//assume operator is "="
+	//evaluate expression in next Register
+	program.assignReg();
+	assignexpr->print_mips(dst,program);
+	dst << "\tmov $" << destReg << ",$" << program.getnReg() << "\n";
+	dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
+
+}
 
 //-----------------------------------------------------------------------------
 

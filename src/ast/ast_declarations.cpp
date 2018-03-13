@@ -152,6 +152,16 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	//FrameSize will eventually be = tempvariables + local variables + 8 + paramarguments;
 	//Find these or should I print mips and then gather the params?
 	int FrameSize = 8;
+	dst << "\t.global " << label << "\n";
+	dst << "\t.align 2\n";
+
+	// .set	nomips16
+ //    .set	nomicromips
+ //    .ent	f
+ //    .type	f, @function
+	// dst << ""
+	dst << "\t.type " << label << ", @function\n";
+
 	dst << label << ":\n";
 	//Setup the frame on the stack for this function call
 
@@ -234,9 +244,9 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 
 
 	if( program.checkVar(name) ){
-		dst << "\tlw $3," << program.getlocalOffset(name) << "($fp)\n";
+		dst << "\tlw $3," << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
 		dst << "\tmove $3,$2 \n";
-		dst << "\tsw $3," << program.getlocalOffset(name) << "($fp)\n";
+		dst << "\tsw $3," << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
 	}
 	else{
 		program.incFrameSize();

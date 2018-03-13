@@ -38,10 +38,10 @@ int main(int argc, char *argv[]){
     const Node *ast = parseAST("std::cin");
     ast->py_translate(std::cout,scp);
   }
-  else if(std::string(argv[1]) == "-S"){
+  else if(std::string(argv[1]) == "mips"){
     const Node *ast = parseAST("std::cin");
-    std::cout << ".global f\n";
-    std::cout << ".align 2\n";
+    // std::cout << ".global f\n";
+    // std::cout << ".align 2\n";
     //.nopmips16
     //.nomicromips
     //.ent
@@ -54,6 +54,17 @@ int main(int argc, char *argv[]){
 
     context program(2,2,0,lMap,8);
     ast->print_mips(std::cout, program);
+  }
+  else if(std::string(argv[1]) == "-S"){
+    const Node *ast = parseAST(argv[2]);
+    std::ofstream output(argv[4]);
+    std::unordered_map<std::string, int> lMap;
+
+    context program(2,2,0,lMap,8);
+    output << "\t.text\n";
+    output << "\t.set nomicromips\n";
+    output << "\t.set nompis16\n";
+    ast->print_mips(output, program);
   }
   // if(argc < 2){
 	// ast->py_translate(std::cout);

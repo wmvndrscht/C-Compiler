@@ -26,7 +26,7 @@ for DRIVER in $workingin/*_driver.c ; do
     fi
     
     # Compile test function with compiler under test to assembly
-    cat $TESTCODE | $COMPILER "-S" > $workingout/$NAME.s  2> $workingout/${NAME}.compile.stderr
+    cat $TESTCODE | $COMPILER "mips" > $workingout/$NAME.s  2> $workingout/${NAME}.compile.stderr
     if [[ $? -ne 0 ]]; then
         >&2 echo "ERROR : Compiler returned error message."
         continue
