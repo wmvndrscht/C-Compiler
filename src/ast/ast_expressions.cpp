@@ -14,12 +14,13 @@ void ExpressionVariable::py_translate(std::ostream &dst, const scope &scp) const
 
 void ExpressionVariable::print_mips(std::ostream &dst, context &program) const {
 	// dst << *variable;
-	dst << "\n#Expressionvar\n";
 	dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getlocalOffset(*variable) << "($fp)" << "\n";
 
 	// dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
+}
 
-
+std::string ExpressionVariable::get_ID() const{
+	return *variable;
 }
 
 //-----------------------------------------------------------------------------
@@ -39,6 +40,12 @@ void Value::print_mips(std::ostream &dst, context &program) const {
 	
 	dst << "\tli $" << program.getnReg() << "," << *number <<"\n";
 }
+
+std::string Value::get_ID() const{
+	throw std::runtime_error("Value class should not have ID");
+	return "Value should not have ID";
+}
+
 
 //-----------------------------------------------------------------------------
 
@@ -75,42 +82,43 @@ void MultExpression::print_mips(std::ostream &dst, context &program) const {
 //-----------------------------------------------------------------------------
 
 
-AssignExpr::AssignExpr(const Expression* _unaryexpr, const Declaration* _assignop,
- const Expression* _assignexpr) : unaryexpr(_unaryexpr), assignop(_assignop),
-	assignexpr(_assignexpr){}
+// AssignEqExpr::AssignEqExpr(const Expression* _unaryexpr, const Declaration* _assignop,
+//  const Expression* _assignexpr) : unaryexpr(_unaryexpr), assignop(_assignop),
+// 	assignexpr(_assignexpr){}
 
-void AssignExpr::print_c(std::ostream &dst) const {
+AssignEqExpr::AssignEqExpr(const Expression* _unaryexpr,const Expression* _assignexpr) :
+ unaryexpr( _unaryexpr), assignexpr(_assignexpr){}
+
+void AssignEqExpr::print_c(std::ostream &dst) const {
 	unaryexpr->print_c(dst);
-	dst << " ";
-	assignop->print_c(dst);
-	dst << " ";
+	dst << " = ";
 	assignexpr->print_c(dst);
 }
 
-void AssignExpr::py_translate(std::ostream &dst, const scope &scp) const {
+void AssignEqExpr::py_translate(std::ostream &dst, const scope &scp) const {
 	unaryexpr->py_translate(dst,scp);
-	dst << "";
-	assignop->py_translate(dst,scp);
-	dst << " ";
+	dst << "= ";
 	assignexpr->py_translate(dst,scp);
 }
 
-void AssignExpr::print_mips(std::ostream &dst, context &program) const {
+void AssignEqExpr::print_mips(std::ostream &dst, context &program) const {
 	//load value into getnReg
 
 	//DON"T KNOW HOW TO GET NAME OF LEFT SIDE, REQUIRES EITHER EXPRESSION ADD OR SOMETHING
 
 	unaryexpr->print_mips(dst,program);
 	int destReg = program.getnReg();
-	// std::string name = unaryexpr::g->get_name();
-	std::string name = "a";
+	Identify* a = (Identify*)unaryexpr;
+
+	std::string name = a->get_ID();
+	// std::string name = "a";
 	//assume operator is "="
 	//evaluate expression in next Register
 	program.assignReg();
 	assignexpr->print_mips(dst,program);
-	dst << "\tmov $" << destReg << ",$" << program.getnReg() << "\n";
+	dst << "\tmove $" << destReg << ",$" << program.getnReg() << "\n";
 	dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
-
+	program.freeReg();
 }
 
 //-----------------------------------------------------------------------------
@@ -309,7 +317,7 @@ void EqualityExpression::print_mips(std::ostream &dst, context &program) const {
 //-----------------------------------------------------------------------------
 
 
-LonePostfixExpression::LonePostfixExpression(const Expression* _expr) : expr(_expr){}
+LonePostfixExpression::LonePostfixExpression(const Identify* _expr) : expr(_expr){}
 
 void LonePostfixExpression::print_c(std::ostream &dst) const {
 	expr->print_c(dst);
@@ -323,10 +331,14 @@ void LonePostfixExpression::py_translate(std::ostream &dst, const scope &scp) co
 
 void LonePostfixExpression::print_mips(std::ostream &dst, context &program) const {}
 
+std::string LonePostfixExpression::get_ID() const{
+	return expr->get_ID();
+}
+
 //-----------------------------------------------------------------------------
 
 
-PostfixArguExpression::PostfixArguExpression(const Expression* _expr, const Expression* _arguexpr):
+PostfixArguExpression::PostfixArguExpression(const Identify* _expr, const Expression* _arguexpr):
 expr(_expr), arguexpr(_arguexpr){}
 
 void PostfixArguExpression::print_c(std::ostream &dst) const {
@@ -344,6 +356,10 @@ void PostfixArguExpression::py_translate(std::ostream &dst, const scope &scp) co
 }
 
 void PostfixArguExpression::print_mips(std::ostream &dst, context &program) const {}
+
+std::string PostfixArguExpression::get_ID() const{
+	return expr->get_ID();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -382,6 +398,12 @@ void UnaryOpExpr::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void UnaryOpExpr::print_mips(std::ostream &dst, context &program) const {}
+
+std::string UnaryOpExpr::get_ID() const{
+	return "yet to support UnaryOpExpr class get_ID()";
+}
+
+
 //-----------------------------------------------------------------------------
 
 UnaryOp::UnaryOp(const std::string _op) : op(_op){}
@@ -395,6 +417,8 @@ void UnaryOp::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void UnaryOp::print_mips(std::ostream &dst, context &program) const {}
+
+
 
 //-----------------------------------------------------------------------------
 
@@ -413,6 +437,13 @@ void ParenExpr::py_translate(std::ostream &dst, const scope &scp) const {
 void ParenExpr::print_mips(std::ostream &dst, context &program) const {
 	expr->print_mips(dst,program);
 }
+
+
+std::string ParenExpr::get_ID() const{
+	return "ParenExpr not supported for get_ID yet";
+}
+
+
 
 //-----------------------------------------------------------------------------
 DivExpression::DivExpression(const Expression* _lhs, const Expression* _rhs) : 

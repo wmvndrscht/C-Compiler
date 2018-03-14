@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <stdexcept>
 
 #include "../codegen/context.hpp"
 
@@ -80,6 +81,13 @@ public:
 };
 
 
+class Identify : public Expression{
+public:
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const = 0;
+};
 
 
 

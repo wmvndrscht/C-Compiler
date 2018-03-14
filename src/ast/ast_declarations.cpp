@@ -250,12 +250,12 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 	}
 	else{
 		program.incFrameSize();
-		dst << "\taddiu $sp,$sp,-4\n";
+		dst << "\n\taddiu $sp,$sp,-4\n";
 		dst << "\tmove $fp,$sp\n";
 		program.addlocal(name, program.getFrameSize() );
-		dst << "\n#local var:" << name <<" at offset " << program.getFrameSize() << "\n";
+		// dst << "\n#local var:" << name <<" at offset " << program.getFrameSize() << "\n";
 		dst << "\tsw $2," << program.getFrameSize() - program.getlocalOffset(name) << "($fp)\n";
-		dst << "\n#offset adjusted = " << program.getFrameSize() - program.getlocalOffset(name) << "\n";
+		// dst << "\n#offset adjusted = " << program.getFrameSize() - program.getlocalOffset(name) << "\n";
 	}
 
 // lw	$3,0($fp)
@@ -399,20 +399,20 @@ std::string ParamList::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 
-AssignmentOperator::AssignmentOperator(const std::string *_assignop) : assignop(_assignop){}
+// AssignmentOperator::AssignmentOperator(const std::string *_assignop) : assignop(_assignop){}
 
-void AssignmentOperator::print_c(std::ostream &dst) const {
-	dst << *assignop;
-}
+// void AssignmentOperator::print_c(std::ostream &dst) const {
+// 	dst << *assignop;
+// }
 
- void AssignmentOperator::py_translate(std::ostream &dst, const scope &scp) const {
-	dst << *assignop;
-}
+//  void AssignmentOperator::py_translate(std::ostream &dst, const scope &scp) const {
+// 	dst << *assignop;
+// }
 
-void AssignmentOperator::print_mips(std::ostream &dst, context& program) const {}
+// void AssignmentOperator::print_mips(std::ostream &dst, context& program) const {}
 
-std::string AssignmentOperator::get_name() const {return "not implemented";}
-std::string AssignmentOperator::get_Label() const {return "not implemented";}
+// std::string AssignmentOperator::get_name() const {return "not implemented";}
+// std::string AssignmentOperator::get_Label() const {return "not implemented";}
 
 //-----------------------------------------------------------------------
 

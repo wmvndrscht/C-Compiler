@@ -101,7 +101,10 @@ void StatementList::py_translate(std::ostream &dst, const scope &scp) const {
 	for(int i =0; i<scp.count;i++){ dst << " ";};
 	stat->py_translate(dst,scp);
 }
-void StatementList::print_mips(std::ostream &dst, context &program) const {}
+void StatementList::print_mips(std::ostream &dst, context &program) const {
+	statlist->print_mips(dst,program);
+	stat->print_mips(dst,program);
+}
 
 //----------------------------------------------------------------------
 
@@ -125,7 +128,24 @@ void WhileStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	// scp.count-=2;
 }
 
-void WhileStatement::print_mips(std::ostream &dst, context &program) const {}
+void WhileStatement::print_mips(std::ostream &dst, context &program) const {
+	std::string one = program.createLabel();
+	std::string two = program.createLabel();
+
+	dst << "\tb $" << two << "\n";
+	dst << "\tnop\n";
+
+	dst << "$" << one << ":\n";
+	stat->print_mips(dst,program);
+	dst << "$" << two << ":\n";
+	expr->print_mips(dst,program);
+	dst << "\tbne $" << program.getnReg() << ",$0,$" << one <<"\n";
+	dst << "\tnop\n";
+
+
+
+
+}
 
 //----------------------------------------------------------------------
 
@@ -150,7 +170,17 @@ void IfStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	preif = false;
 }
 
-void IfStatement::print_mips(std::ostream &dst, context &program) const {}
+void IfStatement::print_mips(std::ostream &dst, context &program) const {
+	std::string LabelEnd = program.createLabel();
+	expr->print_mips(dst,program);
+
+	//if equal to 0 (therefore false branch to else statement)
+	dst << "\tbeq $" << program.getnReg() << ",$" << "0,$" << LabelEnd << "\n";
+	dst << "\tnop\n";
+	stat->print_mips(dst,program);
+	dst << "$" << LabelEnd << ":\n";
+
+}
 
 //----------------------------------------------------------------------
 
@@ -186,7 +216,24 @@ void IfElseStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	preif=false;
 }
 
-void IfElseStatement::print_mips(std::ostream &dst, context &program) const {}
+void IfElseStatement::print_mips(std::ostream &dst, context &program) const {
+	std::string LabelElse = program.createLabel();
+	std::string LabelEnd = program.createLabel();
+
+
+
+	expr->print_mips(dst,program);
+
+	//if equal to 0 (therefore false branch to else statement)
+	dst << "\tbeq $" << program.getnReg() << ",$" << "0,$" << LabelElse << "\n";
+	ifstat->print_mips(dst,program);
+	dst << "\tb $" << LabelEnd << "\n";
+	dst << "\tnop\n";
+	dst << "$" << LabelElse << ":\n";
+	elsestat->print_mips(dst,program);
+	dst << "$" << LabelEnd << ":\n";
+
+}
 
 //----------------------------------------------------------------------
 
@@ -201,6 +248,8 @@ void ExprStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	expr->print_c(dst);
 }
 
-void ExprStatement::print_mips(std::ostream &dst, context &program) const {}
+void ExprStatement::print_mips(std::ostream &dst, context &program) const {
+	expr->print_mips(dst,program);
+}
 
 //----------------------------------------------------------------------

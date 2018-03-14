@@ -4,7 +4,7 @@
 #include "../ast.hpp"
 #include "ast_node.hpp"
 
-class ExpressionVariable : public Expression {
+class ExpressionVariable : public Identify {
 private:
 	const std::string *variable;
 public:
@@ -12,14 +12,12 @@ public:
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
 
-class ArithmeticExpression : public Expression{
 
-};
-
-class Value : public Expression {
+class Value : public Identify {
 private:
 	const double *number;
 public:
@@ -27,9 +25,10 @@ public:
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
-class MultExpression : public ArithmeticExpression {
+class MultExpression : public Expression {
 private:
 	const Expression* lhs;
 	const Expression* rhs;
@@ -40,14 +39,13 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class AssignExpr : public Expression {
+class AssignEqExpr : public Expression {
 private:
 	const Expression* unaryexpr;
-	const Declaration* assignop;
+	// const Declaration* assignop;
 	const Expression* assignexpr;
 public:
-	AssignExpr(const Expression* _unaryexpr, const Declaration* _assignop,
-	  const Expression* _assignexpr);
+	AssignEqExpr(const Expression* _unaryexpr, const Expression* _assignexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
@@ -133,25 +131,27 @@ public:
 };
 
 
-class LonePostfixExpression : public Expression {
+class LonePostfixExpression : public Identify {
 private:
-	const Expression* expr;
+	const Identify* expr;
 public:
-	LonePostfixExpression(const Expression* _expr);
+	LonePostfixExpression(const Identify* _expr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
-class PostfixArguExpression : public Expression {
+class PostfixArguExpression : public Identify {
 private:
-	const Expression* expr;
+	const Identify* expr;
 	const Expression* arguexpr;
 public:
-	PostfixArguExpression(const Expression* _expr, const Expression* _arguexpr);
+	PostfixArguExpression(const Identify* _expr, const Expression* _arguexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
 class AssignExprList : public Expression {
@@ -165,7 +165,7 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class UnaryOpExpr : public Expression {
+class UnaryOpExpr : public Identify {
 private:
 	const Expression* op;
 	const Expression* expr;
@@ -174,6 +174,7 @@ public:
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
 
@@ -187,7 +188,7 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class ParenExpr : public Expression{
+class ParenExpr : public Identify {
 private:
 	const Expression* expr;
 public:
@@ -195,6 +196,7 @@ public:
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
 
@@ -310,6 +312,7 @@ public:
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
+
 
 
 

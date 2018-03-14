@@ -21,7 +21,7 @@
 	const Declaration *dec;
 	const Statement* stat;
 	const Expression* expr;
-
+	const Identify* id;
 
 	const DeclarationSpecifier *decspec;
 	// const CompoundStatement* cstatement;
@@ -51,7 +51,7 @@
 /* --------------------------- Declaration ------------------------------- */
 %type<dec> Function_Definition
 %type<dec> Declaration_List
-%type<dec> Declaration Assignment_Operator
+%type<dec> Declaration 
 %type<dec> Init_Declarator_List Init_Declarator
 %type<dec> Declarator
 %type<dec> Direct_Declarator
@@ -71,8 +71,12 @@
 %type<expr> Logical_AND_Expression Inclusive_OR_Expression Exclusive_OR_Expression
 %type<expr> AND_Expression Equality_Expression Relational_Expression Shift_Expression
 %type<expr> Additive_Expression Multiplicative_Expression Cast_Expression
-%type<expr> Unary_Expression Postfix_Expression Primary_Expression Unary_Operator
+%type<expr> Unary_Expression   Unary_Operator
 %type<expr> Argument_Expression_List
+
+/* --------------------------- Identify ------------------------------- */
+
+%type<id> Postfix_Expression Primary_Expression
 
 /* --------------------------- Other ------------------------------- */
 
@@ -200,9 +204,9 @@ Expression 	: Assignment_Expression {$$ = $1;}
 Initializer	: Assignment_Expression	{$$ = $1;}
 
 Assignment_Expression	:	Conditional_Expression {$$ = $1;}
-											| Unary_Expression Assignment_Operator Assignment_Expression {$$ = new AssignExpr($1,$2,$3);}
+											| Unary_Expression T_EQUAL Assignment_Expression {$$ = new AssignEqExpr($1,$3);}
 
-Assignment_Operator : T_EQUAL { $$ = new AssignmentOperator($1);}
+// Assignment_Operator : T_EQUAL { $$ = new AssignmentOperator($1);}
 
 Conditional_Expression	: Logical_OR_Expression {$$ = $1;}
 

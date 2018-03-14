@@ -20,9 +20,7 @@ void TranslationUnit::py_translate(std::ostream &dst, const scope &scp) const{
 	right->py_translate(dst,scp);
 }
 
-void TranslationUnit::print_mips(std::ostream &dst, context &program) const{
-
-}
+void TranslationUnit::print_mips(std::ostream &dst, context &program) const{}
 
 //-------------------------------Declaration-----------------------------------
 
@@ -47,3 +45,12 @@ void Expression::print_c(std::ostream &dst) const {}
 void Expression::py_translate(std::ostream &dst, const scope &scp) const{}
 
 void Expression::print_mips(std::ostream &dst, context &program) const{}
+
+//------------------------------Assign-------------------------------
+
+
+void Identify::print_c(std::ostream &dst) const {}
+
+void Identify::py_translate(std::ostream &dst, const scope &scp) const{}
+
+void Identify::print_mips(std::ostream &dst, context &program) const{}
