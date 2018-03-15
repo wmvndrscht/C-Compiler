@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
     context program(2,2,0,lMap,8);
     output << "\t.text\n";
     output << "\t.set nomicromips\n";
-    output << "\t.set nompis16\n";
+    output << "\t.set nomips16\n";
     ast->print_mips(output, program);
   }
   // if(argc < 2){

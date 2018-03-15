@@ -719,4 +719,37 @@ void InclusiveORExpression::print_mips(std::ostream &dst, context &program) cons
 	program.freeReg();
 }
 //-----------------------------------------------------------------------------
+
+PostIncrementExpr::PostIncrementExpr(const Identify* _postfixexpr)
+ : postfixexpr(_postfixexpr){}
+
+
+void PostIncrementExpr::print_c(std::ostream &dst) const {
+	postfixexpr->print_c(dst);
+	dst << "++\n";
+}
+
+void PostIncrementExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	postfixexpr->py_translate(dst,scp);
+	dst << "++\n";
+}
+
+
+void PostIncrementExpr::print_mips(std::ostream &dst, context &program) const {
+
+	postfixexpr->print_mips(dst,program);
+	program.getnReg();
+	// Identify* a = (Identify*)postfixexpr;
+	std::string name = postfixexpr->get_ID();
+	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",1\n";
+	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
+
+
+}
+
+std::string PostIncrementExpr::get_ID() const{
+	return postfixexpr->get_ID();
+}
+
+
 //-----------------------------------------------------------------------------

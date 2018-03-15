@@ -93,4 +93,48 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
+class ForStatStatExpr : public Statement{
+private:
+	const Statement* stat1;
+	const Statement* stat2;
+	const Expression* expr;
+	const Statement* body;
+public:
+	ForStatStatExpr(const Statement* _stat1,const Statement* _stat2,const Expression* _expr,
+		const Statement* _body);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+class ForDecStatExpr : public Statement{
+private:
+	const Declaration* dec;
+	const Statement* stat1;
+	const Expression* expr;
+	const Statement* body;
+public:
+	ForDecStatExpr(const Declaration* _dec,const Statement* _stat1,const Expression* _expr,
+		const Statement* _body);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
+
+class DoWhileStatement : public Statement { 
+private:
+	const Statement* stat;
+	const Expression* cond;
+public:
+	DoWhileStatement(const Statement* _stat, const Expression* _cond);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst,  const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+};
+
+
+
+
 #endif

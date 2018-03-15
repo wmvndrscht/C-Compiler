@@ -12,7 +12,13 @@ void ReturnStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	// for(int i =0; i<scp.count;i++){ dst << " ";};
 	dst << "return";
 }
-void ReturnStatement::print_mips(std::ostream &dst, context &program) const {}
+void ReturnStatement::print_mips(std::ostream &dst, context &program) const {
+	dst << "\t" << "move $sp,$fp\n";
+	dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
+	dst << "\tj $31\n";
+	dst << "\tnop\n";
+}
 
 //----------------------------------------------------------------------
 
@@ -31,7 +37,11 @@ void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const 
 	program.setdestReg(2);
 	// dst << "\tmove $" << program.destReg << ",$3";
 	retexprstat->print_mips(dst,program);//can use dest reg etc
-	dst << "\n";
+	dst << "\t" << "move $sp,$fp\n";
+	dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
+	dst << "\tj $31\n";
+	dst << "\tnop\n";
 }
 
 
@@ -149,6 +159,33 @@ void WhileStatement::print_mips(std::ostream &dst, context &program) const {
 
 //----------------------------------------------------------------------
 
+DoWhileStatement::DoWhileStatement(const Statement* _stat, const Expression* _cond) : 
+	stat(_stat), cond(_cond){}
+
+void DoWhileStatement::print_c(std::ostream &dst) const {
+}
+
+void DoWhileStatement::py_translate(std::ostream &dst, const scope &scp) const {
+}
+
+void DoWhileStatement::print_mips(std::ostream &dst, context &program) const {
+	std::string one = program.createLabel();
+
+	dst << "$" << one << ":\n";
+	stat->print_mips(dst,program);
+	dst << "\tnop\n";
+	cond->print_mips(dst,program);
+	dst << "\tbne $" << program.getnReg() << ",$0,$" << one <<"\n";
+	dst << "\tnop\n";
+
+}
+
+
+
+
+
+//----------------------------------------------------------------------
+
 IfStatement::IfStatement(const NodePtr _expr, const Statement* _stat) : expr(_expr), stat(_stat){}
 
 void IfStatement::print_c(std::ostream &dst) const {
@@ -253,3 +290,72 @@ void ExprStatement::print_mips(std::ostream &dst, context &program) const {
 }
 
 //----------------------------------------------------------------------
+
+ForStatStatExpr::ForStatStatExpr(const Statement* _stat1,const Statement* _stat2,
+	const Expression* _expr, const Statement* _body) : stat1(_stat1), 
+		stat2(_stat2), expr(_expr), body(_body){}
+
+
+void ForStatStatExpr::print_c(std::ostream &dst) const {
+	dst << "no need to print for atm";
+}
+
+void ForStatStatExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	dst << "not in spec";
+}
+
+void ForStatStatExpr::print_mips(std::ostream &dst, context &program) const {
+	std::string label1 = program.createLabel();
+	std::string label2 = program.createLabel();
+
+
+	stat1->print_mips(dst,program);
+	dst << "\tb $" << label2 << "\n";
+	dst << "\tnop\n";
+
+	dst << "$" << label1 <<":\n";
+	body->print_mips(dst,program);
+	dst <<"\n";
+	expr->print_mips(dst,program);
+	dst << "$" << label2 << ":\n";
+	stat2->print_mips(dst,program);
+	dst << "\n";
+	dst << "\tbne $" << program.getnReg() << ",$0,$" << label1 <<"\n";
+	dst << "\tnop\n";
+
+}
+
+
+//----------------------------------------------------------------------
+
+ForDecStatExpr::ForDecStatExpr(const Declaration* _dec,const Statement* _stat1,
+	const Expression* _expr, const Statement* _body) : dec(_dec), stat1(_stat1),
+	expr(_expr), body(_body){}
+
+void ForDecStatExpr::print_c(std::ostream &dst) const {
+	dst << "no need to print for atm";
+}
+
+void ForDecStatExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	dst << "not in spec";
+}
+
+void ForDecStatExpr::print_mips(std::ostream &dst, context &program) const {
+	std::string label1 = program.createLabel();
+	std::string label2 = program.createLabel();
+
+
+	dec->print_mips(dst,program);
+	dst << "\tb $" << label2 << "\n";
+	dst << "\tnop\n";
+
+	dst << "$" << label1 <<":\n";
+	body->print_mips(dst,program);
+	dst <<"\n";
+	expr->print_mips(dst,program);
+	dst << "$" << label2 << ":\n";
+	stat1->print_mips(dst,program);
+	dst << "\n";
+	dst << "\tbne $" << program.getnReg() << ",$0,$" << label1 <<"\n";
+	dst << "\tnop\n";
+}

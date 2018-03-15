@@ -37,11 +37,13 @@
 %token T_SEMICOLON T_EQUAL 
 %token T_LCBRACK T_RCBRACK T_LRBRACK T_RRBRACK
 %token T_IDENTIFIER
-%token T_RETURN T_WHILE
+%token T_RETURN T_WHILE T_FOR T_DO
 %token T_NUMBER
 %token T_COMMA T_IF T_ELSE
 %token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN T_GTHAN T_BAND
 %token T_FSLASH T_MODULO T_LSHIFT T_RSHIFT T_LTEQ T_GTEQ T_NEQ T_EXOR T_BOR
+%token T_INCR 
+
 
 /* non-terminal */
 /* --------------------------- Start node  ------------------------------- */
@@ -188,10 +190,13 @@ Selection_Statement : T_IF T_LRBRACK Expression T_RRBRACK Statement T_ELSE State
 										| T_IF T_LRBRACK Expression T_RRBRACK Statement {$$ = new IfStatement($3,$5);}
 
 Iteration_Statement : T_WHILE T_LRBRACK Expression T_RRBRACK Statement {$$ = new WhileStatement($3,$5);}
+										| T_DO Statement T_WHILE T_LRBRACK Expression T_RRBRACK T_SEMICOLON {$$ = new DoWhileStatement($2,$5);}
+										| T_FOR T_LRBRACK Expression_Statement Expression_Statement Expression T_RRBRACK Statement {$$ = new ForStatStatExpr($3,$4,$5,$7);}
+										| T_FOR T_LRBRACK Declaration Expression_Statement Expression T_RRBRACK Statement {$$ = new ForDecStatExpr($3,$4,$5,$7);}
+
 
 Return_Statement	:	T_RETURN T_SEMICOLON	{ $$ = new ReturnStatement(); }
 									| T_RETURN Expression T_SEMICOLON {$$ = new ReturnExprStatement($2);}
-
 
 
 
@@ -264,6 +269,7 @@ Additive_Expression	: Multiplicative_Expression {$$ = $1;}
 Postfix_Expression	: Primary_Expression {$$ = $1;}
 										| Postfix_Expression T_LRBRACK T_RRBRACK {$$ = new LonePostfixExpression($1);}
 										| Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK {$$ = new PostfixArguExpression($1,$3);}
+										| Postfix_Expression T_INCR {$$ = new PostIncrementExpr($1);}
 
 Argument_Expression_List 	: Assignment_Expression 	{$$ = $1;}
 													| Argument_Expression_List T_COMMA Assignment_Expression {$$ = new AssignExprList($1,$3);}

@@ -37,6 +37,8 @@ NUMBER 		 [0-9]+
 "while"							{return T_WHILE;}
 "if"								{return T_IF;}
 "else"							{return T_ELSE;}
+"for"								{return T_FOR;}
+"do"								{return T_DO;}
 
 {IDENTIFIER}				{yylval.str=new std::string(yytext);return T_IDENTIFIER;}
 {NUMBER}						{yylval.number= new double(strtod(yytext, 0)); return T_NUMBER; }
@@ -68,6 +70,8 @@ NUMBER 		 [0-9]+
 "!="								{return T_NEQ;}
 "^"									{return T_EXOR;}
 "|"									{return T_BOR;}
+
+"++"								{return T_INCR;}
 
 
 

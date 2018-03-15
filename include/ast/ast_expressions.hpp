@@ -314,6 +314,15 @@ public:
 };
 
 
-
+class PostIncrementExpr : public Identify {
+private:
+	const Identify* postfixexpr;
+public:
+	PostIncrementExpr(const Identify* _postfixexpr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;\
+	virtual std::string get_ID() const override;
+};
 
 #endif
