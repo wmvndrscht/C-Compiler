@@ -32,6 +32,7 @@ void ReturnExprStatement::py_translate(std::ostream &dst, const scope &scp) cons
 	for(int i =0; i<scp.count;i++){ dst << " ";};
 	dst << "return ";
 	retexprstat->py_translate(dst,scp);
+	dst << "\n";
 }
 void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const {
 	program.setdestReg(2);
@@ -239,6 +240,7 @@ void IfElseStatement::print_c(std::ostream &dst) const {
 }
 
 void IfElseStatement::py_translate(std::ostream &dst, const scope &scp) const {
+	for(int i =0; i<scp.count;i++){ dst << " ";};
 	dst << "if(";
 	expr->py_translate(dst,scp);
 	dst << "):\n";
