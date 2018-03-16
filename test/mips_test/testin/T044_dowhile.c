@@ -4,5 +4,6 @@ int f(){
   do {
     a = a + 1;
   }while( a < 20 );
+  
   return a;
 }

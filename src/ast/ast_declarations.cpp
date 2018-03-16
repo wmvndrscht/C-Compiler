@@ -91,6 +91,8 @@ void TheDeclaration::py_translate(std::ostream &dst, const scope &scp) const {
 		std::string name = initdeclaratorlist->get_name();
 		gbl.var.push_back( name );
 	}
+
+	for(int i =0; i<scp.count;i++){ dst << " ";};
 	initdeclaratorlist->py_translate(dst,scp);
 	dst << "\n";
 }
@@ -140,8 +142,9 @@ void FunctionDefinition::py_translate(std::ostream &dst, const scope &scp) const
 	dst << "def ";
 	dec->py_translate(dst,scp);
 	// for(int i=1;i<gbl.var.size();i++){
-	// 	dst << "\n\t" << gbl.var[i];
+	// 	dst << "\n  " << gbl.var[i];
 	// }
+	// dst << "\n";
 	cstatement->py_translate(dst,increment(scp));
 }
 
@@ -228,6 +231,7 @@ void InitDeclarator::print_c(std::ostream &dst) const {
 }
 
 void InitDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+
 	dec->py_translate(dst,scp);
 	dst << "=";
 	init->py_translate(dst,scp);
@@ -292,6 +296,7 @@ void LoneInitDeclarator::print_c(std::ostream &dst) const {
 }
 
 void LoneInitDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	// for(int i =0; i<scp.count;i++){ dst << " ";};
 	dec->py_translate(dst,scp);
 	dst << "=0";
 }
@@ -315,7 +320,7 @@ void DeclarationList::print_c(std::ostream &dst) const {
 	dec->print_c(dst);
 }
 
- void DeclarationList::py_translate(std::ostream &dst, const scope &scp) const {
+void DeclarationList::py_translate(std::ostream &dst, const scope &scp) const {
 	declist->py_translate(dst,scp);
 	dec->py_translate(dst,scp);
 }

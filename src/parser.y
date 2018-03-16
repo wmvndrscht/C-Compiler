@@ -152,8 +152,7 @@ Storage_Class_Specifier	:	T_TYPEDEF		{$$ = new std::string("typedef");}
 Type_Specifier	:	T_VOID			{$$ = new std::string("void");}
 								| T_CHAR			{$$ = new std::string("char");}
 								| T_SHORT			{$$ = new std::string("short");}
-								| T_INT				{$$ = new std::string("int");}
-								| T_LONG			{$$ = new std::string("long");}
+								| T_INT				{$$ = new std::string("int");}							| T_LONG			{$$ = new std::string("long");}
 								| T_FLOAT			{$$ = new std::string("float");}
 								| T_DOUBLE		{$$ = new std::string("double");}
 								| T_SIGNED 		{$$ = new std::string("signed");}
