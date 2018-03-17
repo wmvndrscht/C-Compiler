@@ -138,7 +138,7 @@ private:
 	const Declaration *dec;
 	const Declaration *paramlist;
 public:
-	ParamListDeclarator(const Declaration *_dec, const Declaration *_paramlist);
+	ParamListDeclarator(const Declaration *_dec, const Declaration  *_paramlist);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;

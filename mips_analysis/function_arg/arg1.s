@@ -21,6 +21,8 @@ f:
 	addiu	$sp,$sp,-8
 	sw	$fp,4($sp)
 	move	$fp,$sp
+
+	#store reg4 at fp +8
 	sw	$4,8($fp)
 	li	$2,1			# 0x1
 	move	$sp,$fp

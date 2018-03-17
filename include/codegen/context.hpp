@@ -29,9 +29,11 @@ private:
 	int lcount;
 	std::unordered_map<std::string, int> localMap;
 	int FrameSize;
+	int ParamPass;
 
 public:
-	context(int _destReg, int _nReg, int _lcount, std::unordered_map<std::string, int> _localMap, int _FrameSize);
+	context(int _destReg, int _nReg, int _lcount, 
+	  std::unordered_map<std::string, int> _localMap, int _FrameSize, int _ParamPass);
 	
 	//General Register functions
 	void assignReg();
@@ -53,6 +55,9 @@ public:
 	int getFrameSize();
 	void addlocal(std::string name, int offset);
 	int getlocalOffset(std::string name);
+	void incrParamPass();
+	void resetParamPass();
+	int get_ParamPass();
 
 };
 

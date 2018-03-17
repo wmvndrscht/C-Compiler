@@ -177,6 +177,9 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	//Set new frame pointer
 	dst << "\t" << "move $fp,$sp\n";
 
+	program.resetParamPass();
+	dec->print_mips(dst,program);
+
 	dst << "\n";
 	//now do return expression, will include context later
 	cstatement->print_mips(dst, program);
@@ -336,11 +339,11 @@ std::string DeclarationList::get_Label() const {return "not implemented";}
 //-----------------------------------------------------------------------
 
 
-ParamListDeclarator::ParamListDeclarator(const Declaration *_dec, const Declaration* _paramlist) : 
-	dec(_dec), paramlist(_paramlist){}
+ParamListDeclarator::ParamListDeclarator(const Declaration* _dec, const Declaration* _paramlist) : 
+	dec(_dec), paramlist(_paramlist) {}
 
 void ParamListDeclarator::print_c(std::ostream &dst) const {
-	dec->print_c(dst);
+	dec->print_c(dst);	
 	dst << "(";
 	paramlist->print_c(dst);
 	dst << ")";
@@ -353,13 +356,18 @@ void ParamListDeclarator::py_translate(std::ostream &dst, const scope &scp) cons
 	dst << ")";
 }
 
-void ParamListDeclarator::print_mips(std::ostream &dst, context& program) const {}
+void ParamListDeclarator::print_mips(std::ostream &dst, context& program) const {
+	paramlist->print_mips(dst,program);
+	// dec->print_mips(dst,program);
+}
 
 std::string ParamListDeclarator::get_Label() const{
 	return dec->get_Label();
 }
 
-std::string ParamListDeclarator::get_name() const {return "not implemented";}
+std::string ParamListDeclarator::get_name() const {
+	return dec->get_name();
+}
 
 //-----------------------------------------------------------------------
 
@@ -375,10 +383,25 @@ void ParamDeclaration::py_translate(std::ostream &dst, const scope &scp) const {
 	dec->py_translate(dst,scp);
 }
 
-void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {}
+void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {
+	//inc ParamPass
+	program.incrParamPass();
+	int offset = program.getFrameSize() + 4*(program.get_ParamPass() - 1);
+	int reg = program.get_ParamPass() + 3;
+	dst << "\tsw $" << reg << "," << offset <<"($fp)\n";
 
-std::string ParamDeclaration::get_name() const {return "not implemented";}
-std::string ParamDeclaration::get_Label() const {return "not implemented";}
+	std::string name = dec->get_name();
+	//need to account for out of scope
+	program.addlocal(name, 8-offset);
+
+}
+
+std::string ParamDeclaration::get_name() const {
+	return dec->get_name();
+}
+std::string ParamDeclaration::get_Label() const {
+	return dec->get_Label();
+}
 
 //-----------------------------------------------------------------------
 
@@ -397,7 +420,10 @@ void ParamList::py_translate(std::ostream &dst, const scope &scp) const {
 	param->py_translate(dst,scp);
 }
 
-void ParamList::print_mips(std::ostream &dst, context& program) const {}
+void ParamList::print_mips(std::ostream &dst, context& program) const {
+	paramlist->print_mips(dst,program);
+	param->print_mips(dst,program);
+}
 
 std::string ParamList::get_name() const {return "not implemented";}
 std::string ParamList::get_Label() const {return "not implemented";}

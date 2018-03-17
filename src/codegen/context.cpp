@@ -3,9 +3,9 @@
 
 
 context::context(int _destReg, int _nReg, int _lcount,
-	std::unordered_map<std::string, int> _localMap, int _FrameSize) :
+	std::unordered_map<std::string, int> _localMap, int _FrameSize, int _ParamPass) :
 	destReg(_destReg), nReg(_nReg), lcount(_lcount), localMap(_localMap),
-	FrameSize(_FrameSize){}
+	FrameSize(_FrameSize), ParamPass(_ParamPass){}
 
 
 void context::assignReg(){
@@ -98,4 +98,16 @@ void context::addlocal(std::string name, int offset){
 
 int context::getlocalOffset(std::string name){
 	return localMap[name];
+}
+
+void context::incrParamPass(){
+	ParamPass++;
+}
+
+void context::resetParamPass(){
+	ParamPass = 0;
+}
+
+int context::get_ParamPass(){
+	return ParamPass;
 }

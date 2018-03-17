@@ -40,27 +40,20 @@ int main(int argc, char *argv[]){
   }
   else if(std::string(argv[1]) == "mips"){
     const Node *ast = parseAST("std::cin");
-    // std::cout << ".global f\n";
-    // std::cout << ".align 2\n";
-    //.nopmips16
-    //.nomicromips
-    //.ent
-    //.type
-    //
-    //context(int _destReg, int _lReg, int _rReg, int _availReg)
-    // context program(2,2,3,3,0);
-
     std::unordered_map<std::string, int> lMap;
 
-    context program(2,2,0,lMap,8);
-    ast->print_mips(std::cout, program);
+    context programA(2,2,0,lMap,8,0);
+    std::cout << "\t.text\n";
+    std::cout << "\t.set nomicromips\n";
+    std::cout << "\t.set nomips16\n";
+    ast->print_mips(std::cout, programA);
   }
   else if(std::string(argv[1]) == "-S"){
     const Node *ast = parseAST(argv[2]);
     std::ofstream output(argv[4]);
-    std::unordered_map<std::string, int> lMap;
+    std::unordered_map<std::string, int> Map;
 
-    context program(2,2,0,lMap,8);
+    context program(2,2,0,Map,8,0);
     output << "\t.text\n";
     output << "\t.set nomicromips\n";
     output << "\t.set nomips16\n";

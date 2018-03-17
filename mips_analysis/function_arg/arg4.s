@@ -21,10 +21,12 @@ f:
 	addiu	$sp,$sp,-8
 	sw	$fp,4($sp)
 	move	$fp,$sp
+
 	sw	$4,8($fp)
 	sw	$5,12($fp)
 	sw	$6,16($fp)
 	sw	$7,20($fp)
+	
 	li	$2,1			# 0x1
 	move	$sp,$fp
 	lw	$fp,4($sp)
