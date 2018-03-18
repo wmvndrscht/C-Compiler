@@ -149,20 +149,18 @@ void FunctionDefinition::py_translate(std::ostream &dst, const scope &scp) const
 }
 
 void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
-
+	
+	std::cout << "\t.text\n";
+	dst << "\t.align 2\n";
 	std::string label = dec->get_Label();
-
 	//FrameSize will eventually be = tempvariables + local variables + 8 + paramarguments;
 	//Find these or should I print mips and then gather the params?
 	int FrameSize = 8;
 	dst << "\t.global " << label << "\n";
-	dst << "\t.align 2\n";
+	
 
-	// .set	nomips16
- //    .set	nomicromips
- //    .ent	f
- //    .type	f, @function
-	// dst << ""
+  std::cout << "\t.set nomicromips\n";
+  std::cout << "\t.set nomips16\n";
 	dst << "\t.type " << label << ", @function\n";
 
 	dst << label << ":\n";

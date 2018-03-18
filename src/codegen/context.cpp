@@ -80,6 +80,9 @@ std::string context::createLabel(){
 
 //FrameStack stuff
 
+
+
+//
 bool context::checkVar(std::string name){
 	return (localMap.count(name) > 0);
 }

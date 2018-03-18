@@ -43,9 +43,6 @@ int main(int argc, char *argv[]){
     std::unordered_map<std::string, int> lMap;
 
     context programA(2,2,0,lMap,8,0);
-    std::cout << "\t.text\n";
-    std::cout << "\t.set nomicromips\n";
-    std::cout << "\t.set nomips16\n";
     ast->print_mips(std::cout, programA);
   }
   else if(std::string(argv[1]) == "-S"){
@@ -54,22 +51,8 @@ int main(int argc, char *argv[]){
     std::unordered_map<std::string, int> Map;
 
     context program(2,2,0,Map,8,0);
-    output << "\t.text\n";
-    output << "\t.set nomicromips\n";
-    output << "\t.set nomips16\n";
     ast->print_mips(output, program);
   }
-  // if(argc < 2){
-	// ast->py_translate(std::cout);
-	// ast_>print();
 	std::cout<<std::endl;
-  // }
-  // else if(argc == 5 && argv[1] == "--translate"){
-  // 	ast->pytranslate()
-  // }
-
-	// bin/c_compiler --translate [source-file.c] -o [dest-file.py]
-
-
   return 0;
 }
