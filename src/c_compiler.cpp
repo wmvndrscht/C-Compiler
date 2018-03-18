@@ -40,19 +40,21 @@ int main(int argc, char *argv[]){
   }
   else if(std::string(argv[1]) == "mips"){
     const Node *ast = parseAST("std::cin");
-    std::unordered_map<std::string, int> lMap;
+    std::unordered_map<int, std::unordered_map<std::string, int>> VarMap;
 
-    context programA(2,2,0,lMap,8,0);
+    context programA(2,2,0,VarMap,8,0,0);
     ast->print_mips(std::cout, programA);
   }
   else if(std::string(argv[1]) == "-S"){
     const Node *ast = parseAST(argv[2]);
     std::ofstream output(argv[4]);
-    std::unordered_map<std::string, int> Map;
 
-    context program(2,2,0,Map,8,0);
+    std::unordered_map<int, std::unordered_map<std::string, int>> VarMap2;
+    context program(2,2,0,VarMap2,8,0,0);
     ast->print_mips(output, program);
   }
 	std::cout<<std::endl;
   return 0;
 }
+
+//std::unordered_map<Tscopenum, std::unordered_map<TVarName, Toffset>> _VarMap,

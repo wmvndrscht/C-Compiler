@@ -14,7 +14,7 @@ void ExpressionVariable::py_translate(std::ostream &dst, const scope &scp) const
 
 void ExpressionVariable::print_mips(std::ostream &dst, context &program) const {
 	// dst << *variable;
-	dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getlocalOffset(*variable) << "($fp)" << "\n";
+	dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getVarOffset(*variable) << "($fp)" << "\n";
 
 	// dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
 }
@@ -117,7 +117,7 @@ void AssignEqExpr::print_mips(std::ostream &dst, context &program) const {
 	program.assignReg();
 	assignexpr->print_mips(dst,program);
 	dst << "\tmove $" << destReg << ",$" << program.getnReg() << "\n";
-	dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
+	dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 	program.freeReg();
 }
 
@@ -742,7 +742,7 @@ void PostIncrementExpr::print_mips(std::ostream &dst, context &program) const {
 	// Identify* a = (Identify*)postfixexpr;
 	std::string name = postfixexpr->get_ID();
 	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",1\n";
-	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
+	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 
 
 }

@@ -176,7 +176,9 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	dst << "\t" << "move $fp,$sp\n";
 
 	program.resetParamPass();
+	program.incrScope();
 	dec->print_mips(dst,program);
+	program.decrScope();
 
 	dst << "\n";
 	//now do return expression, will include context later
@@ -248,19 +250,19 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 	init->print_mips(dst,program);
 
 
-	if( program.checkVar(name) ){
-		dst << "\tlw $3," << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
+	if( program.isVarinScope(name) ){
+		dst << "\tlw $3," << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 		dst << "\tmove $3,$2 \n";
-		dst << "\tsw $3," << program.getFrameSize()- program.getlocalOffset(name) << "($fp)\n";
+		dst << "\tsw $3," << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 	}
 	else{
 		program.incFrameSize();
 		dst << "\n\taddiu $sp,$sp,-4\n";
 		dst << "\tmove $fp,$sp\n";
-		program.addlocal(name, program.getFrameSize() );
+		program.addVartoScope(name, program.getFrameSize() );
 		// dst << "\n#local var:" << name <<" at offset " << program.getFrameSize() << "\n";
-		dst << "\tsw $2," << program.getFrameSize() - program.getlocalOffset(name) << "($fp)\n";
-		// dst << "\n#offset adjusted = " << program.getFrameSize() - program.getlocalOffset(name) << "\n";
+		dst << "\tsw $2," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
+		// dst << "\n#offset adjusted = " << program.getFrameSize() - program.getVarOffset(name) << "\n";
 	}
 
 // lw	$3,0($fp)
@@ -390,7 +392,7 @@ void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {
 
 	std::string name = dec->get_name();
 	//need to account for out of scope
-	program.addlocal(name, 8-offset);
+	program.addVartoScope(name, 8-offset);
 
 }
 
