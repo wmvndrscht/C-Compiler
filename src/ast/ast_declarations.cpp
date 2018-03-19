@@ -155,7 +155,7 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	std::string label = dec->get_Label();
 	//FrameSize will eventually be = tempvariables + local variables + 8 + paramarguments;
 	//Find these or should I print mips and then gather the params?
-	int FrameSize = 8;
+	int FrameSize = 24;
 	dst << "\t.global " << label << "\n";
 	
 
