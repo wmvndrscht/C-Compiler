@@ -98,6 +98,7 @@ void CompoundStatement::print_mips(std::ostream &dst, context &program) const {
 	if(statlist!=NULL){
 		statlist->print_mips(dst,program);
 	}
+	program.deleteScope();
 	program.decrScope();
 }
 

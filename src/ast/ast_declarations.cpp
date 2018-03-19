@@ -193,7 +193,6 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	//finish function
 	dst << "\t" << "j $31\n";
 	dst << "\t" << "nop";
-
 }
 
 std::string FunctionDefinition::get_name() const {return "not implemented";}
