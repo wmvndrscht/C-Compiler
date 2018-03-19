@@ -20,7 +20,10 @@ void TranslationUnit::py_translate(std::ostream &dst, const scope &scp) const{
 	right->py_translate(dst,scp);
 }
 
-void TranslationUnit::print_mips(std::ostream &dst, context &program) const{}
+void TranslationUnit::print_mips(std::ostream &dst, context &program) const{
+	left->print_mips(dst,program);
+	right->print_mips(dst,program);
+}
 
 //-------------------------------Declaration-----------------------------------
 

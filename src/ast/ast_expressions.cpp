@@ -14,8 +14,14 @@ void ExpressionVariable::py_translate(std::ostream &dst, const scope &scp) const
 
 void ExpressionVariable::print_mips(std::ostream &dst, context &program) const {
 	// dst << *variable;
-	dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getVarOffset(*variable) << "($fp)" << "\n";
 
+	if( program.isVarGlobal(*variable) ){
+		dst << "\tlui $" << program.getnReg() << ",%hi(" << *variable << ")\n";
+		dst << "\tlw $" << program.getnReg() << ",%lo(" << *variable << ")($" << program.getnReg() << ")\n";
+	}
+	else{
+		dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getVarOffset(*variable) << "($fp)" << "\n";
+	}
 	// dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
 }
 
@@ -37,8 +43,12 @@ void Value::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void Value::print_mips(std::ostream &dst, context &program) const {
-	
-	dst << "\tli $" << program.getnReg() << "," << *number <<"\n";
+	if(program.getScopeNum() == 0){
+		dst << *number;
+	}
+	else{
+		dst << "\tli $" << program.getnReg() << "," << *number <<"\n";
+	}
 }
 
 std::string Value::get_ID() const{
@@ -104,7 +114,6 @@ void AssignEqExpr::py_translate(std::ostream &dst, const scope &scp) const {
 void AssignEqExpr::print_mips(std::ostream &dst, context &program) const {
 	//load value into getnReg
 
-	//DON"T KNOW HOW TO GET NAME OF LEFT SIDE, REQUIRES EITHER EXPRESSION ADD OR SOMETHING
 
 	unaryexpr->print_mips(dst,program);
 	int destReg = program.getnReg();
@@ -115,9 +124,18 @@ void AssignEqExpr::print_mips(std::ostream &dst, context &program) const {
 	//assume operator is "="
 	//evaluate expression in next Register
 	program.assignReg();
+	//if variable is global
 	assignexpr->print_mips(dst,program);
-	dst << "\tmove $" << destReg << ",$" << program.getnReg() << "\n";
-	dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+	if( program.isVarGlobal(name) ){
+		dst << "\tlui $" << destReg << ",%hi(" << name << ")\n";
+		dst << "\tsw $" << program.getnReg() << ",%lo(" << name << ")($" << destReg << ")\n";
+
+	}
+	else{
+		
+		dst << "\tmove $" << destReg << ",$" << program.getnReg() << "\n";
+		dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+	}
 	program.freeReg();
 }
 

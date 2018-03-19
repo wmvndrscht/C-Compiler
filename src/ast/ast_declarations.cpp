@@ -247,15 +247,32 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 	program.setdestReg(2);
 	program.setnReg(2);
 
-	init->print_mips(dst,program);
+	
 
+	if(program.getScopeNum() == 0){
 
-	if( program.isVarinScope(name) ){
+		//need to cover for if int a = 5*6*2+3; instead of int a =2;
+		
+		dst << "\t.globl " << name << "\n";
+		dst << "\t.data\n";
+		dst << "\t.align 2\n";
+		dst << "\t.type a,@object\n";
+		dst << "\t.size " << name << ",4\n";
+		dst << name << ":\n";
+		dst << "\t.word";
+		init->print_mips(dst,program);
+		dst << "\n";
+
+		dst << "\tsw $2," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
+	}
+	else if( program.isVarinScope(name) ){
+		init->print_mips(dst,program);
 		dst << "\tlw $3," << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 		dst << "\tmove $3,$2 \n";
 		dst << "\tsw $3," << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 	}
 	else{
+		init->print_mips(dst,program);
 		program.incFrameSize();
 		dst << "\n\taddiu $sp,$sp,-4\n";
 		dst << "\tmove $fp,$sp\n";
@@ -304,7 +321,35 @@ void LoneInitDeclarator::py_translate(std::ostream &dst, const scope &scp) const
 	dst << "=0";
 }
 
-void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {}
+void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {
+	std::string name = dec->get_name();
+
+	program.setdestReg(2);
+	program.setnReg(2);
+
+	//if global variable treat differently
+	if(program.getScopeNum() == 0){
+		//assume has not been declared before as compiler emits probelms if so
+		//as LoneInitDeclarator set global value to 0
+		dst << "\t.globl " << name << "\n";
+		dst << "\t.data\n";
+		dst << "\t.align 2\n";
+		dst << "\t.type a,@object\n";
+		dst << "\t.size " << name << ",4\n";
+		dst << name << ":\n";
+		dst << "\t.word 0\n";
+
+	}
+	else{ //local variable so follow convention below
+		program.incFrameSize();
+		dst << "\n\taddiu $sp,$sp,-4\n";
+		dst << "\tmove $fp,$sp\n";
+		program.addVartoScope(name, program.getFrameSize() );
+		dst << "\tsw $0," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
+	}
+
+	
+}
 
 std::string LoneInitDeclarator::get_name() const{
 	return dec->get_Label();

@@ -1,4 +1,4 @@
-	.file	1 "gb2.c"
+	.file	1 "gb4.c"
 	.section .mdebug.abi32
 	.previous
 	.nan	legacy
@@ -6,16 +6,7 @@
 	.module	nooddspreg
 	.abicalls
 
-	#start global int a =5;
-	.globl	a
-	.data
-	.align	2
-	.type	a, @object
-	.size	a, 4
-a:
-	.word	5
-
-	#start function
+	.comm	a,4,4
 	.text
 	.align	2
 	.globl	main
@@ -32,13 +23,13 @@ main:
 	addiu	$sp,$sp,-8
 	sw	$fp,4($sp)
 	move	$fp,$sp
-
-
-	lui	$2,%hi(a)
-
-	li	$3,2			# 0x2
-	sw	$3,%lo(a)($2)
-	move	$2,$0
+	lui	$28,%hi(__gnu_local_gp)
+	addiu	$28,$28,%lo(__gnu_local_gp)
+	lw	$2,%got(a)($28)
+	nop
+	lw	$2,0($2)
+	nop
+	addiu	$2,$2,1
 	move	$sp,$fp
 	lw	$fp,4($sp)
 	addiu	$sp,$sp,8

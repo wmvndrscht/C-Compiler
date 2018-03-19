@@ -70,6 +70,8 @@ public:
 	void deleteScope();
 	void incrScope();
 	void decrScope();
+	int getScopeNum();
+	bool isVarGlobal(std::string name);
 
 
 };

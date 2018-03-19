@@ -163,3 +163,26 @@ void context::incrScope(){
 void context::decrScope(){
 	ScopeNum--;
 }
+
+int context::getScopeNum(){
+	return ScopeNum;
+}
+
+
+bool context::isVarGlobal(std::string name){
+	bool found = false;
+	int i = ScopeNum;
+
+
+	while(i > 0 && !found){
+
+		auto got = VarMap[i].find(name);
+		if( !(got ==  VarMap[i].end() )){
+			return false;
+			found = true;
+		}
+		i--;
+	}
+	return true;
+
+}
