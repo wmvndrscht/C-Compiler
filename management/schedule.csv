@@ -5,5 +5,5 @@ Week,    DateRange,          PlannedEffort,  ActualEffort,  OtherDeadlines
 7, 19th Feb - 25th Feb,12,20.5,None
 8, 26th Feb -  4th Feb,12,15,Database CW2; Regex/Lexers Test
 9,  5th Mar - 11th Mar,12,24,Grammars/Parsers test
-10, 12th Mar - 18th Mar,25,              ,Compilers Codegen test; maths cw
+10, 12th Mar - 18th Mar,25,34,Compilers Codegen test; maths cw
 11, 19th Mar - 27th Mar,25,              ,
