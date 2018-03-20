@@ -270,7 +270,7 @@ Postfix_Expression	: Primary_Expression {$$ = $1;}
 										| Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK {$$ = new PostfixArguExpression($1,$3);}
 										| Postfix_Expression T_INCR {$$ = new PostIncrementExpr($1);}
 
-Argument_Expression_List 	: Assignment_Expression 	{$$ = $1;}
+Argument_Expression_List 	: Assignment_Expression 	{$$ = new AssignExprList(NULL,$1);}
 													| Argument_Expression_List T_COMMA Assignment_Expression {$$ = new AssignExprList($1,$3);}
 
 Primary_Expression	: T_IDENTIFIER	{$$ = new ExpressionVariable($1);}

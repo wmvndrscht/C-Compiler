@@ -155,7 +155,6 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	std::string label = dec->get_Label();
 	//FrameSize will eventually be = tempvariables + local variables + 8 + paramarguments;
 	//Find these or should I print mips and then gather the params?
-	int FrameSize = 24;
 	dst << "\t.global " << label << "\n";
 	
 
@@ -169,9 +168,11 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 
 	//may create own instructions class to do the printing more clearly
 	//Adjust stack for this function
-	dst << "\t" << "addiu $sp,$sp,-" << FrameSize << "\n";
+	dst << "\t" << "addiu $sp,$sp,-" << program.getFrameSize() << "\n";
+	//store return address incase of function call
+	dst << "\tsw $31," << program.getFrameSize()-4 << "($sp)\n";
 	//Store old frame pointer
-	dst << "\t" << "sw $fp," << FrameSize-4 << "($sp)\n";
+	dst << "\t" << "sw $fp," << program.getFrameSize()-8 << "($sp)\n";
 	//Set new frame pointer
 	dst << "\t" << "move $fp,$sp\n";
 
@@ -182,17 +183,23 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 
 	dst << "\n";
 	//now do return expression, will include context later
+
+	program.setdestReg(3);
+	program.setnReg(3);
+
+
 	cstatement->print_mips(dst, program);
 	dst << "\n";
 
 	//restore frame and stack
 	dst << "\t" << "move $sp,$fp\n";
-	dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\tlw $31," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\t" << "lw $fp," << program.getFrameSize() -8 << "($sp)\n";
 	dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
 
 	//finish function
 	dst << "\t" << "j $31\n";
-	dst << "\t" << "nop";
+	dst << "\t" << "nop\n";
 }
 
 std::string FunctionDefinition::get_name() const {return "not implemented";}
@@ -243,10 +250,10 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 	//get the Name
 	std::string name = dec->get_name();
 
-	program.setdestReg(2);
-	program.setnReg(2);
 
-	
+	//set destination register to 3
+	program.setdestReg(3);
+	program.setnReg(3);
 
 	if(program.getScopeNum() == 0){
 
@@ -261,13 +268,9 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 		dst << "\t.word";
 		init->print_mips(dst,program);
 		dst << "\n";
-
-		dst << "\tsw $2," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
 	}
 	else if( program.isVarinScope(name) ){
-		init->print_mips(dst,program);
-		dst << "\tlw $3," << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
-		dst << "\tmove $3,$2 \n";
+		init->print_mips(dst,program); //this result will be stored in $3
 		dst << "\tsw $3," << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 	}
 	else{
@@ -276,26 +279,9 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 		dst << "\n\taddiu $sp,$sp,-4\n";
 		dst << "\tmove $fp,$sp\n";
 		program.addVartoScope(name, program.getFrameSize() );
-		// dst << "\n#local var:" << name <<" at offset " << program.getFrameSize() << "\n";
-		dst << "\tsw $2," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
-		// dst << "\n#offset adjusted = " << program.getFrameSize() - program.getVarOffset(name) << "\n";
+		//result of expression will be $3
+		dst << "\tsw $3," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
 	}
-
-// lw	$3,0($fp)
-
-	// program.assignVar()
-	// //Check if already on stack
-	// 	//if on stack update value
-	// 		//load value of expression
-	// 		//move expression into register
-	// 		//store register into mem at offset
-
-	// 	//else increment frame size
-	// 	//varibale offset = frame size
-	// 	//load value of expression
-	// 	//move expression into mem at offset
-	// 	//push onto map with name and offset
-	// 	//adjust frame pointer and stack pointer 9f
 }
 
 std::string InitDeclarator::get_name() const{
@@ -436,7 +422,7 @@ void ParamDeclaration::print_mips(std::ostream &dst, context& program) const {
 
 	std::string name = dec->get_name();
 	//need to account for out of scope
-	program.addVartoScope(name, 8-offset);
+	program.addVartoScope(name, program.getFrameSize()-offset);
 
 }
 

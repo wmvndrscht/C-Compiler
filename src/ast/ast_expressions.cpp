@@ -347,7 +347,12 @@ void LonePostfixExpression::py_translate(std::ostream &dst, const scope &scp) co
 	dst << "()";
 }
 
-void LonePostfixExpression::print_mips(std::ostream &dst, context &program) const {}
+void LonePostfixExpression::print_mips(std::ostream &dst, context &program) const {
+	std::string name = expr->get_ID();
+	dst << "\tjal " << name << "\n";
+	dst << "\tnop\n"; 
+	dst << "\tmove $" << program.getnReg() << ",$2\n";
+}
 
 std::string LonePostfixExpression::get_ID() const{
 	return expr->get_ID();
@@ -373,7 +378,16 @@ void PostfixArguExpression::py_translate(std::ostream &dst, const scope &scp) co
 	dst << ")";
 }
 
-void PostfixArguExpression::print_mips(std::ostream &dst, context &program) const {}
+void PostfixArguExpression::print_mips(std::ostream &dst, context &program) const {
+
+	std::string name = expr->get_ID();
+
+	program.resetParamPass();
+	arguexpr->print_mips(dst,program);
+	dst << "\tjal " << name << "\n";
+	dst << "\tnop\n";
+	dst << "\tmove $" << program.getnReg() << ",$2\n";
+}
 
 std::string PostfixArguExpression::get_ID() const{
 	return expr->get_ID();
@@ -385,18 +399,32 @@ AssignExprList::AssignExprList(const Expression* _exprlist, const Expression* _e
 	exprlist(_exprlist), expr(_expr){}
 
 void AssignExprList::print_c(std::ostream &dst) const {
-	exprlist->print_c(dst);
-	dst << ",";
+	if(exprlist != NULL){
+		exprlist->print_c(dst);
+		dst << ",";
+	}
 	expr->print_c(dst);
 }
 
 void AssignExprList::py_translate(std::ostream &dst, const scope &scp) const {
-	exprlist->py_translate(dst,scp);
-	dst << ",";
+	if(exprlist != NULL){
+		exprlist->py_translate(dst,scp);
+		dst << ",";
+	}
 	expr->py_translate(dst,scp);
 }
 
-void AssignExprList::print_mips(std::ostream &dst, context &program) const {}
+void AssignExprList::print_mips(std::ostream &dst, context &program) const {
+	//null don't print next expr
+	//in postfixarguexpression set param to 0
+	if(exprlist != NULL){
+		exprlist->print_mips(dst,program);
+	}
+	expr->print_mips(dst,program);
+	int reg = 4 + program.get_ParamPass();
+	dst << "\tmove $" << reg << ",$" << program.getdestReg() << "\n";
+	program.incrParamPass();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -449,7 +477,9 @@ void ParenExpr::print_c(std::ostream &dst) const {
 }
 
 void ParenExpr::py_translate(std::ostream &dst, const scope &scp) const {
-	dst << "\nParenExpr - not in spec\n";
+	dst << "(";
+	expr->py_translate(dst,scp);
+	dst << ")";
 }
 
 void ParenExpr::print_mips(std::ostream &dst, context &program) const {

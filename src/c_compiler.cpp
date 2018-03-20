@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
     const Node *ast = parseAST("std::cin");
     std::unordered_map<int, std::unordered_map<std::string, int>> VarMap;
 
-    context programA(2,2,0,VarMap,8,0,0);
+    context programA(2,2,0,VarMap,32,0,0);
     ast->print_mips(std::cout, programA);
   }
   else if(std::string(argv[1]) == "-S"){
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
     std::ofstream output(argv[4]);
 
     std::unordered_map<int, std::unordered_map<std::string, int>> VarMap2;
-    context program(2,2,0,VarMap2,8,0,0);
+    context program(2,2,0,VarMap2,32,0,0);
     ast->print_mips(output, program);
   }
 	std::cout<<std::endl;

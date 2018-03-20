@@ -5,6 +5,8 @@
 	.module	fp=32
 	.module	nooddspreg
 	.abicalls
+
+	#int f(){ return 10; }
 	.text
 	.align	2
 	.globl	f
@@ -19,15 +21,18 @@ f:
 	.set	noreorder
 	.set	nomacro
 	addiu	$sp,$sp,-8
-	sw	$fp,4($sp)
+	sw	$fp,4($sp) #store the old framepointer at FrameSize-4
 	move	$fp,$sp
-	li	$2,10			# 0xa
+
+	li	$2,10			# 0xa  #load result into $2
 	move	$sp,$fp
 	lw	$fp,4($sp)
 	addiu	$sp,$sp,8
 	j	$31
 	nop
 
+
+	#start main function
 	.set	macro
 	.set	reorder
 	.end	f
@@ -45,9 +50,9 @@ main:
 	.set	noreorder
 	.set	nomacro
 	
-	addiu	$sp,$sp,-32
-	sw	$31,28($sp)
-	sw	$fp,24($sp)
+	addiu	$sp,$sp,-32  #allocate 32 no matter
+	sw	$31,28($sp)  #store return address at stacksize -4
+	sw	$fp,24($sp) #store frame pointer at stacksize - 8
 	move	$fp,$sp
 	.option	pic0
 	jal	f

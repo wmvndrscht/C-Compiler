@@ -13,8 +13,15 @@ void ReturnStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "return";
 }
 void ReturnStatement::print_mips(std::ostream &dst, context &program) const {
+	//add
+	dst << "\tmove $2,$" << program.getdestReg() << "\n";
+	//
+	// dst << "\t" << "move $sp,$fp\n";
+	// dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	// dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
 	dst << "\t" << "move $sp,$fp\n";
-	dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\tlw $31," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\t" << "lw $fp," << program.getFrameSize() -8 << "($sp)\n";
 	dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
 	dst << "\tj $31\n";
 	dst << "\tnop\n";
@@ -35,11 +42,19 @@ void ReturnExprStatement::py_translate(std::ostream &dst, const scope &scp) cons
 	dst << "\n";
 }
 void ReturnExprStatement::print_mips(std::ostream &dst, context &program) const {
-	program.setdestReg(2);
+	// program.setdestReg(2);
 	// dst << "\tmove $" << program.destReg << ",$3";
 	retexprstat->print_mips(dst,program);//can use dest reg etc
+	//add
+	dst << "\tmove $2,$" << program.getdestReg() << "\n";
+
+	// dst << "\t" << "move $sp,$fp\n";
+	// dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	// dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
+
 	dst << "\t" << "move $sp,$fp\n";
-	dst << "\t" << "lw $fp," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\tlw $31," << program.getFrameSize() -4 << "($sp)\n";
+	dst << "\t" << "lw $fp," << program.getFrameSize() -8 << "($sp)\n";
 	dst << "\t" << "addiu $sp,$sp," <<  program.getFrameSize() << "\n";
 	dst << "\tj $31\n";
 	dst << "\tnop\n";

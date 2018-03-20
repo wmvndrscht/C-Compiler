@@ -1,4 +1,4 @@
-	.file	1 "f1.c"
+	.file	1 "f08.c"
 	.section .mdebug.abi32
 	.previous
 	.nan	legacy
@@ -6,7 +6,23 @@
 	.module	nooddspreg
 	.abicalls
 
-	#function f
+# int x;
+
+# int f()
+# {
+#     x=x+1;
+#     return x;
+# }
+
+# int main()
+# {
+
+#     return f()+f();
+# }
+
+
+
+	.comm	x,4,4
 	.text
 	.align	2
 	.globl	f
@@ -23,8 +39,21 @@ f:
 	addiu	$sp,$sp,-8
 	sw	$fp,4($sp)
 	move	$fp,$sp
-	sw	$4,8($fp)
-	li	$2,10			# 0xa
+
+	
+	lui	$28,%hi(__gnu_local_gp)
+	addiu	$28,$28,%lo(__gnu_local_gp)
+	lw	$2,%got(x)($28)
+	nop
+	lw	$2,0($2)
+	nop
+	addiu	$3,$2,1
+	lw	$2,%got(x)($28)
+	nop
+	sw	$3,0($2)
+	lw	$2,%got(x)($28)
+	nop
+	lw	$2,0($2)
 	move	$sp,$fp
 	lw	$fp,4($sp)
 	addiu	$sp,$sp,8
@@ -42,25 +71,33 @@ f:
 	.ent	main
 	.type	main, @function
 main:
-	.frame	$fp,32,$31		# vars= 0, regs= 2/0, args= 16, gp= 8
-	.mask	0xc0000000,-4
+	.frame	$fp,40,$31		# vars= 0, regs= 3/0, args= 16, gp= 8
+	.mask	0xc0010000,-4
 	.fmask	0x00000000,0
 	.set	noreorder
 	.set	nomacro
-	addiu	$sp,$sp,-32
-	sw	$31,28($sp)
-	sw	$fp,24($sp)
+	addiu	$sp,$sp,-40
+	sw	$31,36($sp)
+	sw	$fp,32($sp)
+	sw	$16,28($sp)
 	move	$fp,$sp
-	li	$4,2			# 0x2 #load into the first register
 	.option	pic0
 	jal	f
 	nop
 
 	.option	pic2
+	move	$16,$2
+	.option	pic0
+	jal	f
+	nop
+
+	.option	pic2
+	addu	$2,$16,$2
 	move	$sp,$fp
-	lw	$31,28($sp)
-	lw	$fp,24($sp)
-	addiu	$sp,$sp,32
+	lw	$31,36($sp)
+	lw	$fp,32($sp)
+	lw	$16,28($sp)
+	addiu	$sp,$sp,40
 	j	$31
 	nop
 
