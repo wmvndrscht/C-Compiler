@@ -288,6 +288,7 @@ void IfElseStatement::print_mips(std::ostream &dst, context &program) const {
 
 	//if equal to 0 (therefore false branch to else statement)
 	dst << "\tbeq $" << program.getnReg() << ",$" << "0,$" << LabelElse << "\n";
+	dst << "\tnop\n";
 	ifstat->print_mips(dst,program);
 	dst << "\tb $" << LabelEnd << "\n";
 	dst << "\tnop\n";

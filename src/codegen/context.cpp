@@ -19,18 +19,18 @@ void context::assignReg(){
 	else if(nReg == 3){
 		nReg = 8;
 	}
-	else if(nReg > 7 && nReg <15 ){
+	else if(nReg > 7 && nReg <25 ){
 		nReg +=1;
 		return;
 	}
-	else if(nReg == 15){
-		nReg = 24;
-		return;
-	}
-	else if(nReg == 24){
-		nReg = 25;
-		return;
-	}
+	// else if(nReg == 15){
+	// 	nReg = 24;
+	// 	return;
+	// }
+	// else if(nReg == 24){
+	// 	nReg = 25;
+	// 	return;
+	// }
 	else{
 		std::cerr << "**Reached bounds of availReg**" << std::endl;
 		exit(-1);
@@ -46,17 +46,17 @@ void context::freeReg(){
 	else if(nReg == 8){
 		nReg = 3;
 	}
-	else if( 8 < nReg && nReg < 16 ){
+	else if( 8 < nReg && nReg < 25 ){
 		nReg -=1;
 		return;
 	}
-	else if( nReg == 24){
-		nReg = 15;
-		return;
-	}
-	else if(nReg == 25){
-		nReg =24;
-	}
+	// else if( nReg == 24){
+	// 	nReg = 15;
+	// 	return;
+	// }
+	// else if(nReg == 25){
+	// 	nReg =24;
+	// }
 	else{
 		std::cerr << "**freeReg error**" << std::endl;
 		exit(-1);
@@ -95,6 +95,10 @@ void context::incFrameSize(){
 
 int context::getFrameSize(){
 	return FrameSize;
+}
+
+void context::addtoFrameSize(int f){
+	FrameSize = FrameSize+f;
 }
 
 

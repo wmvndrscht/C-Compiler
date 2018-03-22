@@ -181,6 +181,9 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	dec->print_mips(dst,program);
 	program.decrScope();
 
+	//aa
+	program.resetParamPass();
+
 	dst << "\n";
 	//now do return expression, will include context later
 

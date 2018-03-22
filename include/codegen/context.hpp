@@ -8,19 +8,6 @@
 
 #include <stdexcept>
 
-// class context{
-//   public:
-//     stackpointer;
-//     framepointer;
-//     function to adjust stack pointer at beginnign
-//     function to create return
-//     function for label creation etc
-  
-//   private:
-
-
-// }
-
 
 typedef int Tscopenum;
 typedef int Toffset;
@@ -56,6 +43,7 @@ public:
 	//--------------------Frames-----------------------
 	void incFrameSize();
 	int getFrameSize();
+	void addtoFrameSize(int f);
 
 
   //-------------------Passing parameters------------------------

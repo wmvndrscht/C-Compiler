@@ -349,8 +349,65 @@ void LonePostfixExpression::py_translate(std::ostream &dst, const scope &scp) co
 
 void LonePostfixExpression::print_mips(std::ostream &dst, context &program) const {
 	std::string name = expr->get_ID();
+
+	// program.incFrameSize();
+	// dst << "\n\taddiu $sp,$sp,-4\n";
+	// dst << "\tmove $fp,$sp\n";
+	// program.addVartoScope(name, program.getFrameSize() );
+	// dst << "\tsw $0," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
+
+	program.addtoFrameSize(23*4);
+	//push 19 registers onto the stack
+	dst << "\n\taddiu $sp,$sp,-92\n";
+	dst << "\tsw $25,16($sp)\n";
+	dst << "\tsw $24,20($sp)\n";
+	dst << "\tsw $23,24($sp)\n";
+	dst << "\tsw $22,28($sp)\n";
+	dst << "\tsw $21,32($sp)\n";
+	dst << "\tsw $20,36($sp)\n";
+	dst << "\tsw $19,40($sp)\n";
+	dst << "\tsw $18,44($sp)\n";
+	dst << "\tsw $17,48($sp)\n";
+	dst << "\tsw $16,52($sp)\n";
+	dst << "\tsw $15,56($sp)\n";
+	dst << "\tsw $14,60($sp)\n";
+	dst << "\tsw $13,64($sp)\n";
+	dst << "\tsw $12,68($sp)\n";
+	dst << "\tsw $11,72($sp)\n";
+	dst << "\tsw $10,76($sp)\n";
+	dst << "\tsw $9,80($sp)\n";
+	dst << "\tsw $8,84($sp)\n";
+	dst << "\tsw $3,88($sp)\n";
+	dst << "\tmove $fp,$sp\n";
+
+	dst << "\t.option pic0\n";
 	dst << "\tjal " << name << "\n";
-	dst << "\tnop\n"; 
+	dst << "\tnop\n";
+	dst << "\t.option pic2\n";
+	//restore the 19 registers
+	// dst << "\n\taddiu $sp,$sp,-76\n";
+	dst << "\tlw $25,16($sp)\n";
+	dst << "\tlw $24,20($sp)\n";
+	dst << "\tlw $23,24($sp)\n";
+	dst << "\tlw $22,28($sp)\n";
+	dst << "\tlw $21,32($sp)\n";
+	dst << "\tlw $20,36($sp)\n";
+	dst << "\tlw $19,40($sp)\n";
+	dst << "\tlw $18,44($sp)\n";
+	dst << "\tlw $17,48($sp)\n";
+	dst << "\tlw $16,52($sp)\n";
+	dst << "\tlw $15,56($sp)\n";
+	dst << "\tlw $14,60($sp)\n";
+	dst << "\tlw $13,64($sp)\n";
+	dst << "\tlw $12,68($sp)\n";
+	dst << "\tlw $11,72($sp)\n";
+	dst << "\tlw $10,76($sp)\n";
+	dst << "\tlw $9,80($sp)\n";
+	dst << "\tlw $8,84($sp)\n";
+	dst << "\tlw $3,88($sp)\n";
+	dst << "\n\taddiu $sp,$sp,92\n";
+	dst << "\tmove $fp,$sp\n";
+	program.addtoFrameSize(-23*4);
 	dst << "\tmove $" << program.getnReg() << ",$2\n";
 }
 
@@ -384,9 +441,64 @@ void PostfixArguExpression::print_mips(std::ostream &dst, context &program) cons
 
 	program.resetParamPass();
 	arguexpr->print_mips(dst,program);
+	program.resetParamPass();
+
+	//stack control
+	program.addtoFrameSize(23*4);
+	//push 19 registers onto the stack
+	dst << "\n\taddiu $sp,$sp,-92\n";
+
+	dst << "\tsw $25,16($sp)\n";
+	dst << "\tsw $24,20($sp)\n";
+	dst << "\tsw $23,24($sp)\n";
+	dst << "\tsw $22,28($sp)\n";
+	dst << "\tsw $21,32($sp)\n";
+	dst << "\tsw $20,36($sp)\n";
+	dst << "\tsw $19,40($sp)\n";
+	dst << "\tsw $18,44($sp)\n";
+	dst << "\tsw $17,48($sp)\n";
+	dst << "\tsw $16,52($sp)\n";
+	dst << "\tsw $15,56($sp)\n";
+	dst << "\tsw $14,60($sp)\n";
+	dst << "\tsw $13,64($sp)\n";
+	dst << "\tsw $12,68($sp)\n";
+	dst << "\tsw $11,72($sp)\n";
+	dst << "\tsw $10,76($sp)\n";
+	dst << "\tsw $9,80($sp)\n";
+	dst << "\tsw $8,84($sp)\n";
+	dst << "\tsw $3,88($sp)\n";
+	dst << "\tmove $fp,$sp\n";
+
+	dst << "\t.option pic0\n";
 	dst << "\tjal " << name << "\n";
 	dst << "\tnop\n";
+	dst << "\t.option pic2\n";
+	//restore the 19 registers
+	// dst << "\n\taddiu $sp,$sp,-76\n";
+	dst << "\tlw $25,16($sp)\n";
+	dst << "\tlw $24,20($sp)\n";
+	dst << "\tlw $23,24($sp)\n";
+	dst << "\tlw $22,28($sp)\n";
+	dst << "\tlw $21,32($sp)\n";
+	dst << "\tlw $20,36($sp)\n";
+	dst << "\tlw $19,40($sp)\n";
+	dst << "\tlw $18,44($sp)\n";
+	dst << "\tlw $17,48($sp)\n";
+	dst << "\tlw $16,52($sp)\n";
+	dst << "\tlw $15,56($sp)\n";
+	dst << "\tlw $14,60($sp)\n";
+	dst << "\tlw $13,64($sp)\n";
+	dst << "\tlw $12,68($sp)\n";
+	dst << "\tlw $11,72($sp)\n";
+	dst << "\tlw $10,76($sp)\n";
+	dst << "\tlw $9,80($sp)\n";
+	dst << "\tlw $8,84($sp)\n";
+	dst << "\tlw $3,88($sp)\n";
+	dst << "\n\taddiu $sp,$sp,92\n";
+	dst << "\tmove $fp,$sp\n";
+	program.addtoFrameSize(-23*4);
 	dst << "\tmove $" << program.getnReg() << ",$2\n";
+
 }
 
 std::string PostfixArguExpression::get_ID() const{
@@ -422,7 +534,7 @@ void AssignExprList::print_mips(std::ostream &dst, context &program) const {
 	}
 	expr->print_mips(dst,program);
 	int reg = 4 + program.get_ParamPass();
-	dst << "\tmove $" << reg << ",$" << program.getdestReg() << "\n";
+	dst << "\tmove $" << reg << ",$" << program.getnReg() << "\n";
 	program.incrParamPass();
 }
 
