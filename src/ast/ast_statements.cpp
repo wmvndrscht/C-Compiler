@@ -90,6 +90,11 @@ void CompoundStatement::py_translate(std::ostream &dst, const scope &scp) const 
 	}
 	// dst << "\n";
 	// scp.count+=2;
+	if( (declist == NULL) && (statlist == NULL) ){
+		for(int i =0; i<scp.count;i++){ dst << " ";};
+		dst << "pass\n";
+	}
+
 	if(declist != NULL){
 		// dst << "\n";
 		// for(int i =0; i<scp.count;i++){ dst << " ";};
@@ -275,6 +280,7 @@ void IfElseStatement::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << "else:\n";
         // scp.count+=2;
 	// for(int i =0; i<scp.count;i++){ dst << " ";};
+	preif = true;
 	elsestat->py_translate(dst,increment(scp));
 	// scp.count-=2;
 	preif=false;

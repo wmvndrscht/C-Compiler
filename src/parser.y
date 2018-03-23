@@ -87,6 +87,8 @@
 %type<str> T_IDENTIFIER T_EQUAL
 %type<number> T_NUMBER
 
+%nonassoc "else"  //if else - shift/reduce error
+
 /* Begin the parse tree!!!!!!!!!! */
 
 %%

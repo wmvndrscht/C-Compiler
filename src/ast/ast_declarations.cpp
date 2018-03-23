@@ -491,6 +491,8 @@ void InitDeclaratorList::print_c(std::ostream &dst) const {
 
  void InitDeclaratorList::py_translate(std::ostream &dst, const scope &scp) const {
 	declist->py_translate(dst,scp);
+	dst << "\n";
+	for(int i =0; i<scp.count;i++){ dst << " ";};
 	dec->py_translate(dst,scp);
 }
 

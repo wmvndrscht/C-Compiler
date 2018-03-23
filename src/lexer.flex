@@ -8,7 +8,7 @@
 
 %}
 
-IDENTIFIER [a-zA-Z_][0-9a-zA-Z]*
+IDENTIFIER [a-zA-Z_][0-9a-zA-Z_]*
  /*include mutiple constants eg hex, oct */
 NUMBER 		 [0-9]+
 
