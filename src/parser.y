@@ -42,7 +42,8 @@
 %token T_COMMA T_IF T_ELSE
 %token T_TIMES T_PLUS T_MINUS T_EQ T_OR T_AND T_LTHAN T_GTHAN T_BAND
 %token T_FSLASH T_MODULO T_LSHIFT T_RSHIFT T_LTEQ T_GTEQ T_NEQ T_EXOR T_BOR
-%token T_INCR 
+%token T_INCR T_DECR T_PLUSEQUAL T_SUBEQUAL T_MULTEQUAL T_DIVEQUAL T_MODEQUAL
+%token T_LEFTEQUAL T_RIGHTEQUAL T_ANDEQUAL T_EXEQUAL T_OREQUAL
 
 
 /* non-terminal */
@@ -209,6 +210,17 @@ Initializer	: Assignment_Expression	{$$ = $1;}
 
 Assignment_Expression	:	Conditional_Expression {$$ = $1;}
 											| Unary_Expression T_EQUAL Assignment_Expression {$$ = new AssignEqExpr($1,$3);}
+											| Unary_Expression T_PLUSEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("+="));}
+											| Unary_Expression T_SUBEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("-="));}
+											| Unary_Expression T_MULTEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("*="));}
+											| Unary_Expression T_DIVEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("/="));}
+											| Unary_Expression T_MODEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("%="));}
+											| Unary_Expression T_LEFTEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("<<="));}
+											| Unary_Expression T_RIGHTEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string(">>="));}
+											| Unary_Expression T_ANDEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("&="));}
+											| Unary_Expression T_EXEQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("^="));}
+											| Unary_Expression T_OREQUAL Assignment_Expression {$$ = new AssignOpEqExpr($1,$3,std::string("|="));}
+
 
 // Assignment_Operator : T_EQUAL { $$ = new AssignmentOperator($1);}
 
@@ -269,6 +281,7 @@ Postfix_Expression	: Primary_Expression {$$ = $1;}
 										| Postfix_Expression T_LRBRACK T_RRBRACK {$$ = new LonePostfixExpression($1);}
 										| Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK {$$ = new PostfixArguExpression($1,$3);}
 										| Postfix_Expression T_INCR {$$ = new PostIncrementExpr($1);}
+										| Postfix_Expression T_DECR {$$ = new PostDecrementExpr($1);}
 
 Argument_Expression_List 	: Assignment_Expression 	{$$ = new AssignExprList(NULL,$1);}
 													| Argument_Expression_List T_COMMA Assignment_Expression {$$ = new AssignExprList($1,$3);}

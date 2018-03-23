@@ -72,7 +72,18 @@ NUMBER 		 [0-9]+
 "|"									{return T_BOR;}
 
 "++"								{return T_INCR;}
+"--"								{return T_DECR;}
 
+"+="								{return T_PLUSEQUAL;}
+"-="								{return T_SUBEQUAL;}
+"*="								{return T_MULTEQUAL;}
+"/="								{return T_DIVEQUAL;}
+"%="								{return T_MODEQUAL;}
+"<<="								{return T_LEFTEQUAL;}
+">>="								{return T_RIGHTEQUAL;}
+"&="								{return T_ANDEQUAL;}
+"^="								{return T_EXEQUAL;}
+"|="								{return T_OREQUAL;}
 
 
 "//".* 							{;}

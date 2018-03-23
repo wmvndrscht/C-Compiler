@@ -1,5 +1,5 @@
-int f(int a){
-	if(a){
+int f(){
+	if(1){
 		return 42;
 	}
 	else{

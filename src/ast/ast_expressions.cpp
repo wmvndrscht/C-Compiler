@@ -82,8 +82,7 @@ void MultExpression::print_mips(std::ostream &dst, context &program) const {
 	lhs->print_mips(dst,program);
 	program.assignReg();
 	rhs->print_mips(dst,program);
-	dst << "\tmultu $"  << dReg <<
-		",$" << program.getnReg() << "\n";
+	dst << "\tmultu $"  << dReg << ",$" << program.getnReg() << "\n";
 	dst << "\tmflo $" << dReg << "\n";
 	program.freeReg();
 }
@@ -133,6 +132,129 @@ void AssignEqExpr::print_mips(std::ostream &dst, context &program) const {
 	}
 	else{
 		
+		dst << "\tmove $" << destReg << ",$" << program.getnReg() << "\n";
+		dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+	}
+	program.freeReg();
+}
+
+
+//----------------------------------------------------------------------------
+
+AssignOpEqExpr::AssignOpEqExpr(const Expression* _unaryexpr,const Expression* _assignexpr, const std::string _op) :
+ unaryexpr( _unaryexpr), assignexpr(_assignexpr), op(_op){}
+
+void AssignOpEqExpr::print_c(std::ostream &dst) const {
+	unaryexpr->print_c(dst);
+	dst << op;
+	assignexpr->print_c(dst);
+}
+
+void AssignOpEqExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	unaryexpr->py_translate(dst,scp);
+	dst << op;
+	assignexpr->py_translate(dst,scp);
+}
+
+void AssignOpEqExpr::print_mips(std::ostream &dst, context &program) const {
+	//load value into getnReg
+
+
+	unaryexpr->print_mips(dst,program);
+	int destReg = program.getnReg();
+	Identify* a = (Identify*)unaryexpr;
+
+	std::string name = a->get_ID();
+	// std::string name = "a";
+	//assume operator is "="
+	//evaluate expression in next Register
+	program.assignReg();
+	//if variable is global
+	assignexpr->print_mips(dst,program);
+	if( program.isVarGlobal(name) ){
+		dst << "\tlui $" << destReg << ",%hi(" << name << ")\n";
+		// dst << "\tlw $" << program.getnReg() << ",%lo(" << *variable << ")($" << program.getnReg() << ")\n";
+		dst << "\tlw $" << destReg << ",%lo(" << name << ")($" << destReg << ")\n";
+		
+		if(op == "+="){
+			dst << "\taddu $" << program.getnReg() << ",$" << program.getnReg() << ",$" << destReg << "\n";
+		}
+		else if(op == "-="){
+			dst << "\tsubu $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == "*="){
+			dst << "\tmultu $" << destReg << ",$" << program.getnReg() << "\n";
+			dst << "\tmflo $" << program.getnReg() << "\n";
+		}
+		else if(op == "/="){
+			dst << "\tdiv $" << destReg << ",$" << program.getnReg() << "\n";
+			dst << "\tmflo $" << program.getnReg() << "\n";
+		}
+		else if(op == "%="){
+			dst << "\tdiv $" << destReg << ",$" << program.getnReg() << "\n";
+			dst << "\tmfhi $" << program.getnReg() << "\n";
+
+		}
+		else if(op == "<<="){
+			dst << "\tsll $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == ">>="){
+			dst << "\tsra $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == "&="){
+			dst << "\tand $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == "^="){
+			dst << "\txor $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else{
+			dst << "\tor $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+
+
+		dst << "\tlui $" << destReg << ",%hi(" << name << ")\n";
+		dst << "\tsw $" << program.getnReg() << ",%lo(" << name << ")($" << destReg << ")\n";
+
+	}
+	else{
+
+		dst << "\tlw $" << destReg << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+		
+		if(op == "+="){
+			dst << "\taddu $" << program.getnReg() << ",$" << program.getnReg() << ",$" << destReg << "\n";
+		}
+		else if(op == "-="){
+			dst << "\tsubu $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == "*="){
+			dst << "\tmultu $" << destReg << ",$" << program.getnReg() << "\n";
+			dst << "\tmflo $" << program.getnReg() << "\n";
+		}
+		else if(op == "/="){
+			dst << "\tdiv $" << destReg << ",$" << program.getnReg() << "\n";
+			dst << "\tmflo $" << program.getnReg() << "\n";
+		}
+		else if(op == "%="){
+			dst << "\tdiv $" << destReg << ",$" << program.getnReg() << "\n";
+			dst << "\tmfhi $" << program.getnReg() << "\n";
+
+		}
+		else if(op == "<<="){
+			dst << "\tsll $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == ">>="){
+			dst << "\tsra $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == "&="){
+			dst << "\tand $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else if(op == "^="){
+			dst << "\txor $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+		else{
+			dst << "\tor $" << program.getnReg() << ",$" << destReg << ",$" << program.getnReg() << "\n";
+		}
+
 		dst << "\tmove $" << destReg << ",$" << program.getnReg() << "\n";
 		dst << "\tsw $" << destReg << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
 	}
@@ -218,7 +340,17 @@ void ORExpression::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << " or ";
 	rhs->py_translate(dst,scp);
 }
-void ORExpression::print_mips(std::ostream &dst, context &program) const {}
+void ORExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	//Run lhs where value is stored into lReg
+	lhs->print_mips(dst,program);
+	//Adjust availReg for rhs
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tor $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -237,7 +369,17 @@ void ANDExpression::py_translate(std::ostream &dst, const scope &scp) const {
 	rhs->py_translate(dst,scp);
 }
 
-void ANDExpression::print_mips(std::ostream &dst, context &program) const {}
+void ANDExpression::print_mips(std::ostream &dst, context &program) const {
+	int dReg = program.getnReg();
+	//Run lhs where value is stored into lReg
+	lhs->print_mips(dst,program);
+	//Adjust availReg for rhs
+	program.assignReg();
+	rhs->print_mips(dst,program);
+	dst << "\tand $" << dReg << ",$" << dReg <<
+		",$" << program.getnReg() << "\n";
+	program.freeReg();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -626,8 +768,7 @@ void DivExpression::print_mips(std::ostream &dst, context &program) const {
 	lhs->print_mips(dst,program);
 	program.assignReg();
 	rhs->print_mips(dst,program);
-	dst << "\tdiv $"  << dReg <<
-		",$" << program.getnReg() << "\n";
+	dst << "\tdiv $"  << dReg <<",$" << program.getnReg() << "\n";
 	dst << "\tmflo $" << dReg << "\n";
 	program.freeReg();
 }
@@ -654,8 +795,7 @@ void ModExpression::print_mips(std::ostream &dst, context &program) const {
 	lhs->print_mips(dst,program);
 	program.assignReg();
 	rhs->print_mips(dst,program);
-	dst << "\tdiv $"  << dReg <<
-		",$" << program.getnReg() << "\n";
+	dst << "\tdiv $"  << dReg <<",$" << program.getnReg() << "\n";
 	dst << "\tmfhi $" << dReg << "\n";
 	program.freeReg();
 }
@@ -680,8 +820,7 @@ void LshiftExpression::print_mips(std::ostream &dst, context &program) const {
 	lhs->print_mips(dst,program);
 	program.assignReg();
 	rhs->print_mips(dst,program);
-	dst << "\tsll $" << dReg << ",$" << dReg <<
-		",$" << program.getnReg() << "\n";
+	dst << "\tsll $" << dReg << ",$" << dReg <<",$" << program.getnReg() << "\n";
 	program.freeReg();
 }
 //-----------------------------------------------------------------------------
@@ -912,3 +1051,36 @@ std::string PostIncrementExpr::get_ID() const{
 
 
 //-----------------------------------------------------------------------------
+
+PostDecrementExpr::PostDecrementExpr(const Identify* _postfixexpr)
+ : postfixexpr(_postfixexpr){}
+
+
+void PostDecrementExpr::print_c(std::ostream &dst) const {
+	postfixexpr->print_c(dst);
+	dst << "--\n";
+}
+
+void PostDecrementExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	postfixexpr->py_translate(dst,scp);
+	dst << "--\n";
+}
+
+
+void PostDecrementExpr::print_mips(std::ostream &dst, context &program) const {
+
+	postfixexpr->print_mips(dst,program);
+	program.getnReg();
+	// Identify* a = (Identify*)postfixexpr;
+	std::string name = postfixexpr->get_ID();
+	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",-1\n";
+	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+
+
+}
+
+std::string PostDecrementExpr::get_ID() const{
+	return postfixexpr->get_ID();
+}
+
+//---------------------------------------------------------------------------------
