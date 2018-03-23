@@ -104,8 +104,8 @@ Translation_Unit	:	External_Declaration 	{$$ = $1;}
 /* --------------------------- DECLARATION ------------------------------- */
 
 
-External_Declaration	:	Declaration 				{$$ = $1;}
-											| Function_Definition	{$$ = $1;}
+External_Declaration	: Function_Definition	{$$ = $1;}
+											| Declaration 				{$$ = $1;}
 
 Function_Definition	:	Declaration_Specifiers Declarator Compound_Statement {$$ = new FunctionDefinition($1,$2,$3);}
 

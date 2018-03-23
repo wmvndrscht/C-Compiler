@@ -6,6 +6,9 @@ test/c_translate/out/*
 test/py_translate/tmp/*
 test/mips_test/output/*
 test/py_mips_test/outputs/*
+test/py_translate/*
+
+test_bench_translator.sh
 
 *.idea
 .idea/*

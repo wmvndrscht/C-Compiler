@@ -13,8 +13,8 @@ Grammar
     2 Translation_Unit: External_Declaration
     3                 | Translation_Unit External_Declaration
 
-    4 External_Declaration: Declaration
-    5                     | Function_Definition
+    4 External_Declaration: Function_Definition
+    5                     | Declaration
 
     6 Function_Definition: Declaration_Specifiers Declarator Compound_Statement
 
@@ -233,11 +233,11 @@ Translation_Unit (55)
 External_Declaration (56)
     on left: 4 5, on right: 2 3
 Function_Definition (57)
-    on left: 6, on right: 5
+    on left: 6, on right: 4
 Declaration_List (58)
     on left: 7 8, on right: 8 47 48
 Declaration (59)
-    on left: 9 10, on right: 4 7 8 62
+    on left: 9 10, on right: 5 7 8 62
 Parameter_Type_List (60)
     on left: 11, on right: 22
 Parameter_List (61)
@@ -509,16 +509,16 @@ State 19
 
 State 20
 
-    5 External_Declaration: Function_Definition .
+    4 External_Declaration: Function_Definition .
 
-    $default  reduce using rule 5 (External_Declaration)
+    $default  reduce using rule 4 (External_Declaration)
 
 
 State 21
 
-    4 External_Declaration: Declaration .
+    5 External_Declaration: Declaration .
 
-    $default  reduce using rule 4 (External_Declaration)
+    $default  reduce using rule 5 (External_Declaration)
 
 
 State 22

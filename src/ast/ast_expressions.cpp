@@ -447,7 +447,6 @@ void PostfixArguExpression::print_mips(std::ostream &dst, context &program) cons
 	program.addtoFrameSize(23*4);
 	//push 19 registers onto the stack
 	dst << "\n\taddiu $sp,$sp,-92\n";
-
 	dst << "\tsw $25,16($sp)\n";
 	dst << "\tsw $24,20($sp)\n";
 	dst << "\tsw $23,24($sp)\n";

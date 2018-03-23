@@ -150,7 +150,7 @@ void FunctionDefinition::py_translate(std::ostream &dst, const scope &scp) const
 
 void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	
-	std::cout << "\t.text\n";
+	dst << "\t.text\n";
 	dst << "\t.align 2\n";
 	std::string label = dec->get_Label();
 	//FrameSize will eventually be = tempvariables + local variables + 8 + paramarguments;
@@ -158,8 +158,8 @@ void FunctionDefinition::print_mips(std::ostream &dst, context& program) const {
 	dst << "\t.global " << label << "\n";
 	
 
-  std::cout << "\t.set nomicromips\n";
-  std::cout << "\t.set nomips16\n";
+  dst << "\t.set nomicromips\n";
+  dst << "\t.set nomips16\n";
 	dst << "\t.type " << label << ", @function\n";
 
 	dst << label << ":\n";
@@ -268,7 +268,7 @@ void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
 		dst << "\t.type a,@object\n";
 		dst << "\t.size " << name << ",4\n";
 		dst << name << ":\n";
-		dst << "\t.word";
+		dst << "\t.word ";
 		init->print_mips(dst,program);
 		dst << "\n";
 	}

@@ -151,12 +151,14 @@ void WhileStatement::print_c(std::ostream &dst) const {
 }
 
 void WhileStatement::py_translate(std::ostream &dst, const scope &scp) const {
+	for(int i =0; i<scp.count;i++){ dst << " ";};
 	dst << "while(";
 	expr->py_translate(dst,scp);
 	dst << "):\n";
 	// scp.count+=2;
-	for(int i =0; i<scp.count;i++){ dst << " ";};
+	preif = true;
 	stat->py_translate(dst,increment(scp));
+	preif = false;
 	// scp.count-=2;
 }
 
