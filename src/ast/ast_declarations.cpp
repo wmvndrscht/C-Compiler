@@ -40,10 +40,6 @@ void VariableDeclarator::py_translate(std::ostream &dst, const scope &scp) const
 	dst << variable;
 }
 void VariableDeclarator::print_mips(std::ostream &dst, context& program) const {
-	int dReg = program.getnReg();
-	program.assignReg();
-	dst << "\tlw $" << dReg <<",$" << program.getnReg() << "\n";
-	program.freeReg();
 }
 
 std::string VariableDeclarator::get_Label() const{
@@ -334,6 +330,7 @@ void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {
 		dst << "\tmove $fp,$sp\n";
 		program.addVartoScope(name, program.getFrameSize() );
 		dst << "\tsw $0," << program.getFrameSize() - program.getVarOffset(name) << "($fp)\n";
+		dec->print_mips(dst,program);
 	}
 
 	
@@ -461,24 +458,7 @@ void ParamList::print_mips(std::ostream &dst, context& program) const {
 std::string ParamList::get_name() const {return "not implemented";}
 std::string ParamList::get_Label() const {return "not implemented";}
 
-//-----------------------------------------------------------------------
-
-// AssignmentOperator::AssignmentOperator(const std::string *_assignop) : assignop(_assignop){}
-
-// void AssignmentOperator::print_c(std::ostream &dst) const {
-// 	dst << *assignop;
-// }
-
-//  void AssignmentOperator::py_translate(std::ostream &dst, const scope &scp) const {
-// 	dst << *assignop;
-// }
-
-// void AssignmentOperator::print_mips(std::ostream &dst, context& program) const {}
-
-// std::string AssignmentOperator::get_name() const {return "not implemented";}
-// std::string AssignmentOperator::get_Label() const {return "not implemented";}
-
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
 
 InitDeclaratorList::InitDeclaratorList(const Declaration *_declist, const Declaration *_dec) : declist(_declist),
 	dec(_dec){}
@@ -506,3 +486,63 @@ std::string InitDeclaratorList::get_name() const{
 }
 
 std::string InitDeclaratorList::get_Label() const {return "not implemented";}
+
+//-------------------------------------------------------------------------------------------------
+
+
+ArrayDeclarator::ArrayDeclarator(const Declaration *_dec, const Expression *_expr) : 
+	dec(_dec), expr(_expr) {}
+
+void ArrayDeclarator::print_c(std::ostream &dst) const {
+	dec->print_c(dst);	
+	dst << "[";
+	expr->print_c(dst);
+	dst << "]";
+}
+
+void ArrayDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	dec->py_translate(dst,scp);
+	dst << "[";
+	expr->py_translate(dst,scp);
+	dst << "]";
+}
+
+void ArrayDeclarator::print_mips(std::ostream &dst, context& program) const {
+	//takes in dec and expr
+
+	//get name of array
+	std::string name = dec->get_name();
+	//get value of array size
+	int size = std::stoi(( (Identify*)expr )->get_ID());
+	dst << "#size of array is " << size;
+
+	//   1    if global then
+
+	//   2    if local and previously defined
+
+	//   3    if local and first time declared
+	//make stack big enough
+	//store name at beginning of stack place
+	//add start of array onto the stack
+
+	//create space on the stack for the rest
+	for(int i=1; i < size; i++){
+		program.incFrameSize();
+		dst << "\n\taddiu $sp,$sp,-4\n";
+		dst << "\tmove $fp,$sp\n";
+		program.addVartoScope( name +std::to_string(i) , program.getFrameSize() );
+	}
+
+	dst << "\n";
+
+
+	// dec->print_mips(dst,program);
+}
+
+std::string ArrayDeclarator::get_Label() const{
+	return (dec->get_Label()+"0");
+}
+
+std::string ArrayDeclarator::get_name() const {
+	return (dec->get_name()+"0");
+}

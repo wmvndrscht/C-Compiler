@@ -84,7 +84,8 @@ NUMBER 		 [0-9]+
 "&="								{return T_ANDEQUAL;}
 "^="								{return T_EXEQUAL;}
 "|="								{return T_OREQUAL;}
-
+"["									{return T_LSQBRACK;}
+"]"									{return T_RSQBRACK;}
 
 "//".* 							{;}
 

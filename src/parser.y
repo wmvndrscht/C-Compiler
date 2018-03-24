@@ -44,6 +44,7 @@
 %token T_FSLASH T_MODULO T_LSHIFT T_RSHIFT T_LTEQ T_GTEQ T_NEQ T_EXOR T_BOR
 %token T_INCR T_DECR T_PLUSEQUAL T_SUBEQUAL T_MULTEQUAL T_DIVEQUAL T_MODEQUAL
 %token T_LEFTEQUAL T_RIGHTEQUAL T_ANDEQUAL T_EXEQUAL T_OREQUAL
+%token T_LSQBRACK T_RSQBRACK
 
 
 /* non-terminal */
@@ -137,6 +138,7 @@ Declarator 	:	Direct_Declarator		{$$ = $1;}
 Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
 									|	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
 									| Direct_Declarator T_LRBRACK Parameter_Type_List T_RRBRACK {$$ = new ParamListDeclarator($1,$3);}
+									| Direct_Declarator T_LSQBRACK Assignment_Expression T_RSQBRACK {$$ = new ArrayDeclarator($1,$3);}
 
 
 Declaration_Specifiers	:	Storage_Class_Specifier Declaration_Specifiers 	{$$ = new DeclarationSpecifier(*$1,$2); }
@@ -284,6 +286,7 @@ Postfix_Expression	: Primary_Expression {$$ = $1;}
 										| Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK {$$ = new PostfixArguExpression($1,$3);}
 										| Postfix_Expression T_INCR {$$ = new PostIncrementExpr($1);}
 										| Postfix_Expression T_DECR {$$ = new PostDecrementExpr($1);}
+										| Postfix_Expression T_LSQBRACK Expression T_RSQBRACK { $$ = new PostArrayExpr($1,$3);}
 
 Argument_Expression_List 	: Assignment_Expression 	{$$ = new AssignExprList(NULL,$1);}
 													| Argument_Expression_List T_COMMA Assignment_Expression {$$ = new AssignExprList($1,$3);}

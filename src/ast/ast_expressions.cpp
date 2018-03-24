@@ -52,8 +52,7 @@ void Value::print_mips(std::ostream &dst, context &program) const {
 }
 
 std::string Value::get_ID() const{
-	throw std::runtime_error("Value class should not have ID");
-	return "Value should not have ID";
+	return std::to_string(*number);
 }
 
 
@@ -646,6 +645,45 @@ std::string PostfixArguExpression::get_ID() const{
 	return expr->get_ID();
 }
 
+//----------------------------------------------------------------------------------------------------------
+
+PostArrayExpr::PostArrayExpr(const Identify* _expr, const Expression* _arguexpr):
+expr(_expr), arguexpr(_arguexpr){}
+
+void PostArrayExpr::print_c(std::ostream &dst) const {
+	expr->print_c(dst);
+	dst << "[";
+	arguexpr->print_c(dst);
+	dst << "]";
+}
+
+void PostArrayExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	expr->py_translate(dst,scp);
+	dst << "[";
+	arguexpr->py_translate(dst,scp);
+	dst << "]";
+}
+
+void PostArrayExpr::print_mips(std::ostream &dst, context &program) const {
+	int offset = std::stoi(((Identify*)arguexpr)->get_ID());
+	std::string name = expr->get_ID() + std::to_string(offset);
+
+	if( program.isVarGlobal(name) ){
+		dst << "\tlui $" << program.getnReg() << ",%hi(" << name << ")\n";
+		dst << "\tlw $" << program.getnReg() << ",%lo(" << name << ")($" << program.getnReg() << ")\n";
+	}
+	else{
+		dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getVarOffset(name) << "($fp)" << "\n";
+	}
+	// dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
+
+}
+
+std::string PostArrayExpr::get_ID() const{
+	int offset = std::stoi(((Identify*)arguexpr)->get_ID());
+	std::string name = expr->get_ID() + std::to_string(offset);
+	return name ;
+}
 //-----------------------------------------------------------------------------
 
 AssignExprList::AssignExprList(const Expression* _exprlist, const Expression* _expr):

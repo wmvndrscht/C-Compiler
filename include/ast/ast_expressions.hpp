@@ -168,6 +168,22 @@ public:
 	virtual std::string get_ID() const override;
 };
 
+
+class PostArrayExpr : public Identify {
+private:
+	const Identify* expr;
+	const Expression* arguexpr;
+public:
+	PostArrayExpr(const Identify* _expr, const Expression* _arguexpr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
+};
+
+
+
+
 class AssignExprList : public Expression {
 private:
 	const Expression* exprlist;
