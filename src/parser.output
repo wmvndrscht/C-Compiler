@@ -3,10 +3,10 @@ Terminals unused in grammar
    "else"
 
 
-State 57 conflicts: 1 shift/reduce
-State 148 conflicts: 1 shift/reduce
-State 149 conflicts: 1 shift/reduce
-State 202 conflicts: 1 shift/reduce
+State 55 conflicts: 1 shift/reduce
+State 146 conflicts: 1 shift/reduce
+State 147 conflicts: 1 shift/reduce
+State 200 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -151,37 +151,33 @@ Grammar
   101                 | Shift_Expression T_RSHIFT Additive_Expression
 
   102 Unary_Expression: Postfix_Expression
-  103                 | Unary_Operator Cast_Expression
+  103                 | T_MINUS Cast_Expression
+  104                 | T_PLUS Cast_Expression
 
-  104 Unary_Operator: T_BAND
-  105               | T_TIMES
-  106               | T_PLUS
-  107               | T_MINUS
+  105 Cast_Expression: Unary_Expression
 
-  108 Cast_Expression: Unary_Expression
+  106 Multiplicative_Expression: Cast_Expression
+  107                          | Multiplicative_Expression T_TIMES Cast_Expression
+  108                          | Multiplicative_Expression T_FSLASH Cast_Expression
+  109                          | Multiplicative_Expression T_MODULO Cast_Expression
 
-  109 Multiplicative_Expression: Cast_Expression
-  110                          | Multiplicative_Expression T_TIMES Cast_Expression
-  111                          | Multiplicative_Expression T_FSLASH Cast_Expression
-  112                          | Multiplicative_Expression T_MODULO Cast_Expression
+  110 Additive_Expression: Multiplicative_Expression
+  111                    | Additive_Expression T_PLUS Multiplicative_Expression
+  112                    | Additive_Expression T_MINUS Multiplicative_Expression
 
-  113 Additive_Expression: Multiplicative_Expression
-  114                    | Additive_Expression T_PLUS Multiplicative_Expression
-  115                    | Additive_Expression T_MINUS Multiplicative_Expression
+  113 Postfix_Expression: Primary_Expression
+  114                   | Postfix_Expression T_LRBRACK T_RRBRACK
+  115                   | Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK
+  116                   | Postfix_Expression T_INCR
+  117                   | Postfix_Expression T_DECR
+  118                   | Postfix_Expression T_LSQBRACK Expression T_RSQBRACK
 
-  116 Postfix_Expression: Primary_Expression
-  117                   | Postfix_Expression T_LRBRACK T_RRBRACK
-  118                   | Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK
-  119                   | Postfix_Expression T_INCR
-  120                   | Postfix_Expression T_DECR
-  121                   | Postfix_Expression T_LSQBRACK Expression T_RSQBRACK
+  119 Argument_Expression_List: Assignment_Expression
+  120                         | Argument_Expression_List T_COMMA Assignment_Expression
 
-  122 Argument_Expression_List: Assignment_Expression
-  123                         | Argument_Expression_List T_COMMA Assignment_Expression
-
-  124 Primary_Expression: T_IDENTIFIER
-  125                   | T_NUMBER
-  126                   | T_LRBRACK Expression T_RRBRACK
+  121 Primary_Expression: T_IDENTIFIER
+  122                   | T_NUMBER
+  123                   | T_LRBRACK Expression T_RRBRACK
 
 
 Terminals, with rules where they appear
@@ -208,28 +204,28 @@ T_SEMICOLON (274) 9 10 57 61 64 65
 T_EQUAL (275) 17 69
 T_LCBRACK (276) 46 47 48 49
 T_RCBRACK (277) 46 47 48 49
-T_LRBRACK (278) 21 22 58 59 60 61 62 63 117 118 126
-T_RRBRACK (279) 21 22 58 59 60 61 62 63 117 118 126
-T_IDENTIFIER (280) 20 124
+T_LRBRACK (278) 21 22 58 59 60 61 62 63 114 115 123
+T_RRBRACK (279) 21 22 58 59 60 61 62 63 114 115 123
+T_IDENTIFIER (280) 20 121
 T_RETURN (281) 64 65
 T_WHILE (282) 60 61
 T_FOR (283) 62 63
 T_DO (284) 61
-T_NUMBER (285) 125
-T_COMMA (286) 13 16 123
+T_NUMBER (285) 122
+T_COMMA (286) 13 16 120
 T_IF (287) 58 59
 T_ELSE (288) 58
-T_TIMES (289) 105 110
-T_PLUS (290) 106 114
-T_MINUS (291) 107 115
+T_TIMES (289) 107
+T_PLUS (290) 104 111
+T_MINUS (291) 103 112
 T_EQ (292) 92
 T_OR (293) 82
 T_AND (294) 84
 T_LTHAN (295) 95
 T_GTHAN (296) 96
-T_BAND (297) 90 104
-T_FSLASH (298) 111
-T_MODULO (299) 112
+T_BAND (297) 90
+T_FSLASH (298) 108
+T_MODULO (299) 109
 T_LSHIFT (300) 100
 T_RSHIFT (301) 101
 T_LTEQ (302) 97
@@ -237,8 +233,8 @@ T_GTEQ (303) 98
 T_NEQ (304) 93
 T_EXOR (305) 86
 T_BOR (306) 88
-T_INCR (307) 119
-T_DECR (308) 120
+T_INCR (307) 116
+T_DECR (308) 117
 T_PLUSEQUAL (309) 70
 T_SUBEQUAL (310) 71
 T_MULTEQUAL (311) 72
@@ -249,8 +245,8 @@ T_RIGHTEQUAL (315) 76
 T_ANDEQUAL (316) 77
 T_EXEQUAL (317) 78
 T_OREQUAL (318) 79
-T_LSQBRACK (319) 23 121
-T_RSQBRACK (320) 23 121
+T_LSQBRACK (319) 23 118
+T_RSQBRACK (320) 23 118
 "else" (321)
 
 
@@ -307,12 +303,12 @@ Iteration_Statement (90)
 Return_Statement (91)
     on left: 64 65, on right: 56
 Expression (92)
-    on left: 66, on right: 57 58 59 60 61 62 63 65 121 126
+    on left: 66, on right: 57 58 59 60 61 62 63 65 118 123
 Initializer (93)
     on left: 67, on right: 17
 Assignment_Expression (94)
     on left: 68 69 70 71 72 73 74 75 76 77 78 79, on right: 23 66 67
-    69 70 71 72 73 74 75 76 77 78 79 122 123
+    69 70 71 72 73 74 75 76 77 78 79 119 120
 Conditional_Expression (95)
     on left: 80, on right: 68
 Logical_OR_Expression (96)
@@ -332,22 +328,21 @@ Relational_Expression (102)
 Shift_Expression (103)
     on left: 99 100 101, on right: 94 95 96 97 98 100 101
 Unary_Expression (104)
-    on left: 102 103, on right: 69 70 71 72 73 74 75 76 77 78 79 108
-Unary_Operator (105)
-    on left: 104 105 106 107, on right: 103
-Cast_Expression (106)
-    on left: 108, on right: 103 109 110 111 112
-Multiplicative_Expression (107)
-    on left: 109 110 111 112, on right: 110 111 112 113 114 115
-Additive_Expression (108)
-    on left: 113 114 115, on right: 99 100 101 114 115
-Postfix_Expression (109)
-    on left: 116 117 118 119 120 121, on right: 102 117 118 119 120
-    121
-Argument_Expression_List (110)
-    on left: 122 123, on right: 118 123
-Primary_Expression (111)
-    on left: 124 125 126, on right: 116
+    on left: 102 103 104, on right: 69 70 71 72 73 74 75 76 77 78 79
+    105
+Cast_Expression (105)
+    on left: 105, on right: 103 104 106 107 108 109
+Multiplicative_Expression (106)
+    on left: 106 107 108 109, on right: 107 108 109 110 111 112
+Additive_Expression (107)
+    on left: 110 111 112, on right: 99 100 101 111 112
+Postfix_Expression (108)
+    on left: 113 114 115 116 117 118, on right: 102 114 115 116 117
+    118
+Argument_Expression_List (109)
+    on left: 119 120, on right: 115 120
+Primary_Expression (110)
+    on left: 121 122 123, on right: 113
 
 
 State 0
@@ -777,29 +772,26 @@ State 39
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Initializer                go to state 53
-    Assignment_Expression      go to state 54
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Initializer                go to state 51
+    Assignment_Expression      go to state 52
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 40
@@ -826,51 +818,48 @@ State 40
     T_CONST       shift, and go to state 15
     T_VOLATILE    shift, and go to state 16
     T_LCBRACK     shift, and go to state 40
-    T_RCBRACK     shift, and go to state 71
+    T_RCBRACK     shift, and go to state 68
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Declaration_List           go to state 77
-    Declaration                go to state 78
-    Declaration_Specifiers     go to state 79
+    Declaration_List           go to state 74
+    Declaration                go to state 75
+    Declaration_Specifiers     go to state 76
     Storage_Class_Specifier    go to state 23
     Type_Specifier             go to state 24
     Type_Qualifier             go to state 25
-    Compound_Statement         go to state 80
-    Statement_List             go to state 81
-    Statement                  go to state 82
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement_List             go to state 78
+    Statement                  go to state 79
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 41
@@ -901,12 +890,12 @@ State 42
     T_UNSIGNED  shift, and go to state 14
     T_CONST     shift, and go to state 15
     T_VOLATILE  shift, and go to state 16
-    T_RRBRACK   shift, and go to state 89
+    T_RRBRACK   shift, and go to state 86
 
-    Parameter_Type_List      go to state 90
-    Parameter_List           go to state 91
-    Parameter_Declaration    go to state 92
-    Declaration_Specifiers   go to state 93
+    Parameter_Type_List      go to state 87
+    Parameter_List           go to state 88
+    Parameter_Declaration    go to state 89
+    Declaration_Specifiers   go to state 90
     Storage_Class_Specifier  go to state 23
     Type_Specifier           go to state 24
     Type_Qualifier           go to state 25
@@ -919,28 +908,25 @@ State 43
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 94
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 91
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 44
@@ -962,100 +948,101 @@ State 45
 
 State 46
 
-  126 Primary_Expression: T_LRBRACK . Expression T_RRBRACK
+  123 Primary_Expression: T_LRBRACK . Expression T_RRBRACK
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 95
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 92
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 47
 
-  124 Primary_Expression: T_IDENTIFIER .
+  121 Primary_Expression: T_IDENTIFIER .
 
-    $default  reduce using rule 124 (Primary_Expression)
+    $default  reduce using rule 121 (Primary_Expression)
 
 
 State 48
 
-  125 Primary_Expression: T_NUMBER .
+  122 Primary_Expression: T_NUMBER .
 
-    $default  reduce using rule 125 (Primary_Expression)
+    $default  reduce using rule 122 (Primary_Expression)
 
 
 State 49
 
-  105 Unary_Operator: T_TIMES .
+  104 Unary_Expression: T_PLUS . Cast_Expression
 
-    $default  reduce using rule 105 (Unary_Operator)
+    T_LRBRACK     shift, and go to state 46
+    T_IDENTIFIER  shift, and go to state 47
+    T_NUMBER      shift, and go to state 48
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
+
+    Unary_Expression    go to state 93
+    Cast_Expression     go to state 94
+    Postfix_Expression  go to state 66
+    Primary_Expression  go to state 67
 
 
 State 50
 
-  106 Unary_Operator: T_PLUS .
+  103 Unary_Expression: T_MINUS . Cast_Expression
 
-    $default  reduce using rule 106 (Unary_Operator)
+    T_LRBRACK     shift, and go to state 46
+    T_IDENTIFIER  shift, and go to state 47
+    T_NUMBER      shift, and go to state 48
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
+
+    Unary_Expression    go to state 93
+    Cast_Expression     go to state 95
+    Postfix_Expression  go to state 66
+    Primary_Expression  go to state 67
 
 
 State 51
-
-  107 Unary_Operator: T_MINUS .
-
-    $default  reduce using rule 107 (Unary_Operator)
-
-
-State 52
-
-  104 Unary_Operator: T_BAND .
-
-    $default  reduce using rule 104 (Unary_Operator)
-
-
-State 53
 
    17 Init_Declarator: Declarator T_EQUAL Initializer .
 
     $default  reduce using rule 17 (Init_Declarator)
 
 
-State 54
+State 52
 
    67 Initializer: Assignment_Expression .
 
     $default  reduce using rule 67 (Initializer)
 
 
-State 55
+State 53
 
    68 Assignment_Expression: Conditional_Expression .
 
     $default  reduce using rule 68 (Assignment_Expression)
 
 
-State 56
+State 54
 
    80 Conditional_Expression: Logical_OR_Expression .
    82 Logical_OR_Expression: Logical_OR_Expression . T_OR Logical_AND_Expression
@@ -1065,7 +1052,7 @@ State 56
     $default  reduce using rule 80 (Conditional_Expression)
 
 
-State 57
+State 55
 
    81 Logical_OR_Expression: Logical_AND_Expression .
    84 Logical_AND_Expression: Logical_AND_Expression . T_AND Logical_OR_Expression
@@ -1076,7 +1063,7 @@ State 57
     $default  reduce using rule 81 (Logical_OR_Expression)
 
 
-State 58
+State 56
 
    83 Logical_AND_Expression: Inclusive_OR_Expression .
    86 Inclusive_OR_Expression: Inclusive_OR_Expression . T_EXOR Exclusive_OR_Expression
@@ -1086,7 +1073,7 @@ State 58
     $default  reduce using rule 83 (Logical_AND_Expression)
 
 
-State 59
+State 57
 
    85 Inclusive_OR_Expression: Exclusive_OR_Expression .
    88 Exclusive_OR_Expression: Exclusive_OR_Expression . T_BOR AND_Expression
@@ -1096,7 +1083,7 @@ State 59
     $default  reduce using rule 85 (Inclusive_OR_Expression)
 
 
-State 60
+State 58
 
    87 Exclusive_OR_Expression: AND_Expression .
    90 AND_Expression: AND_Expression . T_BAND Equality_Expression
@@ -1106,7 +1093,7 @@ State 60
     $default  reduce using rule 87 (Exclusive_OR_Expression)
 
 
-State 61
+State 59
 
    89 AND_Expression: Equality_Expression .
    92 Equality_Expression: Equality_Expression . T_EQ Relational_Expression
@@ -1118,7 +1105,7 @@ State 61
     $default  reduce using rule 89 (AND_Expression)
 
 
-State 62
+State 60
 
    91 Equality_Expression: Relational_Expression .
    95 Relational_Expression: Relational_Expression . T_LTHAN Shift_Expression
@@ -1134,7 +1121,7 @@ State 62
     $default  reduce using rule 91 (Equality_Expression)
 
 
-State 63
+State 61
 
    94 Relational_Expression: Shift_Expression .
   100 Shift_Expression: Shift_Expression . T_LSHIFT Additive_Expression
@@ -1146,7 +1133,7 @@ State 63
     $default  reduce using rule 94 (Relational_Expression)
 
 
-State 64
+State 62
 
    69 Assignment_Expression: Unary_Expression . T_EQUAL Assignment_Expression
    70                      | Unary_Expression . T_PLUSEQUAL Assignment_Expression
@@ -1159,7 +1146,7 @@ State 64
    77                      | Unary_Expression . T_ANDEQUAL Assignment_Expression
    78                      | Unary_Expression . T_EXEQUAL Assignment_Expression
    79                      | Unary_Expression . T_OREQUAL Assignment_Expression
-  108 Cast_Expression: Unary_Expression .
+  105 Cast_Expression: Unary_Expression .
 
     T_EQUAL       shift, and go to state 109
     T_PLUSEQUAL   shift, and go to state 110
@@ -1173,194 +1160,169 @@ State 64
     T_EXEQUAL     shift, and go to state 118
     T_OREQUAL     shift, and go to state 119
 
-    $default  reduce using rule 108 (Cast_Expression)
+    $default  reduce using rule 105 (Cast_Expression)
+
+
+State 63
+
+  106 Multiplicative_Expression: Cast_Expression .
+
+    $default  reduce using rule 106 (Multiplicative_Expression)
+
+
+State 64
+
+  107 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
+  108                          | Multiplicative_Expression . T_FSLASH Cast_Expression
+  109                          | Multiplicative_Expression . T_MODULO Cast_Expression
+  110 Additive_Expression: Multiplicative_Expression .
+
+    T_TIMES   shift, and go to state 120
+    T_FSLASH  shift, and go to state 121
+    T_MODULO  shift, and go to state 122
+
+    $default  reduce using rule 110 (Additive_Expression)
 
 
 State 65
 
-  103 Unary_Expression: Unary_Operator . Cast_Expression
-
-    T_LRBRACK     shift, and go to state 46
-    T_IDENTIFIER  shift, and go to state 47
-    T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
-
-    Unary_Expression    go to state 120
-    Unary_Operator      go to state 65
-    Cast_Expression     go to state 121
-    Postfix_Expression  go to state 69
-    Primary_Expression  go to state 70
-
-
-State 66
-
-  109 Multiplicative_Expression: Cast_Expression .
-
-    $default  reduce using rule 109 (Multiplicative_Expression)
-
-
-State 67
-
-  110 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
-  111                          | Multiplicative_Expression . T_FSLASH Cast_Expression
-  112                          | Multiplicative_Expression . T_MODULO Cast_Expression
-  113 Additive_Expression: Multiplicative_Expression .
-
-    T_TIMES   shift, and go to state 122
-    T_FSLASH  shift, and go to state 123
-    T_MODULO  shift, and go to state 124
-
-    $default  reduce using rule 113 (Additive_Expression)
-
-
-State 68
-
    99 Shift_Expression: Additive_Expression .
-  114 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
-  115                    | Additive_Expression . T_MINUS Multiplicative_Expression
+  111 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
+  112                    | Additive_Expression . T_MINUS Multiplicative_Expression
 
-    T_PLUS   shift, and go to state 125
-    T_MINUS  shift, and go to state 126
+    T_PLUS   shift, and go to state 123
+    T_MINUS  shift, and go to state 124
 
     $default  reduce using rule 99 (Shift_Expression)
 
 
-State 69
+State 66
 
   102 Unary_Expression: Postfix_Expression .
-  117 Postfix_Expression: Postfix_Expression . T_LRBRACK T_RRBRACK
-  118                   | Postfix_Expression . T_LRBRACK Argument_Expression_List T_RRBRACK
-  119                   | Postfix_Expression . T_INCR
-  120                   | Postfix_Expression . T_DECR
-  121                   | Postfix_Expression . T_LSQBRACK Expression T_RSQBRACK
+  114 Postfix_Expression: Postfix_Expression . T_LRBRACK T_RRBRACK
+  115                   | Postfix_Expression . T_LRBRACK Argument_Expression_List T_RRBRACK
+  116                   | Postfix_Expression . T_INCR
+  117                   | Postfix_Expression . T_DECR
+  118                   | Postfix_Expression . T_LSQBRACK Expression T_RSQBRACK
 
-    T_LRBRACK   shift, and go to state 127
-    T_INCR      shift, and go to state 128
-    T_DECR      shift, and go to state 129
-    T_LSQBRACK  shift, and go to state 130
+    T_LRBRACK   shift, and go to state 125
+    T_INCR      shift, and go to state 126
+    T_DECR      shift, and go to state 127
+    T_LSQBRACK  shift, and go to state 128
 
     $default  reduce using rule 102 (Unary_Expression)
 
 
-State 70
+State 67
 
-  116 Postfix_Expression: Primary_Expression .
+  113 Postfix_Expression: Primary_Expression .
 
-    $default  reduce using rule 116 (Postfix_Expression)
+    $default  reduce using rule 113 (Postfix_Expression)
 
 
-State 71
+State 68
 
    46 Compound_Statement: T_LCBRACK T_RCBRACK .
 
     $default  reduce using rule 46 (Compound_Statement)
 
 
-State 72
+State 69
 
    64 Return_Statement: T_RETURN . T_SEMICOLON
    65                 | T_RETURN . Expression T_SEMICOLON
 
-    T_SEMICOLON   shift, and go to state 131
+    T_SEMICOLON   shift, and go to state 129
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 132
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 130
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 73
+State 70
 
    60 Iteration_Statement: T_WHILE . T_LRBRACK Expression T_RRBRACK Statement
 
-    T_LRBRACK  shift, and go to state 133
+    T_LRBRACK  shift, and go to state 131
 
 
-State 74
+State 71
 
    62 Iteration_Statement: T_FOR . T_LRBRACK Expression_Statement Expression_Statement Expression T_RRBRACK Statement
    63                    | T_FOR . T_LRBRACK Declaration Expression_Statement Expression T_RRBRACK Statement
 
-    T_LRBRACK  shift, and go to state 134
+    T_LRBRACK  shift, and go to state 132
 
 
-State 75
+State 72
 
    61 Iteration_Statement: T_DO . Statement T_WHILE T_LRBRACK Expression T_RRBRACK T_SEMICOLON
 
     T_LCBRACK     shift, and go to state 40
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 135
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 133
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 76
+State 73
 
    58 Selection_Statement: T_IF . T_LRBRACK Expression T_RRBRACK Statement T_ELSE Statement
    59                    | T_IF . T_LRBRACK Expression T_RRBRACK Statement
 
-    T_LRBRACK  shift, and go to state 136
+    T_LRBRACK  shift, and go to state 134
 
 
-State 77
+State 74
 
     8 Declaration_List: Declaration_List . Declaration
    48 Compound_Statement: T_LCBRACK Declaration_List . T_RCBRACK
@@ -1383,60 +1345,57 @@ State 77
     T_CONST       shift, and go to state 15
     T_VOLATILE    shift, and go to state 16
     T_LCBRACK     shift, and go to state 40
-    T_RCBRACK     shift, and go to state 137
+    T_RCBRACK     shift, and go to state 135
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Declaration                go to state 138
-    Declaration_Specifiers     go to state 79
+    Declaration                go to state 136
+    Declaration_Specifiers     go to state 76
     Storage_Class_Specifier    go to state 23
     Type_Specifier             go to state 24
     Type_Qualifier             go to state 25
-    Compound_Statement         go to state 80
-    Statement_List             go to state 139
-    Statement                  go to state 82
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement_List             go to state 137
+    Statement                  go to state 79
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 78
+State 75
 
     7 Declaration_List: Declaration .
 
     $default  reduce using rule 7 (Declaration_List)
 
 
-State 79
+State 76
 
     9 Declaration: Declaration_Specifiers . T_SEMICOLON
    10            | Declaration_Specifiers . Init_Declarator_List T_SEMICOLON
@@ -1450,161 +1409,179 @@ State 79
     Direct_Declarator     go to state 33
 
 
-State 80
+State 77
 
    52 Statement: Compound_Statement .
 
     $default  reduce using rule 52 (Statement)
 
 
-State 81
+State 78
 
    47 Compound_Statement: T_LCBRACK Statement_List . T_RCBRACK
    51 Statement_List: Statement_List . Statement
 
     T_LCBRACK     shift, and go to state 40
-    T_RCBRACK     shift, and go to state 140
+    T_RCBRACK     shift, and go to state 138
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 141
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 139
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 82
+State 79
 
    50 Statement_List: Statement .
 
     $default  reduce using rule 50 (Statement_List)
 
 
-State 83
+State 80
 
    55 Statement: Expression_Statement .
 
     $default  reduce using rule 55 (Statement)
 
 
-State 84
+State 81
 
    53 Statement: Selection_Statement .
 
     $default  reduce using rule 53 (Statement)
 
 
-State 85
+State 82
 
    54 Statement: Iteration_Statement .
 
     $default  reduce using rule 54 (Statement)
 
 
-State 86
+State 83
 
    56 Statement: Return_Statement .
 
     $default  reduce using rule 56 (Statement)
 
 
-State 87
+State 84
 
    57 Expression_Statement: Expression . T_SEMICOLON
 
-    T_SEMICOLON  shift, and go to state 142
+    T_SEMICOLON  shift, and go to state 140
 
 
-State 88
+State 85
 
    66 Expression: Assignment_Expression .
 
     $default  reduce using rule 66 (Expression)
 
 
-State 89
+State 86
 
    21 Direct_Declarator: Direct_Declarator T_LRBRACK T_RRBRACK .
 
     $default  reduce using rule 21 (Direct_Declarator)
 
 
-State 90
+State 87
 
    22 Direct_Declarator: Direct_Declarator T_LRBRACK Parameter_Type_List . T_RRBRACK
 
-    T_RRBRACK  shift, and go to state 143
+    T_RRBRACK  shift, and go to state 141
 
 
-State 91
+State 88
 
    11 Parameter_Type_List: Parameter_List .
    13 Parameter_List: Parameter_List . T_COMMA Parameter_Declaration
 
-    T_COMMA  shift, and go to state 144
+    T_COMMA  shift, and go to state 142
 
     $default  reduce using rule 11 (Parameter_Type_List)
 
 
-State 92
+State 89
 
    12 Parameter_List: Parameter_Declaration .
 
     $default  reduce using rule 12 (Parameter_List)
 
 
-State 93
+State 90
 
    14 Parameter_Declaration: Declaration_Specifiers . Declarator
 
     T_IDENTIFIER  shift, and go to state 29
 
-    Declarator         go to state 145
+    Declarator         go to state 143
     Direct_Declarator  go to state 33
+
+
+State 91
+
+   23 Direct_Declarator: Direct_Declarator T_LSQBRACK Assignment_Expression . T_RSQBRACK
+
+    T_RSQBRACK  shift, and go to state 144
+
+
+State 92
+
+  123 Primary_Expression: T_LRBRACK Expression . T_RRBRACK
+
+    T_RRBRACK  shift, and go to state 145
+
+
+State 93
+
+  105 Cast_Expression: Unary_Expression .
+
+    $default  reduce using rule 105 (Cast_Expression)
 
 
 State 94
 
-   23 Direct_Declarator: Direct_Declarator T_LSQBRACK Assignment_Expression . T_RSQBRACK
+  104 Unary_Expression: T_PLUS Cast_Expression .
 
-    T_RSQBRACK  shift, and go to state 146
+    $default  reduce using rule 104 (Unary_Expression)
 
 
 State 95
 
-  126 Primary_Expression: T_LRBRACK Expression . T_RRBRACK
+  103 Unary_Expression: T_MINUS Cast_Expression .
 
-    T_RRBRACK  shift, and go to state 147
+    $default  reduce using rule 103 (Unary_Expression)
 
 
 State 96
@@ -1614,25 +1591,22 @@ State 96
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Logical_AND_Expression     go to state 148
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Logical_AND_Expression     go to state 146
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 97
@@ -1642,26 +1616,23 @@ State 97
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Logical_OR_Expression      go to state 149
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Logical_OR_Expression      go to state 147
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 98
@@ -1671,23 +1642,20 @@ State 98
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Exclusive_OR_Expression    go to state 150
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Exclusive_OR_Expression    go to state 148
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 99
@@ -1697,22 +1665,19 @@ State 99
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    AND_Expression             go to state 151
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    AND_Expression             go to state 149
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 100
@@ -1722,21 +1687,18 @@ State 100
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Equality_Expression        go to state 152
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Equality_Expression        go to state 150
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 101
@@ -1746,20 +1708,17 @@ State 101
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Relational_Expression      go to state 153
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Relational_Expression      go to state 151
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 102
@@ -1769,20 +1728,17 @@ State 102
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Relational_Expression      go to state 154
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Relational_Expression      go to state 152
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 103
@@ -1792,19 +1748,16 @@ State 103
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Shift_Expression           go to state 155
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Shift_Expression           go to state 153
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 104
@@ -1814,19 +1767,16 @@ State 104
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Shift_Expression           go to state 156
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Shift_Expression           go to state 154
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 105
@@ -1836,19 +1786,16 @@ State 105
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Shift_Expression           go to state 157
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Shift_Expression           go to state 155
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 106
@@ -1858,19 +1805,16 @@ State 106
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Shift_Expression           go to state 158
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Shift_Expression           go to state 156
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 107
@@ -1880,18 +1824,15 @@ State 107
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 159
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 157
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 108
@@ -1901,18 +1842,15 @@ State 108
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 160
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 158
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 109
@@ -1922,28 +1860,25 @@ State 109
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 161
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 159
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 110
@@ -1953,28 +1888,25 @@ State 110
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 162
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 160
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 111
@@ -1984,28 +1916,25 @@ State 111
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 163
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 161
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 112
@@ -2015,28 +1944,25 @@ State 112
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 164
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 162
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 113
@@ -2046,28 +1972,25 @@ State 113
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 165
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 163
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 114
@@ -2077,28 +2000,25 @@ State 114
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 166
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 164
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 115
@@ -2108,28 +2028,25 @@ State 115
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 167
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 165
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 116
@@ -2139,28 +2056,25 @@ State 116
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 168
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 166
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 117
@@ -2170,28 +2084,25 @@ State 117
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 169
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 167
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 118
@@ -2201,28 +2112,25 @@ State 118
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 170
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 168
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 119
@@ -2232,268 +2140,227 @@ State 119
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Assignment_Expression      go to state 171
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 169
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 120
 
-  108 Cast_Expression: Unary_Expression .
+  107 Multiplicative_Expression: Multiplicative_Expression T_TIMES . Cast_Expression
 
-    $default  reduce using rule 108 (Cast_Expression)
+    T_LRBRACK     shift, and go to state 46
+    T_IDENTIFIER  shift, and go to state 47
+    T_NUMBER      shift, and go to state 48
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
+
+    Unary_Expression    go to state 93
+    Cast_Expression     go to state 170
+    Postfix_Expression  go to state 66
+    Primary_Expression  go to state 67
 
 
 State 121
 
-  103 Unary_Expression: Unary_Operator Cast_Expression .
+  108 Multiplicative_Expression: Multiplicative_Expression T_FSLASH . Cast_Expression
 
-    $default  reduce using rule 103 (Unary_Expression)
+    T_LRBRACK     shift, and go to state 46
+    T_IDENTIFIER  shift, and go to state 47
+    T_NUMBER      shift, and go to state 48
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
+
+    Unary_Expression    go to state 93
+    Cast_Expression     go to state 171
+    Postfix_Expression  go to state 66
+    Primary_Expression  go to state 67
 
 
 State 122
 
-  110 Multiplicative_Expression: Multiplicative_Expression T_TIMES . Cast_Expression
+  109 Multiplicative_Expression: Multiplicative_Expression T_MODULO . Cast_Expression
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Unary_Expression    go to state 120
-    Unary_Operator      go to state 65
+    Unary_Expression    go to state 93
     Cast_Expression     go to state 172
-    Postfix_Expression  go to state 69
-    Primary_Expression  go to state 70
+    Postfix_Expression  go to state 66
+    Primary_Expression  go to state 67
 
 
 State 123
 
-  111 Multiplicative_Expression: Multiplicative_Expression T_FSLASH . Cast_Expression
+  111 Additive_Expression: Additive_Expression T_PLUS . Multiplicative_Expression
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Unary_Expression    go to state 120
-    Unary_Operator      go to state 65
-    Cast_Expression     go to state 173
-    Postfix_Expression  go to state 69
-    Primary_Expression  go to state 70
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 173
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 124
 
-  112 Multiplicative_Expression: Multiplicative_Expression T_MODULO . Cast_Expression
+  112 Additive_Expression: Additive_Expression T_MINUS . Multiplicative_Expression
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Unary_Expression    go to state 120
-    Unary_Operator      go to state 65
-    Cast_Expression     go to state 174
-    Postfix_Expression  go to state 69
-    Primary_Expression  go to state 70
+    Unary_Expression           go to state 93
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 174
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
 State 125
 
-  114 Additive_Expression: Additive_Expression T_PLUS . Multiplicative_Expression
+  114 Postfix_Expression: Postfix_Expression T_LRBRACK . T_RRBRACK
+  115                   | Postfix_Expression T_LRBRACK . Argument_Expression_List T_RRBRACK
 
     T_LRBRACK     shift, and go to state 46
+    T_RRBRACK     shift, and go to state 175
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 175
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Assignment_Expression      go to state 176
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Argument_Expression_List   go to state 177
+    Primary_Expression         go to state 67
 
 
 State 126
 
-  115 Additive_Expression: Additive_Expression T_MINUS . Multiplicative_Expression
+  116 Postfix_Expression: Postfix_Expression T_INCR .
 
-    T_LRBRACK     shift, and go to state 46
-    T_IDENTIFIER  shift, and go to state 47
-    T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
-
-    Unary_Expression           go to state 120
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 176
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    $default  reduce using rule 116 (Postfix_Expression)
 
 
 State 127
 
-  117 Postfix_Expression: Postfix_Expression T_LRBRACK . T_RRBRACK
-  118                   | Postfix_Expression T_LRBRACK . Argument_Expression_List T_RRBRACK
+  117 Postfix_Expression: Postfix_Expression T_DECR .
 
-    T_LRBRACK     shift, and go to state 46
-    T_RRBRACK     shift, and go to state 177
-    T_IDENTIFIER  shift, and go to state 47
-    T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
-
-    Assignment_Expression      go to state 178
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Argument_Expression_List   go to state 179
-    Primary_Expression         go to state 70
+    $default  reduce using rule 117 (Postfix_Expression)
 
 
 State 128
 
-  119 Postfix_Expression: Postfix_Expression T_INCR .
-
-    $default  reduce using rule 119 (Postfix_Expression)
-
-
-State 129
-
-  120 Postfix_Expression: Postfix_Expression T_DECR .
-
-    $default  reduce using rule 120 (Postfix_Expression)
-
-
-State 130
-
-  121 Postfix_Expression: Postfix_Expression T_LSQBRACK . Expression T_RSQBRACK
+  118 Postfix_Expression: Postfix_Expression T_LSQBRACK . Expression T_RSQBRACK
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 180
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 178
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 131
+State 129
 
    64 Return_Statement: T_RETURN T_SEMICOLON .
 
     $default  reduce using rule 64 (Return_Statement)
 
 
-State 132
+State 130
 
    65 Return_Statement: T_RETURN Expression . T_SEMICOLON
 
-    T_SEMICOLON  shift, and go to state 181
+    T_SEMICOLON  shift, and go to state 179
 
 
-State 133
+State 131
 
    60 Iteration_Statement: T_WHILE T_LRBRACK . Expression T_RRBRACK Statement
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 182
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 180
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 134
+State 132
 
    62 Iteration_Statement: T_FOR T_LRBRACK . Expression_Statement Expression_Statement Expression T_RRBRACK Statement
    63                    | T_FOR T_LRBRACK . Declaration Expression_Statement Expression T_RRBRACK Statement
@@ -2517,45 +2384,42 @@ State 134
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Declaration                go to state 183
-    Declaration_Specifiers     go to state 79
+    Declaration                go to state 181
+    Declaration_Specifiers     go to state 76
     Storage_Class_Specifier    go to state 23
     Type_Specifier             go to state 24
     Type_Qualifier             go to state 25
-    Expression_Statement       go to state 184
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression_Statement       go to state 182
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 135
+State 133
 
    61 Iteration_Statement: T_DO Statement . T_WHILE T_LRBRACK Expression T_RRBRACK T_SEMICOLON
 
-    T_WHILE  shift, and go to state 185
+    T_WHILE  shift, and go to state 183
 
 
-State 136
+State 134
 
    58 Selection_Statement: T_IF T_LRBRACK . Expression T_RRBRACK Statement T_ELSE Statement
    59                    | T_IF T_LRBRACK . Expression T_RRBRACK Statement
@@ -2563,120 +2427,114 @@ State 136
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 186
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 184
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 137
+State 135
 
    48 Compound_Statement: T_LCBRACK Declaration_List T_RCBRACK .
 
     $default  reduce using rule 48 (Compound_Statement)
 
 
-State 138
+State 136
 
     8 Declaration_List: Declaration_List Declaration .
 
     $default  reduce using rule 8 (Declaration_List)
 
 
-State 139
+State 137
 
    49 Compound_Statement: T_LCBRACK Declaration_List Statement_List . T_RCBRACK
    51 Statement_List: Statement_List . Statement
 
     T_LCBRACK     shift, and go to state 40
-    T_RCBRACK     shift, and go to state 187
+    T_RCBRACK     shift, and go to state 185
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 141
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 139
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 140
+State 138
 
    47 Compound_Statement: T_LCBRACK Statement_List T_RCBRACK .
 
     $default  reduce using rule 47 (Compound_Statement)
 
 
-State 141
+State 139
 
    51 Statement_List: Statement_List Statement .
 
     $default  reduce using rule 51 (Statement_List)
 
 
-State 142
+State 140
 
    57 Expression_Statement: Expression T_SEMICOLON .
 
     $default  reduce using rule 57 (Expression_Statement)
 
 
-State 143
+State 141
 
    22 Direct_Declarator: Direct_Declarator T_LRBRACK Parameter_Type_List T_RRBRACK .
 
     $default  reduce using rule 22 (Direct_Declarator)
 
 
-State 144
+State 142
 
    13 Parameter_List: Parameter_List T_COMMA . Parameter_Declaration
 
@@ -2697,35 +2555,35 @@ State 144
     T_CONST     shift, and go to state 15
     T_VOLATILE  shift, and go to state 16
 
-    Parameter_Declaration    go to state 188
-    Declaration_Specifiers   go to state 93
+    Parameter_Declaration    go to state 186
+    Declaration_Specifiers   go to state 90
     Storage_Class_Specifier  go to state 23
     Type_Specifier           go to state 24
     Type_Qualifier           go to state 25
 
 
-State 145
+State 143
 
    14 Parameter_Declaration: Declaration_Specifiers Declarator .
 
     $default  reduce using rule 14 (Parameter_Declaration)
 
 
-State 146
+State 144
 
    23 Direct_Declarator: Direct_Declarator T_LSQBRACK Assignment_Expression T_RSQBRACK .
 
     $default  reduce using rule 23 (Direct_Declarator)
 
 
-State 147
+State 145
 
-  126 Primary_Expression: T_LRBRACK Expression T_RRBRACK .
+  123 Primary_Expression: T_LRBRACK Expression T_RRBRACK .
 
-    $default  reduce using rule 126 (Primary_Expression)
+    $default  reduce using rule 123 (Primary_Expression)
 
 
-State 148
+State 146
 
    82 Logical_OR_Expression: Logical_OR_Expression T_OR Logical_AND_Expression .
    84 Logical_AND_Expression: Logical_AND_Expression . T_AND Logical_OR_Expression
@@ -2736,7 +2594,7 @@ State 148
     $default  reduce using rule 82 (Logical_OR_Expression)
 
 
-State 149
+State 147
 
    82 Logical_OR_Expression: Logical_OR_Expression . T_OR Logical_AND_Expression
    84 Logical_AND_Expression: Logical_AND_Expression T_AND Logical_OR_Expression .
@@ -2747,7 +2605,7 @@ State 149
     $default  reduce using rule 84 (Logical_AND_Expression)
 
 
-State 150
+State 148
 
    86 Inclusive_OR_Expression: Inclusive_OR_Expression T_EXOR Exclusive_OR_Expression .
    88 Exclusive_OR_Expression: Exclusive_OR_Expression . T_BOR AND_Expression
@@ -2757,7 +2615,7 @@ State 150
     $default  reduce using rule 86 (Inclusive_OR_Expression)
 
 
-State 151
+State 149
 
    88 Exclusive_OR_Expression: Exclusive_OR_Expression T_BOR AND_Expression .
    90 AND_Expression: AND_Expression . T_BAND Equality_Expression
@@ -2767,7 +2625,7 @@ State 151
     $default  reduce using rule 88 (Exclusive_OR_Expression)
 
 
-State 152
+State 150
 
    90 AND_Expression: AND_Expression T_BAND Equality_Expression .
    92 Equality_Expression: Equality_Expression . T_EQ Relational_Expression
@@ -2779,7 +2637,7 @@ State 152
     $default  reduce using rule 90 (AND_Expression)
 
 
-State 153
+State 151
 
    92 Equality_Expression: Equality_Expression T_EQ Relational_Expression .
    95 Relational_Expression: Relational_Expression . T_LTHAN Shift_Expression
@@ -2795,7 +2653,7 @@ State 153
     $default  reduce using rule 92 (Equality_Expression)
 
 
-State 154
+State 152
 
    93 Equality_Expression: Equality_Expression T_NEQ Relational_Expression .
    95 Relational_Expression: Relational_Expression . T_LTHAN Shift_Expression
@@ -2811,7 +2669,7 @@ State 154
     $default  reduce using rule 93 (Equality_Expression)
 
 
-State 155
+State 153
 
    95 Relational_Expression: Relational_Expression T_LTHAN Shift_Expression .
   100 Shift_Expression: Shift_Expression . T_LSHIFT Additive_Expression
@@ -2823,7 +2681,7 @@ State 155
     $default  reduce using rule 95 (Relational_Expression)
 
 
-State 156
+State 154
 
    96 Relational_Expression: Relational_Expression T_GTHAN Shift_Expression .
   100 Shift_Expression: Shift_Expression . T_LSHIFT Additive_Expression
@@ -2835,7 +2693,7 @@ State 156
     $default  reduce using rule 96 (Relational_Expression)
 
 
-State 157
+State 155
 
    97 Relational_Expression: Relational_Expression T_LTEQ Shift_Expression .
   100 Shift_Expression: Shift_Expression . T_LSHIFT Additive_Expression
@@ -2847,7 +2705,7 @@ State 157
     $default  reduce using rule 97 (Relational_Expression)
 
 
-State 158
+State 156
 
    98 Relational_Expression: Relational_Expression T_GTEQ Shift_Expression .
   100 Shift_Expression: Shift_Expression . T_LSHIFT Additive_Expression
@@ -2859,481 +2717,460 @@ State 158
     $default  reduce using rule 98 (Relational_Expression)
 
 
-State 159
+State 157
 
   100 Shift_Expression: Shift_Expression T_LSHIFT Additive_Expression .
-  114 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
-  115                    | Additive_Expression . T_MINUS Multiplicative_Expression
+  111 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
+  112                    | Additive_Expression . T_MINUS Multiplicative_Expression
 
-    T_PLUS   shift, and go to state 125
-    T_MINUS  shift, and go to state 126
+    T_PLUS   shift, and go to state 123
+    T_MINUS  shift, and go to state 124
 
     $default  reduce using rule 100 (Shift_Expression)
 
 
-State 160
+State 158
 
   101 Shift_Expression: Shift_Expression T_RSHIFT Additive_Expression .
-  114 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
-  115                    | Additive_Expression . T_MINUS Multiplicative_Expression
+  111 Additive_Expression: Additive_Expression . T_PLUS Multiplicative_Expression
+  112                    | Additive_Expression . T_MINUS Multiplicative_Expression
 
-    T_PLUS   shift, and go to state 125
-    T_MINUS  shift, and go to state 126
+    T_PLUS   shift, and go to state 123
+    T_MINUS  shift, and go to state 124
 
     $default  reduce using rule 101 (Shift_Expression)
 
 
-State 161
+State 159
 
    69 Assignment_Expression: Unary_Expression T_EQUAL Assignment_Expression .
 
     $default  reduce using rule 69 (Assignment_Expression)
 
 
-State 162
+State 160
 
    70 Assignment_Expression: Unary_Expression T_PLUSEQUAL Assignment_Expression .
 
     $default  reduce using rule 70 (Assignment_Expression)
 
 
-State 163
+State 161
 
    71 Assignment_Expression: Unary_Expression T_SUBEQUAL Assignment_Expression .
 
     $default  reduce using rule 71 (Assignment_Expression)
 
 
-State 164
+State 162
 
    72 Assignment_Expression: Unary_Expression T_MULTEQUAL Assignment_Expression .
 
     $default  reduce using rule 72 (Assignment_Expression)
 
 
-State 165
+State 163
 
    73 Assignment_Expression: Unary_Expression T_DIVEQUAL Assignment_Expression .
 
     $default  reduce using rule 73 (Assignment_Expression)
 
 
-State 166
+State 164
 
    74 Assignment_Expression: Unary_Expression T_MODEQUAL Assignment_Expression .
 
     $default  reduce using rule 74 (Assignment_Expression)
 
 
-State 167
+State 165
 
    75 Assignment_Expression: Unary_Expression T_LEFTEQUAL Assignment_Expression .
 
     $default  reduce using rule 75 (Assignment_Expression)
 
 
-State 168
+State 166
 
    76 Assignment_Expression: Unary_Expression T_RIGHTEQUAL Assignment_Expression .
 
     $default  reduce using rule 76 (Assignment_Expression)
 
 
-State 169
+State 167
 
    77 Assignment_Expression: Unary_Expression T_ANDEQUAL Assignment_Expression .
 
     $default  reduce using rule 77 (Assignment_Expression)
 
 
-State 170
+State 168
 
    78 Assignment_Expression: Unary_Expression T_EXEQUAL Assignment_Expression .
 
     $default  reduce using rule 78 (Assignment_Expression)
 
 
-State 171
+State 169
 
    79 Assignment_Expression: Unary_Expression T_OREQUAL Assignment_Expression .
 
     $default  reduce using rule 79 (Assignment_Expression)
 
 
+State 170
+
+  107 Multiplicative_Expression: Multiplicative_Expression T_TIMES Cast_Expression .
+
+    $default  reduce using rule 107 (Multiplicative_Expression)
+
+
+State 171
+
+  108 Multiplicative_Expression: Multiplicative_Expression T_FSLASH Cast_Expression .
+
+    $default  reduce using rule 108 (Multiplicative_Expression)
+
+
 State 172
 
-  110 Multiplicative_Expression: Multiplicative_Expression T_TIMES Cast_Expression .
+  109 Multiplicative_Expression: Multiplicative_Expression T_MODULO Cast_Expression .
 
-    $default  reduce using rule 110 (Multiplicative_Expression)
+    $default  reduce using rule 109 (Multiplicative_Expression)
 
 
 State 173
 
-  111 Multiplicative_Expression: Multiplicative_Expression T_FSLASH Cast_Expression .
+  107 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
+  108                          | Multiplicative_Expression . T_FSLASH Cast_Expression
+  109                          | Multiplicative_Expression . T_MODULO Cast_Expression
+  111 Additive_Expression: Additive_Expression T_PLUS Multiplicative_Expression .
 
-    $default  reduce using rule 111 (Multiplicative_Expression)
+    T_TIMES   shift, and go to state 120
+    T_FSLASH  shift, and go to state 121
+    T_MODULO  shift, and go to state 122
+
+    $default  reduce using rule 111 (Additive_Expression)
 
 
 State 174
 
-  112 Multiplicative_Expression: Multiplicative_Expression T_MODULO Cast_Expression .
+  107 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
+  108                          | Multiplicative_Expression . T_FSLASH Cast_Expression
+  109                          | Multiplicative_Expression . T_MODULO Cast_Expression
+  112 Additive_Expression: Additive_Expression T_MINUS Multiplicative_Expression .
 
-    $default  reduce using rule 112 (Multiplicative_Expression)
+    T_TIMES   shift, and go to state 120
+    T_FSLASH  shift, and go to state 121
+    T_MODULO  shift, and go to state 122
+
+    $default  reduce using rule 112 (Additive_Expression)
 
 
 State 175
 
-  110 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
-  111                          | Multiplicative_Expression . T_FSLASH Cast_Expression
-  112                          | Multiplicative_Expression . T_MODULO Cast_Expression
-  114 Additive_Expression: Additive_Expression T_PLUS Multiplicative_Expression .
+  114 Postfix_Expression: Postfix_Expression T_LRBRACK T_RRBRACK .
 
-    T_TIMES   shift, and go to state 122
-    T_FSLASH  shift, and go to state 123
-    T_MODULO  shift, and go to state 124
-
-    $default  reduce using rule 114 (Additive_Expression)
+    $default  reduce using rule 114 (Postfix_Expression)
 
 
 State 176
 
-  110 Multiplicative_Expression: Multiplicative_Expression . T_TIMES Cast_Expression
-  111                          | Multiplicative_Expression . T_FSLASH Cast_Expression
-  112                          | Multiplicative_Expression . T_MODULO Cast_Expression
-  115 Additive_Expression: Additive_Expression T_MINUS Multiplicative_Expression .
+  119 Argument_Expression_List: Assignment_Expression .
 
-    T_TIMES   shift, and go to state 122
-    T_FSLASH  shift, and go to state 123
-    T_MODULO  shift, and go to state 124
-
-    $default  reduce using rule 115 (Additive_Expression)
+    $default  reduce using rule 119 (Argument_Expression_List)
 
 
 State 177
 
-  117 Postfix_Expression: Postfix_Expression T_LRBRACK T_RRBRACK .
+  115 Postfix_Expression: Postfix_Expression T_LRBRACK Argument_Expression_List . T_RRBRACK
+  120 Argument_Expression_List: Argument_Expression_List . T_COMMA Assignment_Expression
 
-    $default  reduce using rule 117 (Postfix_Expression)
+    T_RRBRACK  shift, and go to state 187
+    T_COMMA    shift, and go to state 188
 
 
 State 178
 
-  122 Argument_Expression_List: Assignment_Expression .
+  118 Postfix_Expression: Postfix_Expression T_LSQBRACK Expression . T_RSQBRACK
 
-    $default  reduce using rule 122 (Argument_Expression_List)
+    T_RSQBRACK  shift, and go to state 189
 
 
 State 179
-
-  118 Postfix_Expression: Postfix_Expression T_LRBRACK Argument_Expression_List . T_RRBRACK
-  123 Argument_Expression_List: Argument_Expression_List . T_COMMA Assignment_Expression
-
-    T_RRBRACK  shift, and go to state 189
-    T_COMMA    shift, and go to state 190
-
-
-State 180
-
-  121 Postfix_Expression: Postfix_Expression T_LSQBRACK Expression . T_RSQBRACK
-
-    T_RSQBRACK  shift, and go to state 191
-
-
-State 181
 
    65 Return_Statement: T_RETURN Expression T_SEMICOLON .
 
     $default  reduce using rule 65 (Return_Statement)
 
 
-State 182
+State 180
 
    60 Iteration_Statement: T_WHILE T_LRBRACK Expression . T_RRBRACK Statement
 
-    T_RRBRACK  shift, and go to state 192
+    T_RRBRACK  shift, and go to state 190
 
 
-State 183
+State 181
 
    63 Iteration_Statement: T_FOR T_LRBRACK Declaration . Expression_Statement Expression T_RRBRACK Statement
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression_Statement       go to state 193
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression_Statement       go to state 191
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 184
+State 182
 
    62 Iteration_Statement: T_FOR T_LRBRACK Expression_Statement . Expression_Statement Expression T_RRBRACK Statement
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression_Statement       go to state 194
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression_Statement       go to state 192
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 185
+State 183
 
    61 Iteration_Statement: T_DO Statement T_WHILE . T_LRBRACK Expression T_RRBRACK T_SEMICOLON
 
-    T_LRBRACK  shift, and go to state 195
+    T_LRBRACK  shift, and go to state 193
 
 
-State 186
+State 184
 
    58 Selection_Statement: T_IF T_LRBRACK Expression . T_RRBRACK Statement T_ELSE Statement
    59                    | T_IF T_LRBRACK Expression . T_RRBRACK Statement
 
-    T_RRBRACK  shift, and go to state 196
+    T_RRBRACK  shift, and go to state 194
 
 
-State 187
+State 185
 
    49 Compound_Statement: T_LCBRACK Declaration_List Statement_List T_RCBRACK .
 
     $default  reduce using rule 49 (Compound_Statement)
 
 
-State 188
+State 186
 
    13 Parameter_List: Parameter_List T_COMMA Parameter_Declaration .
 
     $default  reduce using rule 13 (Parameter_List)
 
 
+State 187
+
+  115 Postfix_Expression: Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK .
+
+    $default  reduce using rule 115 (Postfix_Expression)
+
+
+State 188
+
+  120 Argument_Expression_List: Argument_Expression_List T_COMMA . Assignment_Expression
+
+    T_LRBRACK     shift, and go to state 46
+    T_IDENTIFIER  shift, and go to state 47
+    T_NUMBER      shift, and go to state 48
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
+
+    Assignment_Expression      go to state 195
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
+
+
 State 189
 
-  118 Postfix_Expression: Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK .
+  118 Postfix_Expression: Postfix_Expression T_LSQBRACK Expression T_RSQBRACK .
 
     $default  reduce using rule 118 (Postfix_Expression)
 
 
 State 190
 
-  123 Argument_Expression_List: Argument_Expression_List T_COMMA . Assignment_Expression
-
-    T_LRBRACK     shift, and go to state 46
-    T_IDENTIFIER  shift, and go to state 47
-    T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
-
-    Assignment_Expression      go to state 197
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
-
-
-State 191
-
-  121 Postfix_Expression: Postfix_Expression T_LSQBRACK Expression T_RSQBRACK .
-
-    $default  reduce using rule 121 (Postfix_Expression)
-
-
-State 192
-
    60 Iteration_Statement: T_WHILE T_LRBRACK Expression T_RRBRACK . Statement
 
     T_LCBRACK     shift, and go to state 40
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 198
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 196
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 193
+State 191
 
    63 Iteration_Statement: T_FOR T_LRBRACK Declaration Expression_Statement . Expression T_RRBRACK Statement
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 199
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 197
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 194
+State 192
 
    62 Iteration_Statement: T_FOR T_LRBRACK Expression_Statement Expression_Statement . Expression T_RRBRACK Statement
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 200
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 198
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 195
+State 193
 
    61 Iteration_Statement: T_DO Statement T_WHILE T_LRBRACK . Expression T_RRBRACK T_SEMICOLON
 
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
     T_NUMBER      shift, and go to state 48
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Expression                 go to state 201
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Expression                 go to state 199
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 196
+State 194
 
    58 Selection_Statement: T_IF T_LRBRACK Expression T_RRBRACK . Statement T_ELSE Statement
    59                    | T_IF T_LRBRACK Expression T_RRBRACK . Statement
@@ -3341,250 +3178,238 @@ State 196
     T_LCBRACK     shift, and go to state 40
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 202
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 200
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 197
+State 195
 
-  123 Argument_Expression_List: Argument_Expression_List T_COMMA Assignment_Expression .
+  120 Argument_Expression_List: Argument_Expression_List T_COMMA Assignment_Expression .
 
-    $default  reduce using rule 123 (Argument_Expression_List)
+    $default  reduce using rule 120 (Argument_Expression_List)
 
 
-State 198
+State 196
 
    60 Iteration_Statement: T_WHILE T_LRBRACK Expression T_RRBRACK Statement .
 
     $default  reduce using rule 60 (Iteration_Statement)
 
 
-State 199
+State 197
 
    63 Iteration_Statement: T_FOR T_LRBRACK Declaration Expression_Statement Expression . T_RRBRACK Statement
+
+    T_RRBRACK  shift, and go to state 201
+
+
+State 198
+
+   62 Iteration_Statement: T_FOR T_LRBRACK Expression_Statement Expression_Statement Expression . T_RRBRACK Statement
+
+    T_RRBRACK  shift, and go to state 202
+
+
+State 199
+
+   61 Iteration_Statement: T_DO Statement T_WHILE T_LRBRACK Expression . T_RRBRACK T_SEMICOLON
 
     T_RRBRACK  shift, and go to state 203
 
 
 State 200
 
-   62 Iteration_Statement: T_FOR T_LRBRACK Expression_Statement Expression_Statement Expression . T_RRBRACK Statement
-
-    T_RRBRACK  shift, and go to state 204
-
-
-State 201
-
-   61 Iteration_Statement: T_DO Statement T_WHILE T_LRBRACK Expression . T_RRBRACK T_SEMICOLON
-
-    T_RRBRACK  shift, and go to state 205
-
-
-State 202
-
    58 Selection_Statement: T_IF T_LRBRACK Expression T_RRBRACK Statement . T_ELSE Statement
    59                    | T_IF T_LRBRACK Expression T_RRBRACK Statement .
 
-    T_ELSE  shift, and go to state 206
+    T_ELSE  shift, and go to state 204
 
     T_ELSE    [reduce using rule 59 (Selection_Statement)]
     $default  reduce using rule 59 (Selection_Statement)
 
 
-State 203
+State 201
 
    63 Iteration_Statement: T_FOR T_LRBRACK Declaration Expression_Statement Expression T_RRBRACK . Statement
 
     T_LCBRACK     shift, and go to state 40
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 207
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 205
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 204
+State 202
 
    62 Iteration_Statement: T_FOR T_LRBRACK Expression_Statement Expression_Statement Expression T_RRBRACK . Statement
 
     T_LCBRACK     shift, and go to state 40
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 208
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 206
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 205
+State 203
 
    61 Iteration_Statement: T_DO Statement T_WHILE T_LRBRACK Expression T_RRBRACK . T_SEMICOLON
 
-    T_SEMICOLON  shift, and go to state 209
+    T_SEMICOLON  shift, and go to state 207
 
 
-State 206
+State 204
 
    58 Selection_Statement: T_IF T_LRBRACK Expression T_RRBRACK Statement T_ELSE . Statement
 
     T_LCBRACK     shift, and go to state 40
     T_LRBRACK     shift, and go to state 46
     T_IDENTIFIER  shift, and go to state 47
-    T_RETURN      shift, and go to state 72
-    T_WHILE       shift, and go to state 73
-    T_FOR         shift, and go to state 74
-    T_DO          shift, and go to state 75
+    T_RETURN      shift, and go to state 69
+    T_WHILE       shift, and go to state 70
+    T_FOR         shift, and go to state 71
+    T_DO          shift, and go to state 72
     T_NUMBER      shift, and go to state 48
-    T_IF          shift, and go to state 76
-    T_TIMES       shift, and go to state 49
-    T_PLUS        shift, and go to state 50
-    T_MINUS       shift, and go to state 51
-    T_BAND        shift, and go to state 52
+    T_IF          shift, and go to state 73
+    T_PLUS        shift, and go to state 49
+    T_MINUS       shift, and go to state 50
 
-    Compound_Statement         go to state 80
-    Statement                  go to state 210
-    Expression_Statement       go to state 83
-    Selection_Statement        go to state 84
-    Iteration_Statement        go to state 85
-    Return_Statement           go to state 86
-    Expression                 go to state 87
-    Assignment_Expression      go to state 88
-    Conditional_Expression     go to state 55
-    Logical_OR_Expression      go to state 56
-    Logical_AND_Expression     go to state 57
-    Inclusive_OR_Expression    go to state 58
-    Exclusive_OR_Expression    go to state 59
-    AND_Expression             go to state 60
-    Equality_Expression        go to state 61
-    Relational_Expression      go to state 62
-    Shift_Expression           go to state 63
-    Unary_Expression           go to state 64
-    Unary_Operator             go to state 65
-    Cast_Expression            go to state 66
-    Multiplicative_Expression  go to state 67
-    Additive_Expression        go to state 68
-    Postfix_Expression         go to state 69
-    Primary_Expression         go to state 70
+    Compound_Statement         go to state 77
+    Statement                  go to state 208
+    Expression_Statement       go to state 80
+    Selection_Statement        go to state 81
+    Iteration_Statement        go to state 82
+    Return_Statement           go to state 83
+    Expression                 go to state 84
+    Assignment_Expression      go to state 85
+    Conditional_Expression     go to state 53
+    Logical_OR_Expression      go to state 54
+    Logical_AND_Expression     go to state 55
+    Inclusive_OR_Expression    go to state 56
+    Exclusive_OR_Expression    go to state 57
+    AND_Expression             go to state 58
+    Equality_Expression        go to state 59
+    Relational_Expression      go to state 60
+    Shift_Expression           go to state 61
+    Unary_Expression           go to state 62
+    Cast_Expression            go to state 63
+    Multiplicative_Expression  go to state 64
+    Additive_Expression        go to state 65
+    Postfix_Expression         go to state 66
+    Primary_Expression         go to state 67
 
 
-State 207
+State 205
 
    63 Iteration_Statement: T_FOR T_LRBRACK Declaration Expression_Statement Expression T_RRBRACK Statement .
 
     $default  reduce using rule 63 (Iteration_Statement)
 
 
-State 208
+State 206
 
    62 Iteration_Statement: T_FOR T_LRBRACK Expression_Statement Expression_Statement Expression T_RRBRACK Statement .
 
     $default  reduce using rule 62 (Iteration_Statement)
 
 
-State 209
+State 207
 
    61 Iteration_Statement: T_DO Statement T_WHILE T_LRBRACK Expression T_RRBRACK T_SEMICOLON .
 
     $default  reduce using rule 61 (Iteration_Statement)
 
 
-State 210
+State 208
 
    58 Selection_Statement: T_IF T_LRBRACK Expression T_RRBRACK Statement T_ELSE Statement .
 

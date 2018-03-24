@@ -719,42 +719,61 @@ void AssignExprList::print_mips(std::ostream &dst, context &program) const {
 
 //-----------------------------------------------------------------------------
 
-UnaryOpExpr::UnaryOpExpr(const Expression* _op, const Expression* _expr) : op(_op),expr(_expr){}
+// UnaryOpExpr::UnaryOpExpr(const Expression* _op, const Expression* _expr) : op(_op),expr(_expr){}
 
-void UnaryOpExpr::print_c(std::ostream &dst) const {
-	dst << "[";
-	op->print_c(dst);
-	dst << "]{";
-	expr->print_c(dst);
-	dst << "}";
-}
+// void UnaryOpExpr::print_c(std::ostream &dst) const {
+// 	dst << "[";
+// 	op->print_c(dst);
+// 	dst << "]{";
+// 	expr->print_c(dst);
+// 	dst << "}";
+// }
 
-void UnaryOpExpr::py_translate(std::ostream &dst, const scope &scp) const {
-	op->print_c(dst);
-	expr->py_translate(dst,scp);
-}
+// void UnaryOpExpr::py_translate(std::ostream &dst, const scope &scp) const {
+// 	op->print_c(dst);
+// 	expr->py_translate(dst,scp);
+// }
 
-void UnaryOpExpr::print_mips(std::ostream &dst, context &program) const {}
+// void UnaryOpExpr::print_mips(std::ostream &dst, context &program) const {}
 
-std::string UnaryOpExpr::get_ID() const{
-	return "yet to support UnaryOpExpr class get_ID()";
-}
+// std::string UnaryOpExpr::get_ID() const{
+// 	return "yet to support UnaryOpExpr class get_ID()";
+// }
 
 
-//-----------------------------------------------------------------------------
+// //-----------------------------------------------------------------------------
 
-UnaryOp::UnaryOp(const std::string _op) : op(_op){}
+// UnaryOp::UnaryOp(const std::string _op) : op(_op){}
 
-void UnaryOp::print_c(std::ostream &dst) const {
+// void UnaryOp::print_c(std::ostream &dst) const {
+// 	dst << op;
+// }
+
+// void UnaryOp::py_translate(std::ostream &dst, const scope &scp) const {
+// 	dst << op;
+// }
+
+// void UnaryOp::print_mips(std::ostream &dst, context &program) const {}
+
+UnaryCastExpr::UnaryCastExpr(const std::string _op, const Expression* _castexpr) : op(_op),castexpr(_castexpr){}
+
+void UnaryCastExpr::print_c(std::ostream &dst) const {
 	dst << op;
+	castexpr->print_c(dst);
 }
 
-void UnaryOp::py_translate(std::ostream &dst, const scope &scp) const {
+void UnaryCastExpr::py_translate(std::ostream &dst, const scope &scp) const {
 	dst << op;
+	castexpr->py_translate(dst,scp);
 }
 
-void UnaryOp::print_mips(std::ostream &dst, context &program) const {}
+void UnaryCastExpr::print_mips(std::ostream &dst, context &program) const {
+	castexpr->print_mips(dst,program);
+	if(op == "-"){
+		dst << "\tsub $" << program.getnReg() << ",$0,$" << program.getnReg(); 
+	}
 
+}
 
 
 //-----------------------------------------------------------------------------

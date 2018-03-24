@@ -195,28 +195,43 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
 
-class UnaryOpExpr : public Identify {
-private:
-	const Expression* op;
-	const Expression* expr;
-public:
-	UnaryOpExpr(const Expression* _op, const Expression* _expr);
-	virtual void print_c(std::ostream &dst) const override;
-	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
-	virtual void print_mips(std::ostream &dst, context &program) const override;
-	virtual std::string get_ID() const override;
-};
+// class UnaryOpExpr : public Identify {
+// private:
+// 	const Expression* op;
+// 	const Expression* expr;
+// public:
+// 	UnaryOpExpr(const Expression* _op, const Expression* _expr);
+// 	virtual void print_c(std::ostream &dst) const override;
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+// 	virtual void print_mips(std::ostream &dst, context &program) const override;
+// 	virtual std::string get_ID() const override;
+// };
 
 
-class UnaryOp : public Expression {
+// class UnaryOp : public Expression {
+// private:
+// 	const std::string op;
+// public:
+// 	UnaryOp(const std::string _op);
+// 	virtual void print_c(std::ostream &dst) const override;
+// 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+// 	virtual void print_mips(std::ostream &dst, context &program) const override;
+// };
+
+
+class UnaryCastExpr : public Expression {
 private:
 	const std::string op;
+	const Expression* castexpr;
 public:
-	UnaryOp(const std::string _op);
+	UnaryCastExpr(const std::string _op, const Expression* _castexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 };
+
+
+
 
 class ParenExpr : public Identify {
 private:
