@@ -74,14 +74,13 @@
 %type<expr> Assignment_Expression Conditional_Expression Logical_OR_Expression
 %type<expr> Logical_AND_Expression Inclusive_OR_Expression Exclusive_OR_Expression
 %type<expr> AND_Expression Equality_Expression Relational_Expression Shift_Expression
-%type<expr> Additive_Expression Multiplicative_Expression Cast_Expression
-%type<expr> Unary_Expression
+%type<expr> Additive_Expression Multiplicative_Expression 
 // %type<expr> Unary_Operator
 %type<expr> Argument_Expression_List
 
 /* --------------------------- Identify ------------------------------- */
 
-%type<id> Postfix_Expression Primary_Expression
+%type<id> Postfix_Expression Primary_Expression Unary_Expression Cast_Expression
 
 /* --------------------------- Other ------------------------------- */
 
@@ -263,9 +262,10 @@ Shift_Expression : Additive_Expression {$$ = $1;}
 								 | Shift_Expression T_RSHIFT Additive_Expression {$$ = new RshiftExpression($1,$3);}
 
 Unary_Expression	: Postfix_Expression {$$ = $1;}
-									| T_MINUS Cast_Expression {$$ = new UnaryCastExpr(std::string("-"),$2);}
+									| T_INCR Unary_Expression { $$ = new PreIncrementExpr($2);}
+								 	| T_DECR Unary_Expression { $$ = new PreDecrementExpr($2);}
+								 	| T_MINUS Cast_Expression {$$ = new UnaryCastExpr(std::string("-"),$2);}
 									| T_PLUS Cast_Expression {$$ = new UnaryCastExpr(std::string("+"),$2);}
-
 //									| Unary_Operator Cast_Expression {$$ = new UnaryOpExpr($1,$2);}
 // Unary_Operator : T_BAND	{$$ = new UnaryOp(std::string("&"));} //;new std::string("&");}
 // 							 | T_TIMES {$$ = new UnaryOp(std::string("*"));} //{$$ = new std::string("*");}
@@ -273,6 +273,7 @@ Unary_Expression	: Postfix_Expression {$$ = $1;}
 // 							 | T_MINUS {$$ = new UnaryOp(std::string("-"));} //{$$ = new std::string("-");}
 
 Cast_Expression :	Unary_Expression {$$ = $1;}
+
 
 Multiplicative_Expression : Cast_Expression {$$ = $1;} 
 													| Multiplicative_Expression T_TIMES Cast_Expression {$$ = new MultExpression($1,$3);}

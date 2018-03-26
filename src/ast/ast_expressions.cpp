@@ -755,7 +755,7 @@ void AssignExprList::print_mips(std::ostream &dst, context &program) const {
 
 // void UnaryOp::print_mips(std::ostream &dst, context &program) const {}
 
-UnaryCastExpr::UnaryCastExpr(const std::string _op, const Expression* _castexpr) : op(_op),castexpr(_castexpr){}
+UnaryCastExpr::UnaryCastExpr(const std::string _op, const Identify* _castexpr) : op(_op),castexpr(_castexpr){}
 
 void UnaryCastExpr::print_c(std::ostream &dst) const {
 	dst << op;
@@ -773,6 +773,10 @@ void UnaryCastExpr::print_mips(std::ostream &dst, context &program) const {
 		dst << "\tsub $" << program.getnReg() << ",$0,$" << program.getnReg(); 
 	}
 
+}
+
+std::string  UnaryCastExpr::get_ID() const{
+	return castexpr->get_ID();
 }
 
 
@@ -1092,13 +1096,18 @@ void PostIncrementExpr::py_translate(std::ostream &dst, const scope &scp) const 
 
 void PostIncrementExpr::print_mips(std::ostream &dst, context &program) const {
 
+	//do expression first then add
 	postfixexpr->print_mips(dst,program);
-	program.getnReg();
+	int destReg = program.getnReg();
+
+	
+	program.assignReg();
 	// Identify* a = (Identify*)postfixexpr;
+	dst << "\tmove $" << program.getnReg() << ",$" << destReg << "\n";
 	std::string name = postfixexpr->get_ID();
 	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",1\n";
 	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
-
+	program.freeReg();
 
 }
 
@@ -1126,18 +1135,84 @@ void PostDecrementExpr::py_translate(std::ostream &dst, const scope &scp) const 
 
 void PostDecrementExpr::print_mips(std::ostream &dst, context &program) const {
 
+	//do expression first then sub
 	postfixexpr->print_mips(dst,program);
-	program.getnReg();
+	int destReg = program.getnReg();
+
+	
+	program.assignReg();
 	// Identify* a = (Identify*)postfixexpr;
+	dst << "\tmove $" << program.getnReg() << ",$" << destReg << "\n";
 	std::string name = postfixexpr->get_ID();
 	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",-1\n";
 	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
-
+	program.freeReg();
 
 }
 
 std::string PostDecrementExpr::get_ID() const{
 	return postfixexpr->get_ID();
+}
+
+//---------------------------------------------------------------------------------
+
+PreIncrementExpr::PreIncrementExpr(const Identify* _Prefixexpr)
+ : Prefixexpr(_Prefixexpr){}
+
+
+void PreIncrementExpr::print_c(std::ostream &dst) const {
+	Prefixexpr->print_c(dst);
+	dst << "++\n";
+}
+
+void PreIncrementExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	Prefixexpr->py_translate(dst,scp);
+	dst << "++\n";
+}
+
+
+void PreIncrementExpr::print_mips(std::ostream &dst, context &program) const {
+
+	Prefixexpr->print_mips(dst,program);
+	std::string name = Prefixexpr->get_ID();
+	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",1\n";
+	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+
+}
+
+std::string PreIncrementExpr::get_ID() const{
+	return Prefixexpr->get_ID();
+}
+
+
+//-----------------------------------------------------------------------------
+
+PreDecrementExpr::PreDecrementExpr(const Identify* _Prefixexpr)
+ : Prefixexpr(_Prefixexpr){}
+
+
+void PreDecrementExpr::print_c(std::ostream &dst) const {
+	Prefixexpr->print_c(dst);
+	dst << "--\n";
+}
+
+void PreDecrementExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	Prefixexpr->py_translate(dst,scp);
+	dst << "--\n";
+}
+
+
+void PreDecrementExpr::print_mips(std::ostream &dst, context &program) const {
+
+	Prefixexpr->print_mips(dst,program);
+
+	std::string name = Prefixexpr->get_ID();
+	dst << "\taddiu $" << program.getnReg() << ",$" << program.getnReg() << ",-1\n";
+	dst << "\tsw $" << program.getnReg() << ","  << program.getFrameSize()- program.getVarOffset(name) << "($fp)\n";
+}
+
+std::string PreDecrementExpr::get_ID() const{
+	return Prefixexpr->get_ID();
 }
 
 //---------------------------------------------------------------------------------

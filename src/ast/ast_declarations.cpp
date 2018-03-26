@@ -246,6 +246,10 @@ void InitDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
 }
 
 void InitDeclarator::print_mips(std::ostream &dst, context& program) const {
+
+
+
+
 	//get the Name
 	std::string name = dec->get_name();
 
@@ -306,6 +310,36 @@ void LoneInitDeclarator::py_translate(std::ostream &dst, const scope &scp) const
 }
 
 void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {
+
+		// 	std::string name = dec->get_name();
+	// //get value of array size
+	// int size = std::stoi(( (Identify*)expr )->get_ID());
+	// dst << "#size of array is " << size;
+
+	// //   1    if global then
+
+	// //   2    if local and previously defined
+
+	// //   3    if local and first time declared
+	// //make stack big enough
+	// //store name at beginning of stack place
+	// //add start of array onto the stack
+
+	// //create space on the stack for the rest
+	// for(int i=1; i < size; i++){
+	// 	program.incFrameSize();
+	// 	dst << "\n\taddiu $sp,$sp,-4\n";
+	// 	dst << "\tmove $fp,$sp\n";
+	// 	program.addVartoScope( name +std::to_string(i) , program.getFrameSize() );
+	// }
+
+	// dst << "\n";
+
+
+	//----
+
+
+
 	std::string name = dec->get_name();
 
 	program.setdestReg(2);
@@ -313,6 +347,13 @@ void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {
 
 	//if global variable treat differently
 	if(program.getScopeNum() == 0){
+		// if( std::string(&(name.back())) == "0"){
+
+		// 	//.comm	a,20,4
+		// 	dst << "\t.comm " << name << ",100,4\n"; 
+		// 	dec->print_mips(dst,program);
+		// }
+		// else{
 		//assume has not been declared before as compiler emits probelms if so
 		//as LoneInitDeclarator set global value to 0
 		dst << "\t.globl " << name << "\n";
@@ -322,6 +363,7 @@ void LoneInitDeclarator::print_mips(std::ostream &dst, context& program) const {
 		dst << "\t.size " << name << ",4\n";
 		dst << name << ":\n";
 		dst << "\t.word 0\n";
+		// }
 
 	}
 	else{ //local variable so follow convention below

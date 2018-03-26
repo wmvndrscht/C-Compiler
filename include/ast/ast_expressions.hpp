@@ -219,15 +219,16 @@ public:
 // };
 
 
-class UnaryCastExpr : public Expression {
+class UnaryCastExpr : public Identify {
 private:
 	const std::string op;
-	const Expression* castexpr;
+	const Identify* castexpr;
 public:
-	UnaryCastExpr(const std::string _op, const Expression* _castexpr);
+	UnaryCastExpr(const std::string _op, const Identify* _castexpr);
 	virtual void print_c(std::ostream &dst) const override;
 	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
 	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
 };
 
 
@@ -380,5 +381,30 @@ public:
 	virtual void print_mips(std::ostream &dst, context &program) const override;
 	virtual std::string get_ID() const override;
 };
+
+class PreIncrementExpr : public Identify {
+private:
+	const Identify* Prefixexpr;
+public:
+	PreIncrementExpr(const Identify* _Prefixexpr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
+};
+
+
+class PreDecrementExpr : public Identify {
+private:
+	const Identify* Prefixexpr;
+public:
+	PreDecrementExpr(const Identify* _Prefixexpr);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
+};
+
+
 
 #endif
