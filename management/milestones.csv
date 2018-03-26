@@ -5,21 +5,22 @@ LEXER_SIMPLE,Understand Flex; Lexer code lab review; read C89 draft,4,wv116,ed7b
 LEXER_SIMPLE_TESTING,Simple lexer written,3,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Lexer; create tests for independent tokens and group tests.
 PARSER_CODELABREVIEW,Complete lexer lab; code lab; understood AST; understood Bison Tool.,3,wv116,0cce1ce401f4adce130c7a49c1f31fcfebfd4956,Read the lab code; compare with notes; comment code to show understanding.
 PARSER_SIMPLE,Simple lexer written; parser code lab review.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Work on the AST. Create simple tree for simple expressions; working with the Lexer.
-PARSER_SIMPLE_TESTING,Parser simple completed.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Parser; create tests for independent tokens and group tests; start simple though_‹__‹_..
+PARSER_SIMPLE_TESTING,Parser simple completed.,6,wv116,ed7bede7d2ffcde01c5740e10b511f228c92af18,Test Parser; create tests for independent tokens and group tests; start simple though_Ü__Ü_..
 LEXER_PARSER_INTER1,Simple parser completed and tested.,6,wv116,2d3d432262d28b0ed5d266c6515cd79b29af291f,Start by implementing more complex parts; adding to the parser as I add to the lexer.
-LEXER_PARSER_INTER2,Inter1 parser completed and tested.,6,wv116,,Start by implementing more complex parts; adding to the parser as I add to the lexer; this I expect to take a long time to split into two.
+LEXER_PARSER_INTER2,Inter1 parser completed and tested.,6,wv116,c713218d4fee51777c99367aa3416719f46cc186,Start by implementing more complex parts; adding to the parser as I add to the lexer; this I expect to take a long time to split into two.
 CODEGEN_SIMPLEPYTHON,Python syntax; code gen lab review.,5,wv116,c713218d4fee51777c99367aa3416719f46cc186,Look at parts of python code gen; implementing the simple parts
-CODEGEN_PYTHONTESTS,Code gen python.,3,wv116,,Write tests for python code gen; starting with very simple.
-CODEGEN_THINK,labs,6,wv116,,Try to understand c to mips code; Do by creating mips analysis folder and compile certain programs; rewatch dt lectures.
-CODEGEN_STRUCTREWRITE,Python formative,3,wv116,,Reasses structure after comments from formative and 1-1 with FYQ.
-CODEGEN_MIPSINFRARSTRUCTURE,Parser simple completed.,2,wv116,,Building test bench; file arguments; editing parser.
-CODEGEN_SIMPLEMIPS,MIPS syntax; code gen lab review.,6,wv116,,Look at parts of MIPS code gen; implement int main return 0
-PYTHON_TRANSEND,Python formative,5,wv116,,Cover all edge cases of python translation;ensuring all is covered and is reliable.
-CODEGEN_MIPSINTER,codegen_simplemips,6,wv116,,Work through building local variable; arguments.
-CODEGEN_MIPSINTERLOOPS,codegen_mipsinter,6,wv116,,for; while loops
-CODEGEN_MIPSSCOPE,codegen_simplemips,6,wv116,,"Scopes, ensure scopes;globals are all done correctly"
-CODEGEN_MIPSFUNCTIONCALLS,codegen_simplemips,6,wv116,,Function calls; maybe fiddling around with previous stack; deciding on how to use registers for function call expressions
+CODEGEN_PYTHONTESTS,Code gen python.,3,wv116,cfdb2baaacd2d3bf1dec62d64a9ff0454cf484e1,Write tests for python code gen; starting with very simple.
+CODEGEN_THINK,labs,6,wv116,54e8c2b2ae4d943df9815dd378bcaa94b99732b1,Try to understand c to mips code; Do by creating mips analysis folder and compile certain programs; rewatch dt lectures.
+CODEGEN_STRUCTREWRITE,Python formative,3,wv116,045b225379cd08752e80b51ab478f7ab4e5a4853,Reasses structure after comments from formative and 1-1 with FYQ.
+CODEGEN_MIPSINFRARSTRUCTURE,Parser simple completed.,2,wv116,a27f98616af3f07c8a65836df419af134ae03fa8,Building test bench; file arguments; editing parser.
+CODEGEN_SIMPLEMIPS,MIPS syntax; code gen lab review.,6,wv116,403a92ed4b868147034051c465a8ee5f66d23c1d,Look at parts of MIPS code gen; implement int main return 0
+PYTHON_TRANSEND,Python formative,5,wv116,6e171608e9076ce830ca2cd0a0271233beffa86d,Cover all edge cases of python translation;ensuring all is covered and is reliable.
+CODEGEN_MIPSINTER,codegen_simplemips,6,wv116,72fd0b01ef3b355eb6459d3875b1e3a4a87edfbf,Work through building local variable; arguments.
+CODEGEN_MIPSINTERLOOPS,codegen_mipsinter,6,wv116,da3170d3efc80bd622fb04f4617aea406eb75053,for; while loops
+CODEGEN_MIPSSCOPE,codegen_simplemips,6,wv116,46b094f64a52c922f78f52f55a464be90194249c,"Scopes, ensure scopes;globals are all done correctly"
+CODEGEN_FUNCTIONCALLS,codegen_simplemips,6,wv116,a0c834078e925940bec4637e3f7db07a38558fee,Function calls; maybe fiddling around with previous stack; deciding on how to use registers for function call expressions
 CODEGEN_MIPSARRAY,codegen_inter,6,wv116,,1D Arrays
 CODEGEN_POINTERS,codegen_inter,4,wv116,,Pointers
-CODEGEN_MIPSFUNCPARAM,codegen_inter,4,wv116,,passing <= 4 function parameters
-CODEGEN_IFELSE,codegen_simplemips,3,wv116,,implementing if else statements
+CODEGEN_MIPSFUNCPARAM,codegen_inter,4,wv116,d74097c7d4143b4268d0737c0e3d8e97a5b6d312,passing <= 4 function parameters
+CODEGEN_IFELSE,codegen_simplemips,3,wv116,0412e880399b10dee2ab3196dc63c836e4e82fa8,implementing if else statements
+CODEGEN_FINISHINGTOUCHES,codegen_mipsinter,6,wv117,,"expand on previous developed eg more unary operators;assigneq etc, post vs pre"
