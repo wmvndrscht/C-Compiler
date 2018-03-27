@@ -1,6 +1,6 @@
-double atof(const char *str);
+double atof(const char *a);
 
-int f(){
+int f(const char *a){
 
-	return atof("42");
+	return atof(a);
 }

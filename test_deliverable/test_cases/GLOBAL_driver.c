@@ -1,5 +1,8 @@
 int a;
+int b;
+
+int f();
 
 int main(){
-	return !(a==2);
+	return !(f()==1);
 }

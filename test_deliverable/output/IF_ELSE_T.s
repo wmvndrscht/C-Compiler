@@ -9,8 +9,12 @@ f:
 	sw $31,28($sp)
 	sw $fp,24($sp)
 	move $fp,$sp
+	sw $4,32($fp)
 
-	li $3,1
+	lw $3,32($fp)
+	li $8,1
+	multu $3,$8
+	mflo $3
 	beq $3,$0,$L1
 	nop
 	li $3,42
