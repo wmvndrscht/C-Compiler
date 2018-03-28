@@ -361,6 +361,42 @@ void ForStatStatExpr::print_mips(std::ostream &dst, context &program) const {
 
 }
 
+//----------------------------------------------------------------------
+
+ForStatStat::ForStatStat(const Statement* _stat1,const Statement* _stat2,
+		 const Statement* _body) : stat1(_stat1), 
+		stat2(_stat2), body(_body){}
+
+
+void ForStatStat::print_c(std::ostream &dst) const {
+	dst << "no need to print for atm";
+}
+
+void ForStatStat::py_translate(std::ostream &dst, const scope &scp) const {
+	dst << "not in spec";
+}
+
+void ForStatStat::print_mips(std::ostream &dst, context &program) const {
+	std::string label1 = program.createLabel();
+	std::string label2 = program.createLabel();
+
+
+	stat1->print_mips(dst,program);
+	dst << "\tb $" << label2 << "\n";
+	dst << "\tnop\n";
+
+	dst << "$" << label1 <<":\n";
+	body->print_mips(dst,program);
+	dst <<"\n";
+	// expr->print_mips(dst,program);
+	dst << "$" << label2 << ":\n";
+	stat2->print_mips(dst,program);
+	dst << "\n";
+	dst << "\tbne $" << program.getnReg() << ",$0,$" << label1 <<"\n";
+	dst << "\tnop\n";
+
+}
+
 
 //----------------------------------------------------------------------
 

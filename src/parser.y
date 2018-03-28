@@ -207,7 +207,7 @@ Iteration_Statement : T_WHILE T_LRBRACK Expression T_RRBRACK Statement {$$ = new
 										| T_DO Statement T_WHILE T_LRBRACK Expression T_RRBRACK T_SEMICOLON {$$ = new DoWhileStatement($2,$5);}
 										| T_FOR T_LRBRACK Expression_Statement Expression_Statement Expression T_RRBRACK Statement {$$ = new ForStatStatExpr($3,$4,$5,$7);}
 										| T_FOR T_LRBRACK Declaration Expression_Statement Expression T_RRBRACK Statement {$$ = new ForDecStatExpr($3,$4,$5,$7);}
-
+										| T_FOR T_LRBRACK Expression_Statement Expression_Statement T_RRBRACK Statement {$$ = new ForStatStat($3,$4,$6);}
 
 Return_Statement	:	T_RETURN T_SEMICOLON	{ $$ = new ReturnStatement(); }
 									| T_RETURN Expression T_SEMICOLON {$$ = new ReturnExprStatement($2);}
@@ -276,11 +276,6 @@ Unary_Expression	: Postfix_Expression {$$ = $1;}
 								 	| T_DECR Unary_Expression { $$ = new PreDecrementExpr($2);}
 								 	| T_MINUS Cast_Expression {$$ = new UnaryCastExpr(std::string("-"),$2);}
 									| T_PLUS Cast_Expression {$$ = new UnaryCastExpr(std::string("+"),$2);}
-//									| Unary_Operator Cast_Expression {$$ = new UnaryOpExpr($1,$2);}
-// Unary_Operator : T_BAND	{$$ = new UnaryOp(std::string("&"));} //;new std::string("&");}
-// 							 | T_TIMES {$$ = new UnaryOp(std::string("*"));} //{$$ = new std::string("*");}
-// 							 | T_PLUS {$$ = new UnaryOp(std::string("+"));} //{$$ = new std::string("+");}
-// 							 | T_MINUS {$$ = new UnaryOp(std::string("-"));} //{$$ = new std::string("-");}
 
 Cast_Expression :	Unary_Expression {$$ = $1;}
 

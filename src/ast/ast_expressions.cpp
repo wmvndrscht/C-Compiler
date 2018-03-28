@@ -769,8 +769,14 @@ void UnaryCastExpr::py_translate(std::ostream &dst, const scope &scp) const {
 
 void UnaryCastExpr::print_mips(std::ostream &dst, context &program) const {
 	castexpr->print_mips(dst,program);
+	int destReg = program.getnReg();
 	if(op == "-"){
-		dst << "\tsub $" << program.getnReg() << ",$0,$" << program.getnReg(); 
+		dst << "\tsub $" << destReg << ",$0,$" << destReg; 
+	}
+	else if(op == "&"){
+		dst << "\tmove $" << destReg << ",$fp\n";
+		std::string name = castexpr->get_ID();
+		dst << "\taddiu $" << destReg << ",$" << destReg << "," << program.getVarOffset(name) << "\n";
 	}
 
 }
