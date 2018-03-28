@@ -1,5 +1,5 @@
 int f(int a){
-	if(a*1){
+	if(a){
 		return 42;
 	}
 	else{

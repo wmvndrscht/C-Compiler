@@ -1,3 +1,13 @@
+/*
+
+The C89 draft at http://port70.net/~nsz/c/c89/c89-draft.html was very useful
+in understanding the structure of C89, and therefore fundamental in the design
+of this parser. 
+
+*/
+
+
+
 %code requires{
 
 	#include "ast.hpp"

@@ -12,9 +12,6 @@ f:
 	sw $4,32($fp)
 
 	lw $3,32($fp)
-	li $8,1
-	multu $3,$8
-	mflo $3
 	beq $3,$0,$L1
 	nop
 	li $3,42
