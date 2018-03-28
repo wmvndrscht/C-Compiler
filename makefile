@@ -12,7 +12,7 @@ src/lexer.yy.cpp : src/lexer.flex src/parser.tab.hpp
 
 bin/c_compiler : src/c_compiler.o src/parser.tab.o src/lexer.yy.o src/parser.tab.o src/ast/ast_node.o src/ast/ast_declarations.o src/ast/ast_statements.o src/ast/ast_expressions.o src/codegen/context.o
 	mkdir -p bin
-	clang++ $(CPPFLAGS) -o bin/c_compiler $^
+	g++ $(CPPFLAGS) -o bin/c_compiler $^
 	
 
 
