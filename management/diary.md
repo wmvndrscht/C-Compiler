@@ -83,3 +83,22 @@ Next Steps-------: Ensure I can build context well and instructions etc
 nicely. Get things working, then clean (python and test_cases) then advance.
 
 
+29/03/2018
+
+
+Title : Hey (Pixies)
+
+Moral : Doing individual projects and producing something good, feels good.
+I can now say "Hey, I wrote my own C2MIPS compiler"
+
+Overall:
+Things seemed to turn out well, just need to wait for the marks to be 
+released. 
+1.Biggest lesson is to get the infrastructure sorted out early on,
+draw lots of diagrams and thinking through clearly before writing code.
+2.Think more than the time I spend writing code (should be quick and elegant).
+3.Getting a testbench up and ready to add to as I progress is vital.
+4.Less fear of starting a coding project now
+
+
+
