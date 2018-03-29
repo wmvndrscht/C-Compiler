@@ -11,6 +11,8 @@
 IDENTIFIER [a-zA-Z_][0-9a-zA-Z_]*
  /*include mutiple constants eg hex, oct */
 NUMBER 		 [0-9]+
+HEX 			 [0][xX][0-9a-fA-F]+
+OCTAL 		 [0][0-7]+
 
 %%
 
@@ -42,6 +44,8 @@ NUMBER 		 [0-9]+
 
 {IDENTIFIER}				{yylval.str=new std::string(yytext);return T_IDENTIFIER;}
 {NUMBER}						{yylval.number= new double(strtod(yytext, 0)); return T_NUMBER; }
+{HEX}								{yylval.number = new double(strtol(yytext,NULL,16)); return T_NUMBER;}
+{OCTAL}							{yylval.number = new double(strtol(yytext,NULL,8)); return T_NUMBER;}
 
 "="									{yylval.str=new std::string(yytext);return T_EQUAL;}
 ";"									{return T_SEMICOLON;}
