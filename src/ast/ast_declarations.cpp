@@ -588,3 +588,71 @@ std::string ArrayDeclarator::get_Label() const{
 std::string ArrayDeclarator::get_name() const {
 	return (dec->get_name()+"0");
 }
+
+
+
+
+//-------------------------------------------------------------------------------------------------
+
+
+TwoDArrayDeclarator::TwoDArrayDeclarator(const Declaration *_dec, const Expression *_expr, const Expression *_expr1) : 
+	dec(_dec), expr(_expr), expr1(_expr1) {}
+
+void TwoDArrayDeclarator::print_c(std::ostream &dst) const {
+	dec->print_c(dst);	
+	dst << "[";
+	expr->print_c(dst);
+	dst << "][";
+	expr1->print_c(dst);
+	dst << "]";
+}
+
+void TwoDArrayDeclarator::py_translate(std::ostream &dst, const scope &scp) const {
+	dec->py_translate(dst,scp);
+	dst << "[";
+	expr->py_translate(dst,scp);
+	dst << "]";
+}
+
+void TwoDArrayDeclarator::print_mips(std::ostream &dst, context& program) const {
+	//takes in dec and expr
+
+	//get name of array
+	std::string name = dec->get_name();
+	//get value of array size
+	int sizj = std::stoi(( (Identify*)expr )->get_ID());
+	int sizi = std::stoi(( (Identify*)expr1 )->get_ID());
+	dst << "#size of array is " << sizj*sizi;
+
+	//   1    if global then
+
+	//   2    if local and previously defined
+
+	//   3    if local and first time declared
+	//make stack big enough
+	//store name at beginning of stack place
+	//add start of array onto the stack
+
+	//create space on the stack for the rest
+	for(int j=0; j < sizj; j++){
+		for(int i=0; i < sizi; i++){
+			program.incFrameSize();
+			dst << "\n\taddiu $sp,$sp,-4\n";
+			dst << "\tmove $fp,$sp\n";
+			program.addVartoScope( name +std::to_string(j)+std::to_string(i) , program.getFrameSize() );
+		}
+	}
+
+	dst << "\n";
+
+
+	// dec->print_mips(dst,program);
+}
+
+std::string TwoDArrayDeclarator::get_Label() const{
+	return (dec->get_Label()+"0");
+}
+
+std::string TwoDArrayDeclarator::get_name() const {
+	return (dec->get_name()+"0");
+}

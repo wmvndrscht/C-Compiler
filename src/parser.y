@@ -149,6 +149,7 @@ Direct_Declarator	:	T_IDENTIFIER	{$$ = new VariableDeclarator(*$1);}
 									|	Direct_Declarator T_LRBRACK T_RRBRACK {$$ = new EmptyDeclarator($1);}
 									| Direct_Declarator T_LRBRACK Parameter_Type_List T_RRBRACK {$$ = new ParamListDeclarator($1,$3);}
 									| Direct_Declarator T_LSQBRACK Assignment_Expression T_RSQBRACK {$$ = new ArrayDeclarator($1,$3);}
+									| Direct_Declarator T_LSQBRACK Assignment_Expression T_RSQBRACK T_LSQBRACK Assignment_Expression T_RSQBRACK {$$ = new TwoDArrayDeclarator($1,$3,$6);}
 
 
 Declaration_Specifiers	:	Storage_Class_Specifier Declaration_Specifiers 	{$$ = new DeclarationSpecifier(*$1,$2); }
@@ -295,6 +296,7 @@ Postfix_Expression	: Primary_Expression {$$ = $1;}
 										| Postfix_Expression T_LRBRACK Argument_Expression_List T_RRBRACK {$$ = new PostfixArguExpression($1,$3);}
 										| Postfix_Expression T_INCR {$$ = new PostIncrementExpr($1);}
 										| Postfix_Expression T_DECR {$$ = new PostDecrementExpr($1);}
+										| Postfix_Expression T_LSQBRACK Expression T_RSQBRACK T_LSQBRACK Expression T_RSQBRACK {$$ = new PostTwoDArrayExpr($1,$3,$6);} 
 										| Postfix_Expression T_LSQBRACK Expression T_RSQBRACK { $$ = new PostArrayExpr($1,$3);}
 
 Argument_Expression_List 	: Assignment_Expression 	{$$ = new AssignExprList(NULL,$1);}

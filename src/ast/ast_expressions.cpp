@@ -1222,3 +1222,43 @@ std::string PreDecrementExpr::get_ID() const{
 }
 
 //---------------------------------------------------------------------------------
+
+PostTwoDArrayExpr::PostTwoDArrayExpr(const Identify* _expr, const Expression* _exp1,const Expression* _exp2 ):
+expr(_expr), exp1(_exp1), exp2(_exp2){}
+
+void PostTwoDArrayExpr::print_c(std::ostream &dst) const {
+	// expr->print_c(dst);
+	// dst << "[";
+	// arguexpr->print_c(dst);
+	// dst << "]";
+}
+
+void PostTwoDArrayExpr::py_translate(std::ostream &dst, const scope &scp) const {
+	// expr->py_translate(dst,scp);
+	// dst << "[";
+	// arguexpr->py_translate(dst,scp);
+	// dst << "]";
+}
+
+void PostTwoDArrayExpr::print_mips(std::ostream &dst, context &program) const {
+	int offsetj = std::stoi(((Identify*)exp1)->get_ID());
+	int offseti = std::stoi(((Identify*)exp2)->get_ID());
+	std::string name = expr->get_ID() + std::to_string(offsetj)+ std::to_string(offseti);
+
+	if( program.isVarGlobal(name) ){
+		dst << "\tlui $" << program.getnReg() << ",%hi(" << name << ")\n";
+		dst << "\tlw $" << program.getnReg() << ",%lo(" << name << ")($" << program.getnReg() << ")\n";
+	}
+	else{
+		dst << "\tlw $" << program.getnReg() << "," << program.getFrameSize() - program.getVarOffset(name) << "($fp)" << "\n";
+	}
+	// dst << "\t" << "lw $fp," << FrameSize-4 << "($sp)\n";
+
+}
+
+std::string PostTwoDArrayExpr::get_ID() const{
+	int offsetj = std::stoi(((Identify*)exp1)->get_ID());
+	int offseti = std::stoi(((Identify*)exp2)->get_ID());
+	std::string name = expr->get_ID() + std::to_string(offsetj)+ std::to_string(offseti);
+	return name ;
+}

@@ -199,7 +199,19 @@ public:
 	virtual std::string get_Label() const override;
 };
 
-
+class TwoDArrayDeclarator : public Declaration{
+private:
+	const Declaration* dec;
+	const Expression* expr;
+	const Expression* expr1;
+public:
+	TwoDArrayDeclarator(const Declaration *_dec, const Expression *_expr, const Expression *_expr1);
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_name() const override;
+	virtual std::string get_Label() const override;
+};
 
 
 #endif

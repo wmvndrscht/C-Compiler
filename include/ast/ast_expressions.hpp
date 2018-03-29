@@ -406,5 +406,18 @@ public:
 };
 
 
+class PostTwoDArrayExpr : public Identify {
+private:
+	const Identify* expr;
+	const Expression* exp1;
+	const Expression* exp2;
+public:
+	PostTwoDArrayExpr(const Identify* _expr, const Expression* _exp1,const Expression* _exp2 );
+	virtual void print_c(std::ostream &dst) const override;
+	virtual void py_translate(std::ostream &dst, const scope &scp) const override;
+	virtual void print_mips(std::ostream &dst, context &program) const override;
+	virtual std::string get_ID() const override;
+};
+
 
 #endif
