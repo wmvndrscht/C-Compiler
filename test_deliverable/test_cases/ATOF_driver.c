@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 int f(const char *a);
 
 int main(){
