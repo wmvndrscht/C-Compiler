@@ -88,10 +88,10 @@ OCTAL 		 [0][0-7]+
 "&="								{return T_ANDEQUAL;}
 "^="								{return T_EXEQUAL;}
 "|="								{return T_OREQUAL;}
-"["									{return T_LSQBRACK;}
-"]"									{return T_RSQBRACK;}
+"["								{return T_LSQBRACK;}
+"]"								{return T_RSQBRACK;}
 
-"//".* 							{;}
+(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)		{;}
 
 [ \t\r\n]+ 				{;}
 
